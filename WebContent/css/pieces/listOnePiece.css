@@ -1,0 +1,26 @@
+table {
+	width: 1000px;
+	background-color: #CCCCFF;
+	margin: 0 auto;
+	text-align: center;
+	background-color: white;
+}
+
+table, th, td {
+	border: 1px solid #CCCCFF;
+}
+
+th, td {
+	padding: 5px;
+}
+table#table-1 {
+	background-color: #CCCCFF;
+	border: 2px solid black;
+	text-align: center;
+}
+
+table#table-1 h4 {
+	color: red;
+	display: block;
+	margin-bottom: 1px;
+}

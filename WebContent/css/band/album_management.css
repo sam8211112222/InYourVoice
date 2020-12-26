@@ -1,0 +1,68 @@
+*{
+    /* border: 3px solid grey; */
+}
+div{
+    /* border: 3px solid grey; */
+    
+}
+.hide{
+    display: none;
+}
+div.album_management_container{
+    border: 3px solid grey;
+    border-radius: 10px;
+    margin: 30px auto;
+    font-size: 20px;
+}
+.search_table_title{
+    font-size: 30px;
+    font-weight: bold;
+    color: blue;
+    margin: 30px;
+
+}
+.search_table{
+    text-align: center;
+    margin: 10px auto;
+}
+.search_box{
+    border-radius: 5px;
+}
+.btn{
+    border-radius: 10px;
+}
+.album_control_btn_area{
+    margin: 10px auto;
+    text-align: center;
+}
+.check_all, .check_one_album, .check_one_piece{
+    width:20px;
+    height:20px;
+    margin-left:20px
+}
+.album_header div{
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 15px auto;
+}
+.my_album_body_item{
+    margin: 10px;
+    text-align: center;
+}
+/* .album_header, .my_album_body{
+    border: 3px solid grey;
+    border-radius: 10px;
+} */
+
+.my_album_card{
+    margin:10px auto;
+    border: 3px solid grey;
+    border-radius: 10px;
+}
+img.album_photo_thumb{
+    width: 100px;
+    height:100px;
+    border-radius: 10px;
+}

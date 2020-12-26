@@ -1,0 +1,94 @@
+* {
+/*     box-sizing: border-box; */
+}
+
+.aplayer .aplayer-list{
+	display:block;
+}
+
+body {
+    margin: 0;
+    /* font-size: 0; */
+}
+
+div {
+    /* border: 1px solid black; */
+    font-size: 16px;
+}
+
+div.album_container {
+/*     width: 80%; */
+    border: 3px solid grey;
+    border-radius: 10px;
+    /* min-height: 100vh; */
+    padding: 10px 20px;
+    margin: 30px auto;
+}
+
+div.album_pieces {
+    height: auto;
+    margin: 30px 20px 0 0; 
+    border: 3px solid grey;
+    border-radius: 10px;
+}
+
+div.album_pieces div{
+    /* border: 3px solid grey; */
+    padding: 0;
+    text-align: center;
+}
+
+div.albums{
+    height: auto;
+    margin-top: 30px;
+    border: 3px solid grey;
+    border-radius: 10px;
+}
+
+ul.pieces_list, div.albums_wrapper{
+    padding: 0;
+}
+
+ul.pieces_list li.piece_card{
+    list-style: none;
+    width: 100%;
+    margin: 10px auto;
+}
+
+div.aplayer li{
+    width: auto;
+    text-align: justify;
+}
+
+div.album_card, div.album_photo, div.album_intro{
+    margin: 10px;
+    padding: 0;
+}
+
+div.album_card{
+    cursor: pointer;
+}
+
+div.piece_card{
+    width:90%;
+    margin: 0 auto;
+}
+
+img.album_photo{
+    border: 1px solid grey;
+    border-radius: 10px;
+    width:100%;
+    max-width: 100%;
+}
+
+/* 嚙踝蕭嚙� */
+.outer:before { 
+    content: "";
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+div.album_cards{
+	padding: 10px;
+}

@@ -1,0 +1,74 @@
+table.list {
+	width: 1000px;
+	background-color: #CCCCFF;
+	margin: 0 auto;
+	text-align: center;
+	background-color: white;
+	border: 1px solid #CCCCFF;
+}
+
+table.list > th, table.list > td {
+	border: 1px solid #CCCCFF;
+}
+
+th, td {
+	padding: 5px;
+	border: 1px solid #CCCCFF;
+}
+table#table-1 {
+	background-color: #CCCCFF;
+	border: 2px solid black;
+	text-align: center;
+}
+
+table#table-1 h4 {
+	color: red;
+	display: block;
+	margin-bottom: 1px;
+}
+img{
+	width:100px;
+}
+input{
+	border:hidden;
+}
+input{
+    border-radius: 5px;
+    height: 30px;
+}
+button.shelf_btn{
+    border-radius: 5px;
+    width: 70px;
+    height: 30px;
+}
+h1{
+    text-align: center;
+}
+table{
+    margin: 0 auto;
+/*     border-radius: 15px; */
+    border: 5px solid black;
+}
+div.frame{
+    border-radius: 15px;
+    border: 5px solid black;
+    width:90%;
+    margin: 0 auto;
+}
+
+div.form_btn{
+    text-align: center;
+}
+div > input{
+    margin: 10px;
+}
+div.on_which_page{
+	width: 100px;
+	margin: 0 auto;
+	text-align: center;
+}
+div.select_page{
+	width: 100px;
+	margin: 0 auto;
+	text-align: center;
+}

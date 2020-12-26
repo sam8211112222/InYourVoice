@@ -1,0 +1,51 @@
+* {
+	border-radius: 5px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+table#table-1 {
+	background-color: #CCCCFF;
+	border: 2px solid black;
+	text-align: center;
+}
+
+table#table-1 h4 {
+	color: red;
+	display: block;
+	margin-bottom: 1px;
+}
+
+h4 {
+	color: blue;
+	display: inline;
+}
+
+h1 {
+	text-align: center;
+}
+
+table, tr, th, td {
+	border: 1px solid blue;
+	text-align: center;
+	margin: 0 auto;
+	border-radius: 0px;
+}
+
+td {
+	padding: 5px;
+}
+
+th {
+	background-color: #a4c0f4;
+	color: white;
+}
+
+div {
+	/* width: 800px; */
+	margin: 0 auto;
+}
+
+li {
+	margin: 5px;
+}
