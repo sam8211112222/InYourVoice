@@ -38,8 +38,10 @@ $(function(){
     
     $("div.album_card").click(function(){
 
-        console.log($(this).attr("data-piece_href"));
+        // console.log($(this).attr("data-piece_href"));
         let path = $(this).attr("data-contextpath");
+        let album_id = $(this).attr("data-album_id");
+        $("#album_photo_main").find(".front").attr("style", `background-image: url(${path}/album/album.do?action=getAlbumPhoto&album_id=${album_id})`);
 
         $.ajax({
             url:  $(this).attr("data-piece_href"),           // 資料請求的網址
@@ -51,10 +53,12 @@ $(function(){
             dataType: "json",                        // 預期會接收到回傳資料的格式： json | xml | html
             timeout: 0,                              //  request 可等待的毫秒數 | 0 代表不設定 timeout
             success: function(data){                 // request 成功取得回應後執行
-                console.log(data.length);
-                console.log(data[0]);
-                console.log(data[0].piece_id);
-                console.log(data[0].piece_name);
+
+
+                // console.log(data.length);
+                // console.log(data[0]);
+                // console.log(data[0].piece_id);
+                // console.log(data[0].piece_name);
                 
                 if(data.length!=0){
                     ap1.list.clear();
@@ -68,6 +72,24 @@ $(function(){
                         }]);
                     }
                 }
+            }
+        });
+
+        $.ajax({
+            url:  path + "/album/album.do?action=getAlbumIntro&album_id=" + album_id,           // 資料請求的網址
+            type: "post",                            // GET | POST | PUT | DELETE | PATCH
+            data: {},                         // 傳送資料到指定的 url
+            // processData: false,
+            // contentType : false,
+            // cache: false,
+            dataType: "json",                        // 預期會接收到回傳資料的格式： json | xml | html
+            timeout: 0,                              //  request 可等待的毫秒數 | 0 代表不設定 timeout
+            success: function(data){    
+                console.log("here");  
+                console.log(data);       // request 成功取得回應後執行
+                console.log("here");  
+
+                $("div.album_intro").text(data);
             }
         });
 

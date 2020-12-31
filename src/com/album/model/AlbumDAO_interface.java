@@ -5,7 +5,7 @@ import database.util.ConnectionInfo;
 
 public interface AlbumDAO_interface extends ConnectionInfo{
 	
-	public void insert(AlbumVO albumVO);
+	public String insert(AlbumVO albumVO);
     public void update(AlbumVO albumVO);
     public void delete(String album_id);
     public AlbumVO findByPrimaryKey(String album_id);

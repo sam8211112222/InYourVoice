@@ -5,7 +5,7 @@ import database.util.ConnectionInfo;
 
 public interface PiecesDAO_interface extends ConnectionInfo {
 	
-	public void insert(PiecesVO piecesVO);
+	public String insert(PiecesVO piecesVO);
     public void update(PiecesVO piecesVO);
     public void delete(String piece_id);
     public PiecesVO findByPrimaryKey(String piece_id);

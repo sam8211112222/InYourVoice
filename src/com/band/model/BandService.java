@@ -1,6 +1,9 @@
 package com.band.model;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.bandtag.model.BandTagDAOJDBC;
 import com.bandtag.model.BandTagDAO_interface;
@@ -60,6 +63,19 @@ public class BandService {
 
 	public List<BandVO> getAllBand() {
 		return dao.getAll();
+	}
+	
+	public List<BandVO> getAllBand(Map<String, String[]> map) {
+		return dao.getAll(map);
+	}
+	
+	public List<BandVO> getBySearchKeyWord(String searchKeyWord){
+		List<BandVO> listOfSearch = dao.getAll().stream()
+				.filter(b -> b.getBand_name().contains(searchKeyWord) || b.getBand_intro().contains(searchKeyWord))
+//				.filter(b -> b.getBand_intro().contains(searchKeyWord))
+				.collect(Collectors.toList());
+			System.out.println(listOfSearch.size());
+		return listOfSearch;		
 	}
 
 }

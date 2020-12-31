@@ -105,25 +105,34 @@ public class PiecesDAO implements PiecesDAO_interface {
 	}
 
 	@Override
-	public void insert(PiecesVO piecesVO) {
+	public String insert(PiecesVO piecesVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String generatedKey = "";
 
 		try {
 
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(INSERT_PSTMT);
+			String[] generatedColumn = {"PIECE_ID"};
+			pstmt = con.prepareStatement(INSERT_PSTMT, generatedColumn);
 
 			pstmt.setString(1, piecesVO.getAlbum_id());
-			pstmt.setString(2, piecesVO.getPiece_name());
-			pstmt.setBytes(3, piecesVO.getPiece());
-			pstmt.setInt(4, piecesVO.getPiece_status());
-			pstmt.setInt(5, piecesVO.getPiece_play_count());
-			pstmt.setTimestamp(6, piecesVO.getPiece_add_time());
-			pstmt.setTimestamp(7, piecesVO.getPiece_last_edit_time());
+			pstmt.setBytes(2, piecesVO.getPiece());
+			pstmt.setString(3, piecesVO.getPiece_name());
+			pstmt.setInt(4, 0);
+			pstmt.setInt(5, 0);
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(8, piecesVO.getPiece_last_editor());
 
 			pstmt.executeUpdate();
+			
+			// 取得自增pk: piece_id
+			rs = pstmt.getGeneratedKeys();
+			while(rs.next()) {
+				generatedKey = rs.getString(1);
+			}
 
 			// Handle any SQL errors
 		} catch (SQLException se) {
@@ -131,6 +140,13 @@ public class PiecesDAO implements PiecesDAO_interface {
 					+ se.getMessage());
 			// Clean up JDBC resources
 		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
 			if (pstmt != null) {
 				try {
 					pstmt.close();
@@ -146,6 +162,7 @@ public class PiecesDAO implements PiecesDAO_interface {
 				}
 			}
 		}
+		return generatedKey;
 	}
 
 	@Override

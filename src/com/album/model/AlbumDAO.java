@@ -26,7 +26,7 @@ public class AlbumDAO implements AlbumDAO_interface {
 	private static final String GET_ONE_PSTMT = "SELECT * FROM ALBUM WHERE ALBUM_ID = ?";
 	private static final String GET_ALL_PSTMT = "SELECT * FROM ALBUM ORDER BY ALBUM_ID";
 	private static final String GET_ALBUM_PHOTO = "SELECT ALBUM_PHOTO FROM ALBUM WHERE ALBUM_ID = ?";
-	private static final String GET_ALL_BY_BAND_ID_PSTMT = "SELECT * FROM ALBUM WHERE BAND_ID = ?";
+	private static final String GET_ALL_BY_BAND_ID_PSTMT = "SELECT * FROM ALBUM WHERE BAND_ID = ? ORDER BY ALBUM_ID DESC";
 	
 	
 	
@@ -107,32 +107,46 @@ public class AlbumDAO implements AlbumDAO_interface {
 	}
 	
 	@Override
-	public void insert(AlbumVO albumVO) {
+	public String insert(AlbumVO albumVO) {
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String generatedKey = "";
 
 		try {
 
 			con = ds.getConnection();
-			pstmt = con.prepareStatement(INSERT_PSTMT);
+			String[] generatedColumn = {"ALBUM_ID"};
+			pstmt = con.prepareStatement(INSERT_PSTMT, generatedColumn);
 
 			pstmt.setString(1, albumVO.getBand_id());
 			pstmt.setString(2, albumVO.getAlbum_name());
 			pstmt.setString(3, albumVO.getAlbum_intro());
 			pstmt.setBytes(4, albumVO.getAlbum_photo());
-			pstmt.setInt(5, albumVO.getAlbum_status());
-			pstmt.setTimestamp(6, albumVO.getAlbum_add_time());
+			pstmt.setInt(5, 1);
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
 			pstmt.setTimestamp(7, albumVO.getAlbum_release_time());
-			pstmt.setTimestamp(8, albumVO.getAlbum_last_edit_time());
+			pstmt.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(9, albumVO.getAlbum_last_editor());
 
 			pstmt.executeUpdate();
 
+			rs = pstmt.getGeneratedKeys();
+			while(rs.next()) {
+				generatedKey = rs.getString(1);
+			}
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. "
 					+ se.getMessage());
 			// Clean up JDBC resources
 		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
 			if (pstmt != null) {
 				try {
 					pstmt.close();
@@ -148,6 +162,7 @@ public class AlbumDAO implements AlbumDAO_interface {
 				}
 			}
 		}
+		return generatedKey;
 	}
 
 	@Override

@@ -40,8 +40,20 @@
                 <div class="col-6">
 
                     <div class="row justify-content-center">
-                        <div class="album_photo col-12 col-md-5"><img class="album_photo"
-                                src="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVOList[0].album_id}" alt=""></div>
+                        <!-- <div class="album_photo col-12 col-md-5"><img class="album_photo"
+                                src="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVOList[0].album_id}" alt=""></div> -->
+
+                        <div class="flip album_photo" id="album_photo_main" data-contextpath="<%= request.getContextPath() %>" data-album_id="${albumVO.album_id}" data-href="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" data-piece_href="<%= request.getContextPath() %>/pieces/pieces.do?action=getPieceList&album_id=${albumVO.album_id}" >
+                            <div class="front"
+                                style="background-image: url(<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVOList[0].album_id})">
+                                <h1 class="text-shadow"></hi>
+                            </div>
+                            <!-- <div class="back">
+                                <h2>${bandVO.band_name}</h2>
+                                <p></p>
+                            </div> -->
+                        </div>
+                        
                         <div class="album_intro .d-none .d-md-block col-md-5">${albumVOList[0].album_intro}</div>
                     </div>
 
@@ -49,10 +61,23 @@
                         <div class="albums col-10">
                             <div class="row justify-content-between album_cards">
 								<c:forEach var="albumVO" items="${albumVOList}">
-	                                <div class="album_card col-10 col-md-3" data-contextpath="<%= request.getContextPath() %>" data-album_id="${albumVO.album_id}" data-href="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" data-piece_href="<%= request.getContextPath() %>/pieces/pieces.do?action=getPieceList&album_id=${albumVO.album_id}">
+
+	                                <!-- <div class="album_card col-10 col-md-3" data-contextpath="<%= request.getContextPath() %>" data-album_id="${albumVO.album_id}" data-href="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" data-piece_href="<%= request.getContextPath() %>/pieces/pieces.do?action=getPieceList&album_id=${albumVO.album_id}">
 	                                    <img class="album_photo"
 	                                        src="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" alt="">
-	                                </div>
+                                    </div> -->
+                                    
+                                    <div class="flip album_card" data-contextpath="<%= request.getContextPath() %>" data-album_id="${albumVO.album_id}" data-href="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" data-piece_href="<%= request.getContextPath() %>/pieces/pieces.do?action=getPieceList&album_id=${albumVO.album_id}" style="cursor: pointer;" >
+                                        <div class="front"
+                                            style="background-image: url(<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id})">
+                                            <h1 class="text-shadow"></hi>
+                                        </div>
+                                        <!-- <div class="back">
+                                            <h2>${bandVO.band_name}</h2>
+                                            <p></p>
+                                        </div> -->
+                                    </div>
+
 								</c:forEach>
                             </div>
                         </div>
