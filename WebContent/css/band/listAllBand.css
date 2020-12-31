@@ -1,130 +1,17 @@
-* {
-/*     box-sizing: border-box; */
-}
-
-.aplayer .aplayer-list{
-	display:block;
-}
-
-body {
-    margin: 0;
-    /* font-size: 0; */
-}
-
-div {
-    /* border: 1px solid black; */
-    font-size: 16px;
-}
-
-div.album_container {
-/*     width: 80%; */
-    border: 3px solid grey;
-    border-radius: 10px;
-    /* min-height: 100vh; */
-    padding: 10px 20px;
-    margin: 30px auto;
-}
-
-div.album_pieces {
-    height: auto;
-    margin: 30px 20px 0 0; 
-    border: 3px solid grey;
-    border-radius: 10px;
-}
-
-div.album_pieces div{
-    /* border: 3px solid grey; */
-    padding: 0;
-    text-align: center;
-}
-
-div.albums{
-    height: auto;
-    margin-top: 30px;
-    border: 3px solid grey;
-    border-radius: 10px;
-}
-
-ul.pieces_list, div.albums_wrapper{
-    padding: 0;
-}
-
-ul.pieces_list li.piece_card{
-    list-style: none;
-    width: 100%;
-    margin: 10px auto;
-}
-
-div.aplayer li{
-    width: auto;
-    text-align: justify;
-}
-
-div.album_card, div.album_photo, div.album_intro{
-    margin: 10px;
-    padding: 0;
-}
-
-div.album_card{
-    cursor: pointer;
-}
-
-div.piece_card{
-    width:90%;
-    margin: 0 auto;
-}
-
-div.album_photo{
-    border: 1px solid grey;
-    border-radius: 10px;
-    overflow: hidden;
-    /* width:100%;
-    max-width: 100%; */
-    width:200px;
-    height: 200px;
-}
-img.album_photo{
-    /* height: 100%;
-    width:100%; */
-   width: auto;
-   height: auto;
-}
-
-/* 嚙踝蕭嚙� */
-.outer:before { 
-    content: "";
-    height: 100%;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-div.album_cards{
-    padding: 10px;
-    
-}
-div.album_card{
-    border: 1px solid grey;
-    border-radius: 10px;
-    overflow: hidden;
-    /* width:100%;
-    max-width: 100%; */
-    /* width:200px; */
-    /* height: auto; */
-}
-
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
 
 * {
     box-sizing: border-box;
     font-weight: normal;
+    /* border: 1px solid black; */
 }
 
 body {
-    /* color: rgba(85, 85, 85, 0.199); */
-    /* background: rgb(199 188 147 / 38%); */
+    color: rgba(85, 85, 85, 0.199);
+    background: rgb(199 188 147 / 38%);
     text-align: center;
     font-family: 'Roboto Mono';
-    padding: 1em;
+    /* padding: 1em; */
 }
 
 h1 {
@@ -139,7 +26,7 @@ h1 {
     margin: 10px;
 }
 
-/* .flip>.front,
+.flip>.front,
 .flip>.back {
     display: block;
     transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -180,7 +67,7 @@ h1 {
 
 .flip.flip-vertical:hover>.back {
     transform: rotateX(0deg);
-} */
+}
 
 .flip {
     position: relative;
@@ -212,4 +99,13 @@ h1 {
 
 .text-shadow {
     text-shadow: 1px 1px rgba(0, 0, 0, 0.04), 2px 2px rgba(0, 0, 0, 0.04), 3px 3px rgba(0, 0, 0, 0.04), 4px 4px rgba(0, 0, 0, 0.04), 0.125rem 0.125rem rgba(0, 0, 0, 0.04), 6px 6px rgba(0, 0, 0, 0.04), 7px 7px rgba(0, 0, 0, 0.04), 8px 8px rgba(0, 0, 0, 0.04), 9px 9px rgba(0, 0, 0, 0.04), 0.3125rem 0.3125rem rgba(0, 0, 0, 0.04), 11px 11px rgba(0, 0, 0, 0.04), 12px 12px rgba(0, 0, 0, 0.04), 13px 13px rgba(0, 0, 0, 0.04), 14px 14px rgba(0, 0, 0, 0.04), 0.625rem 0.625rem rgba(0, 0, 0, 0.04), 16px 16px rgba(0, 0, 0, 0.04), 17px 17px rgba(0, 0, 0, 0.04), 18px 18px rgba(0, 0, 0, 0.04), 19px 19px rgba(0, 0, 0, 0.04), 1.25rem 1.25rem rgba(0, 0, 0, 0.04);
+}
+.search_box{
+    margin:30px;
+}
+.band_title{
+    font-size: 30px;
+    font-weight: bolder;
+    color: darkslateblue;
+    margin: 30px;
 }

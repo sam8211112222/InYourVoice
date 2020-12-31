@@ -38,6 +38,14 @@ public class PiecesService {
 
 		return piecesVO;
 	}
+	
+	public PiecesVO insertPiece(PiecesVO piecesVO) {
+
+		String pk = dao.insert(piecesVO);
+		piecesVO.setPiece_id(pk);
+
+		return piecesVO;
+	}
 
 	public PiecesVO updatePieces(String piece_id, String album_id, String piece_name, byte[] piece, Integer piece_status,
 			Integer piece_play_count, Timestamp piece_add_time, Timestamp piece_last_edit_time,

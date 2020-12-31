@@ -54,19 +54,10 @@
 </style>
 </head>
 <body>
+	
+	<%@ include file="/back-end/sb/page1.file" %>
 
-
-	<table id="table-1">
-		<tr>
-			<td>
-				<h3>專輯資料修改 - update_album.jsp</h3>
-				<h4>
-					<a href="<%=request.getContextPath()%>/back-end/album/list_all_album.jsp">
-					<img src="<%=request.getContextPath()%>/images/back1.gif" width="100" height="32" border="0">回首頁</a>
-				</h4>
-			</td>
-		</tr>
-	</table>
+	
 	<h3>資料修改:</h3>
 
 	<%-- 錯誤表列 --%>
@@ -127,12 +118,12 @@
 				<td><fmt:formatDate value="${albumVO.album_add_time}"
 						pattern="yyyy-MM-dd HH:mm:ss" /></td>
 			</tr>
-			<tr>
-				<td>專輯上架時間</td>
-				<td><input name="album_release_time" id="f_date1" type="text">
-					<%-- 					<fmt:formatDate	value="${albumVO.album_release_time}" pattern="yyyy-MM-dd HH:mm:ss" /> --%>
-				</td>
-			</tr>
+<!-- 			<tr> -->
+<!-- 				<td>專輯上架時間</td> -->
+<!-- 				<td><input name="album_release_time" id="f_date1" type="text"> -->
+<%-- 										<fmt:formatDate	value="${albumVO.album_release_time}" pattern="yyyy-MM-dd HH:mm:ss" /> --%>
+<!-- 				</td> -->
+<!-- 			</tr> -->
 			<tr>
 				<td>專輯最後編輯時間</td>
 				<td><fmt:formatDate value="${albumVO.album_last_edit_time}"
@@ -182,6 +173,6 @@
            //maxDate:           '+1970-01-01'  // 去除今日(不含)之後
         });
 </script>
-
+<%@ include file="/back-end/sb/page2.file" %>
 </body>
 </html>

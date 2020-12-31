@@ -24,10 +24,10 @@
 
         <!-- start of upper content -->
 
-        <div class="width-navbar-dark position-relative profile-page-header-wrapper mb-6">
-            <div class="profile-cover-block image-upload width-absolute-btn">
+        <div class="width-navbar-dark position-relative profile-page-header-wrapper mb-6" style="background-image: url(<%= request.getContextPath() %>/band/band.do?action=getBandBanner&band_id=${bandVO.band_id}); background-size: 100%;">
+            <!-- <div class="profile-cover-block image-upload width-absolute-btn">
                 <div class="image-preview">
-                    <div class="image-preview-item" id="cover_img">
+                    <div class="image-preview-item" id="cover_img"> -->
                         <!-- <img class="band_banner" src="https://i.imgur.com/7HD0bkf.jpg" alt=""> -->
                         <!-- http://fakeimg.pl/440x300/282828/EAE0D0/?text=PJCHENder -->
 <!-- 	                    <img class="band_banner" src="http://fakeimg.pl/1920x360?text=Band_Banner" alt=""> -->
@@ -47,24 +47,29 @@
 							}
 							
 						%>
-	                    <img class="band_banner" src="data:image/gif;base64,<%= band_banner_base64 %>" alt="">
-                        
+	                    <!-- <img class="band_banner" src="data:image/gif;base64,<%= band_banner_base64 %>" alt=""> -->
+<!--                         
                     </div>
                 </div>
 
-            </div>
+            </div> -->
             <div class="container profile-cover-block-up">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="image-upload width-absolute-btn">
+                        <!-- <div class="image-upload width-absolute-btn">
                             <div class="image-preview img-square cover-block img-circle">
-                                <div class="image-preview-item" id="avatar_img">
+                                <div class="image-preview-item" id="avatar_img"> -->
                                     <!-- <img class="band_photo" src="https://i.imgur.com/5IWAEdX.jpg" alt=""> -->
 <!-- 	                                <img class="band_photo" src="http://fakeimg.pl/600x600?text=Band_Photo" alt=""> -->
-	                                <img class="band_photo" src="data:image/gif;base64,<%= band_photo_base64 %>" alt="">
+	                                <!-- <img class="band_photo" src="data:image/gif;base64,<%= band_photo_base64 %>" alt="">
                                 </div>
                             </div>
 
+                        </div> -->
+                        <div class="flip" data-band_id="${bandVO.band_id}">
+                            <div class="front"
+                                style="background-image: url(<%= request.getContextPath() %>/band/band.do?action=getBandPhoto&band_id=${bandVO.band_id})">
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-9">

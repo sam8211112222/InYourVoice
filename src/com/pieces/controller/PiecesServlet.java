@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.album.model.AlbumService;
 import com.google.gson.Gson;
 import com.pieces.model.PiecesService;
 import com.pieces.model.PiecesVO;
@@ -236,6 +237,88 @@ public class PiecesServlet extends HttpServlet {
 			out.write(jsonStr);
 			
 		}
+		
+		
+		if("updatePiece".equals(action)) {
+			
+			res.setCharacterEncoding("UTF-8");
+			// 接收資料
+			String album_id = req.getParameter("album_id");
+			String piece_id = req.getParameter("piece_id");
+			String piece_name = req.getParameter("piece_name");
+			String piece_last_editor = req.getParameter("piece_last_editor");
+
+			Part piece_file = req.getPart("piece_file");
+			InputStream in = piece_file.getInputStream();
+			byte[] piece_file_byte = new byte[in.available()];
+			in.read(piece_file_byte);
+			in.close();
+			
+			// 印出接收資料
+			System.out.println(album_id);
+			System.out.println(piece_id);
+			System.out.println(piece_file.getSubmittedFileName());
+			
+			// 用piece_id找看看是否新增過
+			PiecesService piecesSvc = new PiecesService();
+			PiecesVO piecesVO = piecesSvc.getOnePiece(piece_id);
+			
+			if(piecesVO == null) {
+				// 若沒有則新增資料
+				
+				piecesVO = new PiecesVO();
+				piecesVO.setAlbum_id(album_id);
+				piecesVO.setPiece_name(piece_name);
+				piecesVO.setPiece_last_editor(piece_last_editor);
+				if(piece_file_byte.length != 0) {
+					piecesVO.setPiece(piece_file_byte);
+				}
+				
+				// 寫入資料庫
+				PiecesVO newPiecesVO = piecesSvc.insertPiece(piecesVO);
+				newPiecesVO.setPiece(new byte[1]);
+				// 回傳json給ajax
+				Gson gson = new Gson();
+				String jsonStr = gson.toJson(newPiecesVO);
+				System.out.println(jsonStr);
+				PrintWriter out = res.getWriter();
+				out.write(jsonStr);
+				
+			}else {
+				// 若有則更新資料
+				piecesVO.setAlbum_id(album_id);
+				piecesVO.setPiece_name(piece_name);
+				piecesVO.setPiece_last_editor(piece_last_editor);
+				if(piece_file_byte.length != 0) {
+					piecesVO.setPiece(piece_file_byte);
+				}				
+				// 寫入資料庫
+				PiecesVO newPiecesVO = piecesSvc.insertPiece(piecesVO);
+				newPiecesVO.setPiece(new byte[1]);
+				// 回傳json給ajax
+				Gson gson = new Gson();
+				String jsonStr = gson.toJson(newPiecesVO);
+				System.out.println(jsonStr);
+				PrintWriter out = res.getWriter();
+				out.write(jsonStr);
+				
+			}
+			
+			
+		}
+		
+		
+		if("deletePiece".equals(action)) {
+			
+			String piece_id = req.getParameter("piece_id");
+			PiecesService piecesSvc = new PiecesService();
+			piecesSvc.deletePiece(piece_id);
+			
+		}
+		
+		
+		
+		
 
 	}
 

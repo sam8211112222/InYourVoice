@@ -23,7 +23,8 @@ public class AlbumService {
 	}
 	public AlbumVO insertAlbum(AlbumVO albumVO) {
 		
-		dao.insert(albumVO);
+		String pk = dao.insert(albumVO);
+		albumVO.setAlbum_id(pk);
 		
 		return albumVO;
 	}
@@ -37,13 +38,14 @@ public class AlbumService {
 		albumVO.setAlbum_name(album_name);
 		albumVO.setAlbum_intro(album_intro);
 		albumVO.setAlbum_photo(album_photo);
-		albumVO.setAlbum_status(album_status);
-		albumVO.setAlbum_add_time(album_add_time);
-		albumVO.setAlbum_release_time(album_release_time);
-		albumVO.setAlbum_last_edit_time(album_last_edit_time);
+//		albumVO.setAlbum_status(album_status);
+//		albumVO.setAlbum_add_time(album_add_time);
+//		albumVO.setAlbum_release_time(album_release_time);
+//		albumVO.setAlbum_last_edit_time(album_last_edit_time);
 		albumVO.setAlbum_last_editor(album_last_editor);
 		
-		dao.insert(albumVO);
+		String pk = dao.insert(albumVO);
+		albumVO.setAlbum_id(pk);
 		
 		return albumVO;
 	}
@@ -68,7 +70,7 @@ public class AlbumService {
 		
 	}
 	
-public AlbumVO updateAlbum(AlbumVO albumVO) {
+	public AlbumVO updateAlbum(AlbumVO albumVO) {
 		
 		dao.update(albumVO);
 		
