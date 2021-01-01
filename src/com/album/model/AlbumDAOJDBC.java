@@ -95,48 +95,65 @@ public class AlbumDAOJDBC implements AlbumDAO_interface {
 	}
 	
 	@Override
-	public void insert(AlbumVO albumVO) {
-		Connection conn = null;
+	public String insert(AlbumVO albumVO) {
+		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String generatedKey = "";
 
 		try {
 
 			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(INSERT_PSTMT);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			String[] generatedColumn = {"ALBUM_ID"};
+			pstmt = con.prepareStatement(INSERT_PSTMT, generatedColumn);
 
 			pstmt.setString(1, albumVO.getBand_id());
 			pstmt.setString(2, albumVO.getAlbum_name());
 			pstmt.setString(3, albumVO.getAlbum_intro());
 			pstmt.setBytes(4, albumVO.getAlbum_photo());
-			pstmt.setInt(5, albumVO.getAlbum_status());
-			pstmt.setTimestamp(6, albumVO.getAlbum_add_time());
+			pstmt.setInt(5, 1);
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
 			pstmt.setTimestamp(7, albumVO.getAlbum_release_time());
-			pstmt.setTimestamp(8, albumVO.getAlbum_last_edit_time());
+			pstmt.setTimestamp(8, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(9, albumVO.getAlbum_last_editor());
 
 			pstmt.executeUpdate();
 
+			rs = pstmt.getGeneratedKeys();
+			while(rs.next()) {
+				generatedKey = rs.getString(1);
+			}
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
+			e.printStackTrace();
 		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
 			if (pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
 				}
 			}
-			if (conn != null) {
+			if (con != null) {
 				try {
-					conn.close();
-				} catch (SQLException e) {
+					con.close();
+				} catch (Exception e) {
 					e.printStackTrace(System.err);
 				}
 			}
 		}
+		return generatedKey;
 	}
 
 	@Override
