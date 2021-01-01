@@ -1,12 +1,13 @@
 package com.eventorderlist.model;
 
+import java.sql.Connection;
 import java.util.List;
 
 import com.event.model.EventVO;
 
 public interface EventOrderListDAO {
 
-	public void insert(EventOrderListVO eventOrderListVO);
+	public void insert(Connection con,EventOrderListVO eventOrderListVO);
 
 	public void update(EventOrderListVO eventOrderListVO);
 

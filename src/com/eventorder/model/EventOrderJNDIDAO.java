@@ -8,30 +8,52 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
+import com.eventorderlist.model.EventOrderListDAO;
+import com.eventorderlist.model.EventOrderListJNDIDAO;
 import com.eventorderlist.model.EventOrderListVO;
+import com.google.gson.Gson;
 
-public class EventOrderJDBCDAO implements EventOrderDAO {
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Response;
+import redis.clients.jedis.Transaction;
 
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "TEA102G6";
-	String passwd = "123456";
+public class EventOrderJNDIDAO implements EventOrderDAO {
+
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TEA102G6");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	private static final String INSERT_STMT = "INSERT INTO eventorder (event_order_id,member_id,event_id,order_place_time,order_name,order_mail,order_phone) VALUES ('EVENT_ORDER'||LPAD(EVENTORDER_SEQ.NEXTVAL, 5, '0'), ?, ?, ?, ?, ?, ?)";
 	private static final String GET_ALL_STMT = "SELECT event_order_id,member_id,event_id,order_place_time,order_name,order_mail,order_phone FROM eventorder order by event_order_id ";
 	private static final String GET_ONE_STMT = "SELECT event_order_id,member_id,event_id,order_place_time,order_name,order_mail,order_phone FROM  eventorder WHERE event_order_id = ?";
 	private static final String DELETE = "DELETE FROM eventorder where event_order_id = ?";
 	private static final String UPDATE = "UPDATE eventorder set member_id = ?,event_id = ?,order_place_time = ?,order_name = ?,order_mail = ?,order_phone = ? where event_order_id=? ";
-	public void insert(EventOrderVO eventOrderVO) {
+
+	@Override
+	public void insert(EventOrderVO eventOrderVO,List<EventOrderListVO> eventOrderList) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
+		EventOrderListDAO dao = new EventOrderListJNDIDAO();
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
-			pstmt = con.prepareStatement(INSERT_STMT);
+			con = ds.getConnection();
+			con.setAutoCommit(false);
+			String[] cols = { "event_order_id" };
+			pstmt = con.prepareStatement(INSERT_STMT, cols);
 
 			pstmt.setString(1, eventOrderVO.getMember_id());
 			pstmt.setString(2, eventOrderVO.getEvent_id());
@@ -42,13 +64,27 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			ResultSet rs = pstmt.getGeneratedKeys();
+			String pk = null;
+			while (rs.next()) {
+				 pk = rs.getString(1);
+			}
+			
+			for(EventOrderListVO eventOrderListVO:eventOrderList) {
+				eventOrderListVO.setEvent_order_id(pk);
+				dao.insert(con, eventOrderListVO);
+			}
+			
+			con.commit();
+
 			// Handle any SQL errors
 		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			throw new RuntimeException("A database error occured. " + se.getMessage());
-			// Clean up JDBC resources
 		} finally {
 			if (pstmt != null) {
 				try {
@@ -59,6 +95,7 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 			}
 			if (con != null) {
 				try {
+					con.setAutoCommit(true);
 					con.close();
 				} catch (Exception e) {
 					e.printStackTrace(System.err);
@@ -76,8 +113,7 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setString(1, eventOrderVO.getMember_id());
@@ -90,9 +126,6 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -123,17 +156,14 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
+
 			pstmt = con.prepareStatement(DELETE);
 
 			pstmt.setString(1, event_order_id);
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -157,7 +187,6 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 	}
 
-
 	@Override
 	public EventOrderVO findByPrimaryKey(String event_order_id) {
 		EventOrderVO eventOrderVO = null;
@@ -167,8 +196,7 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 
 			pstmt.setString(1, event_order_id);
@@ -187,9 +215,6 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 			}
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -231,8 +256,7 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
@@ -248,9 +272,6 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 				list.add(eventOrderVO); // Store the row in the list
 			}
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -280,14 +301,5 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 		}
 		return list;
 	}
-
-	@Override
-	public void insert(EventOrderVO eventOrderVO, List<EventOrderListVO> eventOrderList) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
 
 }

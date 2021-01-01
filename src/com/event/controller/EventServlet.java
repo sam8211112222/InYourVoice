@@ -5,10 +5,18 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -19,12 +27,42 @@ import javax.servlet.http.Part;
 
 import com.event.model.EventService;
 import com.event.model.EventVO;
+import com.eventorderlist.model.EventOrderListService;
+import com.eventorderlist.model.EventOrderListVO;
 import com.ticket.model.TicketService;
 import com.ticket.model.TicketVO;
 
-@WebServlet("/event/EventServlet")
+import jdk.nashorn.internal.runtime.Context;
+
+@WebServlet(urlPatterns = "/event/EventServlet", loadOnStartup = 1)
 @MultipartConfig
 public class EventServlet extends HttpServlet {
+	Timer timer;
+	public void init() throws ServletException {
+		timer = new Timer();
+		TimerTask task = new TimerTask() {
+
+			public void run() {
+				ServletContext context = getServletContext();
+				EventService eventSvc = new EventService();
+				List<EventVO> onEventList = eventSvc.getAll();
+				Iterator<EventVO> it = onEventList.iterator();
+				while(it.hasNext()) {
+					EventVO event = it.next();
+					Long nowTime = System.currentTimeMillis();
+					if (event.getEvent_on_time().getTime()> nowTime||event.getEvent_status()!=1) {
+						it.remove();
+					}
+				}
+				context.setAttribute("onEventList", onEventList);
+			}
+		};
+		Calendar cal = Calendar.getInstance();
+		GregorianCalendar gc = new GregorianCalendar(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+				cal.get(Calendar.DAY_OF_MONTH));
+		timer.scheduleAtFixedRate(task, gc.getTime(), 15 * 60 * 1000);
+
+	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -76,7 +114,7 @@ public class EventServlet extends HttpServlet {
 				} catch (Exception e) {
 					errorMsgs.add("活動編號格式不正確");
 				}
-				// Send the use back to the form, if there were errors
+//				 Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/events/select_page.jsp");
 					failureView.forward(req, res);
@@ -89,18 +127,20 @@ public class EventServlet extends HttpServlet {
 				EventVO eventVO = eventSvc.getOneEvent(event_id);
 				TicketService ticketSvc = new TicketService();
 				List<TicketVO> ticketList = ticketSvc.getTicketByEventId(event_id);
-
 				if (eventVO == null) {
 					errorMsgs.add("查無資料");
 				} else if (ticketList != null) {
-					for (TicketVO ticketVO : ticketList) {
+//					for (TicketVO ticketVO : ticketList) {
+					Iterator<TicketVO> it = ticketList.iterator();
+					while (it.hasNext()) {
+						TicketVO ticketVO = it.next();
 						Integer ticketStatus = ticketVO.getTicket_status();
 						Long ticketOnsaleTime = ticketVO.getTicket_onsale_time().getTime();
 						Long ticketEndsaleTime = ticketVO.getTicket_endsale_time().getTime();
 						Long serverTime = System.currentTimeMillis();
 
 						if (ticketStatus == 0 || ticketOnsaleTime > serverTime || ticketEndsaleTime < serverTime) {
-							ticketList.remove(ticketVO);
+							it.remove();
 						}
 					}
 				}
@@ -115,12 +155,13 @@ public class EventServlet extends HttpServlet {
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("eventVO", eventVO); // 資料庫取出的eventVO物件,存入req
 				req.setAttribute("ticketList", ticketList); // 資料庫取出此event的ticketVO(List)
-				String url = "/front-end/events/listOneEvent.jsp";
+				String url = "/front-end/event/listOneEvent.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneEvent.jsp
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
+				e.printStackTrace();
 				errorMsgs.add("無法取得資料:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/events/select_page.jsp");
 				failureView.forward(req, res);
@@ -460,7 +501,7 @@ public class EventServlet extends HttpServlet {
 				}
 				/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("eventVO", eventVO); // 資料庫update成功後,正確的的eventVO物件,存入req
-				String url = "/back-end/events/listOneEvent.jsp";
+				String url = "/back-end/events/index.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 
@@ -803,6 +844,28 @@ public class EventServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
+		
+		if(req.getParameter("action").equals("band_event")) {
+			String band_id = req.getParameter("band_id");
+			System.out.println(band_id);
+			EventService eventsvc = new EventService();
+			List<EventVO> band_event = eventsvc.getEventsByBandId(band_id);
+			System.out.println(band_event.size());
+			
+			
+			req.setAttribute("band_event", band_event);
+			
+			String url = "/front-end/event/band_event.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
+			successView.forward(req, res);
+			
+			
+			
+		}
+	}
+	
+	public void destroy() {
+		timer.cancel();
 	}
 
 }

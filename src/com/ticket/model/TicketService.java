@@ -56,4 +56,13 @@ public class TicketService {
 	public List<TicketVO> getTicketByEventId(String event_id){
 		return dao.findByEventId(event_id);
 	}
+	
+	public TicketVO getOneTicket(String ticket_id) {
+		return dao.findByPrimaryKey(ticket_id);
+		
+	}
+	
+	public List<TicketVO> getAll(){
+		return dao.getAll();
+	}
 }

@@ -298,60 +298,6 @@ public class TicketJDBCDAO implements TicketDAO {
 		return list;
 	}
 
-//	public static void main(String[] args) {
-//		Date date = new Date();
-//		Timestamp timestamp = new Timestamp(date.getTime());
-//		TicketJDBCDAO ticketJDBCDAO = new TicketJDBCDAO();
-//
-////		 測試新增
-////		TicketVO ticketVO1 = new TicketVO();
-////		ticketVO1.setEvent_id("EVENT00000");
-////		ticketVO1.setTicket_sort(29);
-////		ticketVO1.setTicket_name("激夯早鳥票");
-////		ticketVO1.setTicket_amount(3000);
-////		ticketVO1.setTicket_price(3000);
-////		ticketVO1.setTicket_endsale_time(timestamp);
-////		ticketVO1.setTicket_edit_time(timestamp);
-////		ticketVO1.setTicket_status(1);
-////
-////		ticketJDBCDAO.insert(ticketVO1);
-//
-////		// 測試修改
-////		TicketVO ticketVO2 = new TicketVO();
-////		ticketVO2.setTicket_id("TICKET00200");
-////		ticketVO2.setEvent_id("EVENT00000");
-////		ticketVO2.setTicket_sort(29);
-////		ticketVO2.setTicket_name("激夯修改票");
-////		ticketVO2.setTicket_amount(3000);
-////		ticketVO2.setTicket_price(3000);
-////		ticketVO2.setTicket_endsale_time(timestamp);
-////		ticketVO2.setTicket_edit_time(timestamp);
-////		ticketVO2.setTicket_status(1);
-////
-////		ticketJDBCDAO.update(ticketVO2);
-//
-////		//測試刪除
-////		TicketVO ticketVO3 = new TicketVO();
-////		ticketVO3.setTicket_id("TICKET00200");
-////		
-////		ticketJDBCDAO.delete(ticketVO3.getTicket_id());
-//
-////		// 測試查詢單筆
-////		TicketVO ticketVO3 = ticketJDBCDAO.findByPrimaryKey("TICKET00350");
-////		System.out.println(ticketJDBCDAO.findByPrimaryKey("TICKET00350").toString());
-////		
-////		測試查詢全部
-////		List<TicketVO> allTickets = ticketJDBCDAO.getAll();
-////		for(TicketVO ticketVO:allTickets) {
-////			System.out.println(ticketVO.toString());
-////		}
-//		
-////		測試查詢單一活動的所有票種
-//		List<TicketVO> allTickets = ticketJDBCDAO.findByEventId("EVENT00000");
-//		for(TicketVO ticketVO:allTickets) {
-//			System.out.println(ticketVO.toString());
-//		}
-//	}
 
 	@Override
 	public List<TicketVO> findByEventId(String event_id) {
