@@ -7,11 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Band;
 
 public class BandDAOJDBC implements BandDAO_interface {
 	
@@ -270,6 +273,63 @@ public class BandDAOJDBC implements BandDAO_interface {
 			}
 		}
 
+		return list;
+	}
+
+	@Override
+	public List<BandVO> getAll(Map<String, String[]> map) {
+		List<BandVO> list = new ArrayList<BandVO>();
+		BandVO bandVO = null;
+	
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+	
+		try {
+			
+			con = ds.getConnection();
+			String finalSQL = "select * from band "
+		          + jdbcUtil_CompositeQuery_Band.get_WhereCondition(map)
+		          + "order by band_id";
+			pstmt = con.prepareStatement(finalSQL);
+			System.out.println("●●finalSQL(by DAO) = "+finalSQL);
+			rs = pstmt.executeQuery();
+	
+			while (rs.next()) {
+				bandVO = new BandVO();
+				bandVO.setBand_id(rs.getString("band_id"));
+				bandVO.setBand_name(rs.getString("band_name"));
+				bandVO.setBand_intro(rs.getString("band_intro"));
+				list.add(bandVO); // Store the row in the List
+			}
+	
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 		return list;
 	}
 	

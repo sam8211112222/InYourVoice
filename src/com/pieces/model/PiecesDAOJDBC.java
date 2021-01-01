@@ -89,47 +89,67 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 	}
 
 	@Override
-	public void insert(PiecesVO piecesVO) {
-		Connection conn = null;
+	public String insert(PiecesVO piecesVO) {
+		Connection con = null;
 		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String generatedKey = "";
 
 		try {
 
 			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(INSERT_PSTMT);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			String[] generatedColumn = {"PIECE_ID"};
+			pstmt = con.prepareStatement(INSERT_PSTMT, generatedColumn);
 
 			pstmt.setString(1, piecesVO.getAlbum_id());
-			pstmt.setString(2, piecesVO.getPiece_name());
-			pstmt.setBytes(3, piecesVO.getPiece());
-			pstmt.setInt(4, piecesVO.getPiece_status());
-			pstmt.setInt(5, piecesVO.getPiece_play_count());
-			pstmt.setTimestamp(6, piecesVO.getPiece_add_time());
-			pstmt.setTimestamp(7, piecesVO.getPiece_last_edit_time());
+			pstmt.setBytes(2, piecesVO.getPiece());
+			pstmt.setString(3, piecesVO.getPiece_name());
+			pstmt.setInt(4, 0);
+			pstmt.setInt(5, 0);
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
+			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(8, piecesVO.getPiece_last_editor());
 
 			pstmt.executeUpdate();
+			
+			// 取得自增pk: piece_id
+			rs = pstmt.getGeneratedKeys();
+			while(rs.next()) {
+				generatedKey = rs.getString(1);
+			}
 
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
+			e.printStackTrace();
 		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
 			if (pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
 				}
 			}
-			if (conn != null) {
+			if (con != null) {
 				try {
-					conn.close();
-				} catch (SQLException e) {
+					con.close();
+				} catch (Exception e) {
 					e.printStackTrace(System.err);
 				}
 			}
 		}
+		return generatedKey;
 	}
 
 	@Override
