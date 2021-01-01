@@ -12,18 +12,29 @@ public class TicketVO implements Serializable {
 	private Integer ticket_amount;
 	private Integer ticket_price;
 	private Timestamp ticket_onsale_time;
-
-	public Timestamp getTicket_onsale_time() {
-		return ticket_onsale_time;
-	}
-
-	public void setTicket_onsale_time(Timestamp ticket_onsale_time) {
-		this.ticket_onsale_time = ticket_onsale_time;
-	}
-
 	private Timestamp ticket_endsale_time;
 	private Timestamp ticket_edit_time;
 	private Integer ticket_status;
+	
+	public TicketVO() {
+		
+	}
+	
+	public TicketVO(String ticket_id, String event_id, Integer ticket_sort, String ticket_name, Integer ticket_amount,
+			Integer ticket_price, Timestamp ticket_onsale_time, Timestamp ticket_endsale_time,
+			Timestamp ticket_edit_time, Integer ticket_status) {
+		super();
+		this.ticket_id = ticket_id;
+		this.event_id = event_id;
+		this.ticket_sort = ticket_sort;
+		this.ticket_name = ticket_name;
+		this.ticket_amount = ticket_amount;
+		this.ticket_price = ticket_price;
+		this.ticket_onsale_time = ticket_onsale_time;
+		this.ticket_endsale_time = ticket_endsale_time;
+		this.ticket_edit_time = ticket_edit_time;
+		this.ticket_status = ticket_status;
+	}
 
 	public String getTicket_id() {
 		return ticket_id;
@@ -95,6 +106,14 @@ public class TicketVO implements Serializable {
 
 	public void setTicket_status(Integer ticket_status) {
 		this.ticket_status = ticket_status;
+	}
+
+	public Timestamp getTicket_onsale_time() {
+		return ticket_onsale_time;
+	}
+
+	public void setTicket_onsale_time(Timestamp ticket_onsale_time) {
+		this.ticket_onsale_time = ticket_onsale_time;
 	}
 
 	public String toString() {

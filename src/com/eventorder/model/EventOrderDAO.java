@@ -2,10 +2,11 @@ package com.eventorder.model;
 
 import java.util.List;
 
-import com.ticket.model.TicketVO;
+import com.eventorderlist.model.EventOrderListVO;
+
 
 public interface EventOrderDAO {
-	public void insert(EventOrderVO eventOrderVO);
+	public void insert(EventOrderVO eventOrderVO,List<EventOrderListVO> eventOrderList);
 
 	public void update(EventOrderVO eventOrderVO);
 

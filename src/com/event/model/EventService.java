@@ -3,13 +3,14 @@ package com.event.model;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventService {
 
 	private EventDAO dao;
 
 	public EventService() {
-		dao = new EventJDBCDAO();
+		dao = new EventJNDIDAO();
 	}
 
 	public EventVO addEvent(String band_id, Integer event_type, Integer event_sort, String event_title,
@@ -38,7 +39,7 @@ public class EventService {
 		eventVO.setEvent_seat(event_seat);
 
 		String pk = dao.insert(eventVO);
-		
+
 		eventVO.setEvent_id(pk);
 
 		return eventVO;
@@ -91,7 +92,14 @@ public class EventService {
 	}
 
 	public List<EventVO> getEventsByBandId(String band_id) {
-		return dao.findByBandId(band_id);
+		Long nowTime = System.currentTimeMillis();
+		List<EventVO> bandEvent = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
+				.filter(e -> e.getEvent_on_time().getTime() < nowTime)
+				.filter(e -> e.getEvent_start_time().getTime() > nowTime).filter(e -> e.getEvent_status() == 1)
+				.collect(Collectors.toList());
+
+		return bandEvent;
+
 	}
 
 }

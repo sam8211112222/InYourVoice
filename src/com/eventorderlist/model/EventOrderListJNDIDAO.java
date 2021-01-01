@@ -8,15 +8,21 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.event.model.EventVO;
-import com.eventorder.model.EventOrderVO;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 
-public class EventOrderListJDBCDAO implements EventOrderListDAO {
-
-	String driver = "oracle.jdbc.driver.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:XE";
-	String userid = "TEA102G6";
-	String passwd = "123456";
+public class EventOrderListJNDIDAO implements EventOrderListDAO {
+	private static DataSource ds = null;
+	static {
+		try {
+			Context ctx = new InitialContext();
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TEA102G6");
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+	}
 
 	private static final String INSERT_STMT = "INSERT INTO eventorderlist (orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks) VALUES ('EVENTORDERLIST'||LPAD(EVENTORDERLIST_SEQ.NEXTVAL, 5, '0'), ?, ?, ?, ?)";
 	private static final String GET_ALL_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks FROM eventorderlist order by orderlist_id ";
@@ -24,16 +30,14 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 	private static final String DELETE = "DELETE FROM eventorderlist where orderlist_id = ?";
 	private static final String UPDATE = "UPDATE eventorderlist set ticket_id = ?,event_order_id = ?,orderlist_goods_amount = ?,orderlist_remarks = ? where orderlist_id=? ";
 	private static final String GET_LIST_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks FROM  eventorderlist WHERE event_order_id = ?";
-	
-	public void insert(EventOrderListVO eventOrderListVO) {
 
-		Connection con = null;
+	@Override
+	public void insert(Connection con ,EventOrderListVO eventOrderListVO) {
+
 		PreparedStatement pstmt = null;
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
 			pstmt = con.prepareStatement(INSERT_STMT);
 
 			pstmt.setString(1, eventOrderListVO.getTicket_id());
@@ -43,11 +47,14 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
@@ -58,16 +65,10 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 					se.printStackTrace(System.err);
 				}
 			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace(System.err);
-				}
-			}
 		}
 
 	}
+
 
 	@Override
 	public void update(EventOrderListVO eventOrderListVO) {
@@ -76,9 +77,7 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 		PreparedStatement pstmt = null;
 
 		try {
-
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(UPDATE);
 
 			pstmt.setString(1, eventOrderListVO.getTicket_id());
@@ -89,9 +88,6 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -121,18 +117,13 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 		PreparedStatement pstmt = null;
 
 		try {
-
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(DELETE);
 
 			pstmt.setString(1, orderlist_id);
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -165,8 +156,7 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ONE_STMT);
 
 			pstmt.setString(1, orderlist_id);
@@ -183,9 +173,6 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 
 			}
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -227,8 +214,7 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
+			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ALL_STMT);
 			rs = pstmt.executeQuery();
 
@@ -242,9 +228,6 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 				list.add(eventOrderListVO); // Store the row in the list
 			}
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -275,7 +258,6 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 		return list;
 	}
 
-
 	@Override
 	public List<EventOrderListVO> getListByOrderId(String event_order_id) {
 		return null;
@@ -287,8 +269,8 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 //
 //		try {
 //
-//			Class.forName(driver);
-//			con = DriverManager.getConnection(url, userid, passwd);
+//			
+//			con = ds.getConnection();
 //			pstmt = con.prepareStatement(GET_LIST_STMT);
 //
 //			pstmt.setString(1, event_order_id);
@@ -305,9 +287,6 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 //
 //			}
 //
-//			// Handle any driver errors
-//		} catch (ClassNotFoundException e) {
-//			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 //			// Handle any SQL errors
 //		} catch (SQLException se) {
 //			throw new RuntimeException("A database error occured. " + se.getMessage());
@@ -338,9 +317,4 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 //		return eventOrderListVO;
 	}
 
-	@Override
-	public void insert(Connection con, EventOrderListVO eventOrderListVO) {
-		// TODO Auto-generated method stub
-		
-	}
 }
