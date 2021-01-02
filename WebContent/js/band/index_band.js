@@ -22,7 +22,7 @@ $(function(){
         console.log("jquery.load");
         let href = $(this).attr("data-href") + "/front-end/product/band_productAll.jsp";
 
-        $("#product_content").load(href, { band_id : $(this).attr("data-band_id")}, function(result){
+        $("#product_content").load(href, { band_id : $(this).attr("data-band_id"),action : "show_me_band"}, function(result){
         	//alert(result);
         	//將被載入頁的JavaScript載入到本頁執行
         	$result = $(result); 
@@ -52,6 +52,23 @@ $(function(){
             $(this).removeClass("active");
         })
         $(this).addClass("active");
+    });
+    
+    $("#event_btn").on("click", function(e){
+
+        $(".included_content").addClass("content_hide");
+        $("#event_content").removeClass("content_hide");
+
+        e.preventDefault();
+        console.log("jquery.load");
+        let href = $(this).attr("data-href") + "/event/EventServlet";
+
+        $("#event_content").load(href, { band_id : $(this).attr("data-band_id"),action : "band_event"}, function(result){
+        	//alert(result);
+        	//將被載入頁的JavaScript載入到本頁執行
+        	$result = $(result); 
+        	$result.find("script").appendTo('#event_content');
+    	}).hide().fadeIn('slow'); 
     });
      
    
