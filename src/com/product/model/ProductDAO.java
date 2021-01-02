@@ -861,4 +861,11 @@ public class ProductDAO implements ProductDAO_interface {
 		}
 		return list;
 	}
+	
+	//這是鈺涵的方法
+	@Override
+	public void updateStock(String productId, int stockDifference) {
+		// TODO Auto-generated method stub
+		
+	}
 }

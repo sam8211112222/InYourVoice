@@ -58,6 +58,11 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 	private static final String GET_TIME = "SELECT * FROM product ORDER BY product_last_edit_time DESC";
 	private static final String GET_ORDER = "SELECT product.band_id, orderlist.orderlist_id, orderlist.order_id, orderlist.orderlist_good_amount, orderlist.orderlist_remarks, orderlist.review_score, orderlist.review_msg, orderlist.review_time, orderlist.review_hidden, orderlist.price FROM product LEFT JOIN orderlist ON product.productid=orderlist.product_id";	
 	
+	//這是鈺涵的方法
+	private static final String UPDATE_STOCK = "UPDATE PRODUCT SET PRODUCT_STOCK = PRODUCT_STOCK + ? where PRODUCT_ID = ?";
+
+	
+	
 	@Override
 	public void insert(ProductVO productVO) {
 		Connection con = null;
@@ -1051,5 +1056,48 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 //			System.out.println(pv.getProduct_last_editor());
 //			System.out.println("======================================");
 //		}
+	}
+	
+	
+	//這是鈺涵的方法
+	public void updateStock(String productId,int stockDifference) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			con.setAutoCommit(false);
+			pstmt = con.prepareStatement(UPDATE_STOCK);
+
+			pstmt.setInt(1, stockDifference);
+			pstmt.setString(2, productId);
+			
+			pstmt.executeUpdate();
+			con.commit();
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
 	}
 }

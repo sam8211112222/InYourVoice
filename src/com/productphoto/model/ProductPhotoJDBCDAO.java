@@ -284,6 +284,217 @@ public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 		}
 		return list;
 	}
+	
+	
+	//這是鈺涵的方法
+		public byte[] getImage(String product_id) {
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			 byte[] result = null;
+			try {
+
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, userid, passwd);
+				con.setAutoCommit(false);
+				pstmt = con.prepareStatement("select productphoto_photo FROM productphoto where product_id = ?");
+				pstmt.setString(1,product_id);
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					result = rs.getBytes("productphoto_photo");
+				}
+				System.out.println("Operation success!");
+				con.commit();
+				// Handle any driver errors
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return result;
+		}
+		
+		//這是鈺涵的方法
+		public byte[] getFirstImageByProductId(String product_id) {
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			byte[] result = null;
+			try {
+
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, userid, passwd);
+				pstmt = con.prepareStatement(
+						"select productphoto_photo FROM productphoto where product_id = ? and ROWNUM = 1 order by productphoto_sort");
+				pstmt.setString(1, product_id);
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					result = rs.getBytes("productphoto_photo");
+				}
+				// Handle any driver errors
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return result;
+		}
+		
+		//這是鈺涵的方法
+		public byte[] getImageByPhotoId(String photoId) {
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			byte[] result = null;
+			try {
+
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, userid, passwd);
+				pstmt = con.prepareStatement(
+						"select productphoto_photo FROM productphoto where productphoto_id = ?");
+				pstmt.setString(1, photoId);
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					result = rs.getBytes("productphoto_photo");
+				}
+				// Handle any driver errors
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return result;
+		}
+		
+		//這是鈺涵的方法
+		public List<String> getIdListByProductId(String productId) {
+
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			List<String> result = new ArrayList<String>();
+			try {
+
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, userid, passwd);
+				pstmt = con.prepareStatement(
+						"select productphoto_id FROM productphoto where product_id = ? and ROWNUM < 6 order by productphoto_sort");
+				pstmt.setString(1, productId);
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					result.add(rs.getString("productphoto_id"));
+				}
+				// Handle any driver errors
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return result;
+		}
 
 	public static void main(String[] args) {
 		ProductPhotoJDBCDAO dao = new ProductPhotoJDBCDAO();

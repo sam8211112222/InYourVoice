@@ -774,4 +774,18 @@ public class ProductJNDIDAO implements ProductDAO_interface {
 		}
 		return list;
 	}
+	
+	//這是鈺涵的方法
+		@Override
+		public void updateStock(String productId, int stockDifference) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public List<ProductVO> getOrder(String product_id) {
+			// TODO Auto-generated method stub
+			System.err.println("ERROR! 這個人還沒有在JNDIDAO實作這個方法!");
+			return null;
+		}
 }

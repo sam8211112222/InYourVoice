@@ -275,5 +275,80 @@ public class ProductPhotoDAO implements ProductPhotoDAO_interface{
 		}
 		return list;
 	}
+	
+	//這是鈺涵的方法
+		@Override
+		public byte[] getImage(String product_id) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			 byte[] result = null;
+			try {
+
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_ALL_STMT);
+				con.setAutoCommit(false);
+				pstmt = con.prepareStatement("select productphoto_photo FROM productphoto where product_id = ?");
+				pstmt.setString(1,product_id);
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					result = rs.getBytes("productphoto_photo");
+				}
+				System.out.println("Operation success!");
+				con.commit();
+				// Handle any driver errors
+			
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. " + se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return result;
+		}
+
+		
+		//這是鈺涵的方法
+		@Override
+		public byte[] getFirstImageByProductId(String product_id) {
+			return null;
+		}
+
+		
+		//這是鈺涵的方法
+		@Override
+		public List<String> getIdListByProductId(String productId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		//這是鈺涵的方法
+		@Override
+		public byte[] getImageByPhotoId(String photoId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }
 

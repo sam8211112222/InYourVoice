@@ -2,6 +2,7 @@ package com.product.model;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductService {
 	
@@ -114,5 +115,23 @@ public class ProductService {
 	}
 	public List<ProductVO> getTime() {
 		return dao.getTime();
+	}
+	
+	//這是鈺涵的
+	public List<ProductVO> getAllByBand(String band_id) {
+		Long nowTime = System.currentTimeMillis();
+		List<ProductVO> bandProduct = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
+				.filter(e -> e.getProduct_on_time().getTime() < nowTime)
+				.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+				.collect(Collectors.toList());
+		return bandProduct;
+	}
+
+	public void updateStock(String productId, int stockDifference) {
+		try {
+			dao.updateStock(productId, stockDifference);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

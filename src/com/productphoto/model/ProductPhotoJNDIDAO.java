@@ -268,4 +268,30 @@ public class ProductPhotoJNDIDAO implements ProductPhotoDAO_interface {
 		}
 		return list;
 	}
+	
+	//這是鈺涵的方法
+		@Override
+		public byte[] getImage(String id) {
+			return null;
+		}
+
+		//這是鈺涵的方法
+		@Override
+		public byte[] getFirstImageByProductId(String product_id) {
+			return null;
+		}
+
+		//這是鈺涵的方法
+		@Override
+		public List<String> getIdListByProductId(String productId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		//這是鈺涵的方法
+		@Override
+		public byte[] getImageByPhotoId(String photoId) {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }
