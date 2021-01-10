@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="BIG5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAB3:upload</title>
+    <style>
+      
+    </style>
+</head>
+
+<body>
+
+    <FORM action="uploadServlet3_simple.do" method=post enctype="multipart/form-data">
+        <div><input type="file" name="upfile1" id="file1" class="upload"></div>
+        <div><input type="file" name="upfile2" id="file2" class="upload"></div>
+        <div><input type="file" name="upfile3" id="file3" class="upload"></div>
+        <div><input type="file" name="upfile4" id="file4" class="upload"></div>
+        <div><input type="file" name="upfile5" id="file5" class="upload"></div>
+        <div><span>預覽圖</span></div>
+        <div><span class="preview"></span><span class="preview"></span><span class="preview"></span><span
+                class="preview"></span><span class="preview"></span></div>
+        <input type="submit" name = "submit" value="上傳" >
+    </FORM>
+
+
+    <script>
+        var upload = document.getElementsByClassName("upload");
+        for (let i = 0; i < upload.length; i++) {
+            upload[i].addEventListener("change", function (e) {
+                let reader = new FileReader();
+                reader.readAsDataURL(upload[i].files[0]);
+                reader.addEventListener("load", function () {
+                    let preview_img = `<img src="${reader.result}" class = "preview_img" >`;
+                    let preview = document.getElementsByClassName("preview");
+                    // preview.innerHTML = "";
+                    preview[i].innerHTML = preview_img;
+
+
+                })
+            })
+        }
+    </script>
+</body>
+
+</html>
