@@ -34,12 +34,22 @@ public interface ProductDAO_interface {
 
 	public List<OrderListVO> getOrder(String band_id);
 
-	// 這是鈺涵的方法
 	/**
-	 * 異動產品的庫存數量
-	 * 
-	 * @param productId       產品id
-	 * @param stockDifference 庫存變動數
-	 */
-	void updateStock(String productId, int stockDifference);
+     * 異動產品的庫存數量
+     * @param productId 產品id
+     * @param stockDifference 庫存變動數
+     * //這是鈺涵的方法
+     */
+    void updateStock(String productId,int stockDifference);
+    
+    /**
+     * //這是鈺涵的方法
+     */
+	List<ProductVO> findByProductName(String name);
+	
+	/**
+
+     * //這是鈺涵的方法
+     */
+	List<ProductVO> findByProductType(String productType);
 }

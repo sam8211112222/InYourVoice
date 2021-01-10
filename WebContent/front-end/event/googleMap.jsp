@@ -18,8 +18,8 @@
 <title>Document</title>
 <style>
 #map {
-	height: 300px;
-	width: 300px;
+	height: 500px;
+	width: 500px;
 }
 </style>
 </head>
@@ -31,15 +31,21 @@
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGybO6zwEF7iK4WGAo6GpIoBKkZlJF3IA&callback=initMap">
         </script>
 	<script>
+
         var map;
         function initMap() {
+        	navigator.geolocation.getCurrentPosition(function(position){
+        		   lat = position.coords.latitude;
+        	        lng = position.coords.longitude;
+  			  console.log(position);
+  			});
   var markers = [];
   var infoWindows = [];
   var loaction;
   var geocoder = new google.maps.Geocoder();
   var info_config = [
 	<c:forEach var="eventVO" items="${list}">
-    '<h2>'+"${eventVO.event_place}"+'</h2>'+
+    `<h2>`+"${eventVO.event_place}"+'</h2>'+
     '<span>'+"${eventVO.event_title}"+'</span><br/>'+
     '<img class="infoImg" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"><br/>'
     ,
@@ -69,10 +75,10 @@
   }
 
   //使用地址或名稱標出位置
-  _geocoder('南京復興捷運站',function(address){
+  _geocoder('台北市',function(address){
     var map = new google.maps.Map(document.getElementById('map'), {
-      center: address,
-      zoom: 14
+      center: { lat:lat, lng:lng },
+      zoom: 14,
     });
 
     //設定資訊視窗內容

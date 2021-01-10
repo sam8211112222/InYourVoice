@@ -26,7 +26,7 @@
  rel="stylesheet">
 </head>
 <body bgcolor='white'>
-<%@ include file="/back-end/headerNfooter/header.file" %>
+<%@ include file="/back-end/sb/page1.file" %>
 <div align="center" style="position:relative" id="table-1">
    後台商品首頁
 </div>
@@ -50,6 +50,6 @@
 		</c:forEach>
 	</ul>
 </c:if>
-<%@ include file="/back-end/headerNfooter/footer.file" %>
+<%@ include file="/back-end/sb/page2.file" %>
 </body>
 </html>

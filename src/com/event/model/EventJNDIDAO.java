@@ -405,4 +405,16 @@ public class EventJNDIDAO implements EventDAO {
 		}
 		return list;
 	}
+
+	@Override
+	public List<EventVO> eventListOrderBy() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<EventVO> eventSelcet(String sql) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

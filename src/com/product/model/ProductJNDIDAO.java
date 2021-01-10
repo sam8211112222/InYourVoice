@@ -906,10 +906,24 @@ public class ProductJNDIDAO implements ProductDAO_interface {
 		}
 		return list;
 	}
-	//這是鈺涵的方法
+	// 這是鈺涵的方法
 	@Override
 	public void updateStock(String productId, int stockDifference) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	// 這是鈺涵的方法
+	@Override
+	public List<ProductVO> findByProductName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 這是鈺涵的方法
+	@Override
+	public List<ProductVO> findByProductType(String productType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

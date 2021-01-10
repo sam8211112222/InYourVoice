@@ -30,7 +30,7 @@
 </head>
 
 <body id="page-top">
-<%@ include file="/back-end/headerNfooter/header.file"%>
+<%@ include file="/back-end/sb/page1.file"%>
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
@@ -366,7 +366,7 @@
             </div>
             <!-- End of Main Content -->
 
-         <%@ include file="/back-end/headerNfooter/footer.file"%>
+         <%@ include file="/back-end/sb/page2.file"%>
 
     <!-- Bootstrap core JavaScript-->
     <script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>

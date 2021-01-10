@@ -934,4 +934,18 @@ public class ProductDAO implements ProductDAO_interface {
 		// TODO Auto-generated method stub
 		
 	}
+
+	//這是鈺涵的方法
+	@Override
+	public List<ProductVO> findByProductName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	//這是鈺涵的方法
+	@Override
+	public List<ProductVO> findByProductType(String productType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

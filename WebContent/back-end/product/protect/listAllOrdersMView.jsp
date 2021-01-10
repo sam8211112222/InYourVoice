@@ -28,7 +28,7 @@
  rel="stylesheet">
 </head>
 <body>
-<%@ include file="/back-end/headerNfooter/header.file" %>
+<%@ include file="/back-end/sb/page1.file" %>
 <div align="center" style="position:relative" id="table-1">
 	商品訂單資料 
 </div>
@@ -100,6 +100,6 @@
 			</c:forEach>
 		</tbody>
 	</Table>
-<%@ include file="/back-end/headerNfooter/footer.file" %>
+<%@ include file="/back-end/sb/page2.file" %>
 </body>
 </html>

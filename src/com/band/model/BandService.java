@@ -1,5 +1,6 @@
 package com.band.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -76,6 +77,45 @@ public class BandService {
 				.collect(Collectors.toList());
 			System.out.println(listOfSearch.size());
 		return listOfSearch;		
+	}
+	
+// Kevin===========================================================================================================
+	public BandVO updateBandIntro(String bandId,String bandIntro) {
+		BandVO bandVO = getOneBand(bandId);
+		bandVO = dao.updateBandIntro(bandVO,bandIntro);
+		return bandVO;
+	}
+	public byte[] getBandSong(String bandId) {
+		BandVO bandVO = getOneBand(bandId);
+		byte[] song = bandVO.getBand_piece_check();
+		return song;
+	}
+	public byte[] getBanner(String bandId) {
+		BandVO bandVO = getOneBand(bandId);
+		byte[] banner = bandVO.getBand_banner();
+		return banner;
+	}
+	public BandVO updateBandStatus(String bandId) {
+		BandVO bandVO = getOneBand(bandId);
+		bandVO.setBand_status(1);
+		dao.update(bandVO);
+		return bandVO;
+	}
+	//取得樂團圖片
+	public byte[] getBandpic(String bandId) {
+		BandVO bandVO = getOneBand(bandId);
+		byte[] pic = bandVO.getBand_photo();
+		return pic;
+	}
+
+
+	public BandVO updateBandStatusBackEnd(String bandId,String bandStatus,Timestamp bandLastEditTime,String bandLastEditor) {
+		BandVO bandVO = getOneBand(bandId);
+		bandVO.setBand_status(Integer.valueOf(bandStatus));
+		bandVO.setBand_last_editor(bandLastEditor);
+		bandVO.setBand_last_edit_time(bandLastEditTime);
+		dao.update(bandVO);
+		return bandVO;		
 	}
 
 }

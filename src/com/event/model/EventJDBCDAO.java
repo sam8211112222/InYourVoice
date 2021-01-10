@@ -32,7 +32,8 @@ public class EventJDBCDAO implements EventDAO {
 			+ "event_last_edit_time=?," + "event_last_editor=?," + "event_status=?,"
 			+ "event_seat=? where event_id = ?";
 	private static final String GET_LIST_BY_BANDID = "SELECT event_id, band_id, event_type, event_sort, event_title, event_detail, event_poster, event_area, event_place, event_city,event_cityarea, event_address, event_start_time, event_on_time, event_last_edit_time,event_last_editor, event_status, event_seat FROM event WHERE BAND_ID = ?  ORDER BY EVENT_SORT";
-
+	// Kevin
+	private static final String GET_ALL_EVENT = "select * from event order by event_start_time desc";
 	@Override
 	public String insert(EventVO eventVO) {
 		Connection con = null;
@@ -488,4 +489,135 @@ public class EventJDBCDAO implements EventDAO {
 		return list;
 	}
 
+	@Override
+	public List<EventVO> eventListOrderBy() {
+		List<EventVO> list = new ArrayList<EventVO>();
+		EventVO eventVO = null;
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ALL_EVENT);		
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				eventVO = new EventVO();
+				eventVO.setEvent_id(rs.getString("event_id"));
+				eventVO.setBand_id(rs.getString("band_id"));
+				eventVO.setEvent_type(rs.getInt("event_type"));
+				eventVO.setEvent_sort(rs.getInt("event_sort"));
+				eventVO.setEvent_title(rs.getString("event_title"));
+				eventVO.setEvent_detail(rs.getString("event_detail"));
+				eventVO.setEvent_poster(rs.getBytes("event_poster"));
+				eventVO.setEvent_area(rs.getInt("event_area"));
+				eventVO.setEvent_place(rs.getString("event_place"));
+				eventVO.setEvent_city(rs.getString("event_city"));
+				eventVO.setEvent_cityarea(rs.getString("event_cityarea"));
+				eventVO.setEvent_address(rs.getString("event_address"));
+				eventVO.setEvent_start_time(rs.getTimestamp("event_start_time"));
+			
+
+				list.add(eventVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<EventVO> eventSelcet(String sql) {
+		List<EventVO> list = new ArrayList<EventVO>();
+		EventVO eventVO = null;
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(sql);		
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				eventVO = new EventVO();
+				eventVO.setEvent_id(rs.getString("event_id"));
+				eventVO.setBand_id(rs.getString("band_id"));
+				eventVO.setEvent_type(rs.getInt("event_type"));
+				eventVO.setEvent_sort(rs.getInt("event_sort"));
+				eventVO.setEvent_title(rs.getString("event_title"));
+				eventVO.setEvent_detail(rs.getString("event_detail"));
+				eventVO.setEvent_poster(rs.getBytes("event_poster"));
+				eventVO.setEvent_area(rs.getInt("event_area"));
+				eventVO.setEvent_place(rs.getString("event_place"));
+				eventVO.setEvent_city(rs.getString("event_city"));
+				eventVO.setEvent_cityarea(rs.getString("event_cityarea"));
+				eventVO.setEvent_address(rs.getString("event_address"));
+				eventVO.setEvent_start_time(rs.getTimestamp("event_start_time"));
+			
+
+				list.add(eventVO); // Store the row in the list
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
 }

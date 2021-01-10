@@ -115,4 +115,13 @@ public class EventService {
 	public void setEventStatus(EventVO eventVO) {
 		dao.update(eventVO);
 	}
+	
+	// Kevin================================================================================================
+	public List<EventVO> getListEventOrderby(){
+		return dao.eventListOrderBy();
+	}
+	public List<EventVO> getResult(String searchKeyWord){
+	String get_result = "select * from event where event_detail like '%"+searchKeyWord+"%' order by event_start_time desc";
+		return dao.eventSelcet(get_result);
+	}
 }

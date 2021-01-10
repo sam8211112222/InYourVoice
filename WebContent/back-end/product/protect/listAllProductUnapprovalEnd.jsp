@@ -33,7 +33,7 @@
  rel="stylesheet">
 </head>
 <body bgcolor='white'>
-<%@ include file="/back-end/headerNfooter/header.file" %>
+<%@ include file="/back-end/sb/page1.file" %>
 <script type="text/javascript">
 alert('已完成審核');
 </script>
@@ -148,6 +148,6 @@ alert('已完成審核');
 	</c:forEach>
 </table>
 <%@ include file="page2.file" %>
-<%@ include file="/back-end/headerNfooter/footer.file" %>
+<%@ include file="/back-end/sb/page2.file" %>
 </body>
 </html>

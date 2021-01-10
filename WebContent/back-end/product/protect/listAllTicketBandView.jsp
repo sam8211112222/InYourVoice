@@ -32,7 +32,7 @@
  rel="stylesheet">
 </head>
 <body bgcolor='white'>
-<%@ include file="/back-end/headerNfooter/header.file" %>
+<%@ include file="/back-end/sb/page1.file" %>
 <div align="center" style="position:relative" id="table-1">
 	票卷訂單資料 
 </div>
@@ -110,6 +110,6 @@
 </table>
 </div>
 <%@ include file="page2.file" %>
-<%@ include file="/back-end/headerNfooter/footer.file" %>
+<%@ include file="/back-end/sb/page2.file" %>
 </body>
 </html>

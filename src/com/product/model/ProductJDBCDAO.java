@@ -60,7 +60,18 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 	private static final String GET_TIME = "SELECT * FROM product ORDER BY product_last_edit_time DESC";
 	private static final String GET_ORDER = "SELECT p.band_id, o.orderlist_id, o.order_id, o.product_id, o.orderlist_goods_amount,o.orderlist_remarks,o.review_score, o.review_msg, o.review_time, o.review_hidden, o.price FROM product p,orderlist o WHERE p.product_id=o.product_id AND p.band_id = ?";	
 	
-	//這是鈺涵的方法
+	/**
+	 * added by  鈺涵
+	 */
+	private static final String FIND_BY_NAME_STMT = "SELECT * FROM product where upper(product_name) LIKE upper(?)";
+	/**
+	 * added by  鈺涵
+	 */
+	private static final String FIND_BY_TYPE_STMT = "SELECT * FROM product where product_type = ?";
+	
+	/**
+	 * added by  鈺涵
+	 */
 	private static final String UPDATE_STOCK = "UPDATE PRODUCT SET PRODUCT_STOCK = PRODUCT_STOCK + ? where PRODUCT_ID = ?";
 
 	@Override
@@ -938,8 +949,10 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		return list;
 	}
 	
-	//這是鈺涵的方法
-	public void updateStock(String productId,int stockDifference) {
+	/**
+	 * added by  鈺涵
+	 */
+	public void updateStock(String productId, int stockDifference) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -952,7 +965,7 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 
 			pstmt.setInt(1, stockDifference);
 			pstmt.setString(2, productId);
-			
+
 			pstmt.executeUpdate();
 			con.commit();
 			// Handle any driver errors
@@ -980,31 +993,184 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		}
 	}
 
+	
+	/**
+	 * added by  鈺涵
+	 */
+	@Override
+	public List<ProductVO> findByProductName(String productName) {
+		List<ProductVO> list = new ArrayList<ProductVO>();
+		ProductVO productVO = null;
 
-	public static void main(String[] args) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 
-		ProductJDBCDAO dao = new ProductJDBCDAO();
+		try {
 
-		// 新增
-		ProductVO productVO1 = new ProductVO();
-		productVO1.setBand_id("BAND00350");
-		productVO1.setProduct_type(2);
-		productVO1.setProduct_name("洪正出櫃");
-		productVO1.setProduct_intro("洪正出櫃海報");
-		productVO1.setProduct_detail("洪正出櫃海報");
-		productVO1.setProduct_price(200.00);
-		productVO1.setProduct_stock(30);
-		productVO1.setProduct_check_status(1);
-		productVO1.setProduct_status(1);
-		productVO1.setProduct_on_time(java.sql.Timestamp.valueOf("2020-12-10 12:49:45"));
-		productVO1.setProduct_off_time(java.sql.Timestamp.valueOf("2021-12-10 12:49:45"));
-		productVO1.setProduct_add_time(java.sql.Timestamp.valueOf("2020-12-4 12:49:45"));
-		productVO1.setProduct_discount(0.25);
-		productVO1.setProduct_discount_on_time(java.sql.Timestamp.valueOf("2020-12-20 12:49:45"));
-		productVO1.setProduct_discount_off_time(java.sql.Timestamp.valueOf("2021-5-20 12:49:45"));
-		productVO1.setProduct_last_edit_time(new Timestamp(System.currentTimeMillis()));
-		productVO1.setProduct_last_editor("BAND00350");
-		dao.insert(productVO1);
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(FIND_BY_NAME_STMT);
+			pstmt.setString(1, "%" + productName + "%");
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVO 也稱為 Domain objects
+				productVO = new ProductVO();
+				productVO.setProduct_id(rs.getString("product_id"));
+				productVO.setBand_id(rs.getString("band_id"));
+				productVO.setProduct_type(rs.getInt("product_type"));
+				productVO.setProduct_name(rs.getString("product_name"));
+				productVO.setProduct_intro(rs.getString("product_intro"));
+				productVO.setProduct_detail(rs.getString("product_detail"));
+				productVO.setProduct_price(rs.getDouble("product_price"));
+				productVO.setProduct_stock(rs.getInt("product_stock"));
+				productVO.setProduct_check_status(rs.getInt("product_check_status"));
+				productVO.setProduct_status(rs.getInt("product_status"));
+				productVO.setProduct_on_time(rs.getTimestamp("product_on_time"));
+				productVO.setProduct_off_time(rs.getTimestamp("product_off_time"));
+				productVO.setProduct_add_time(rs.getTimestamp("product_add_time"));
+				productVO.setProduct_discount(rs.getDouble("product_discount"));
+				productVO.setProduct_discount_on_time(rs.getTimestamp("product_discount_on_time"));
+				productVO.setProduct_discount_off_time(rs.getTimestamp("product_discount_off_time"));
+				productVO.setProduct_last_edit_time(rs.getTimestamp("product_last_edit_time"));
+				productVO.setProduct_last_editor(rs.getString("product_last_editor"));
+				list.add(productVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	
+	/**
+	 * added by  鈺涵
+	 */
+	@Override
+	public List<ProductVO> findByProductType(String productType) {
+		List<ProductVO> list = new ArrayList<ProductVO>();
+		ProductVO productVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(FIND_BY_TYPE_STMT);
+			pstmt.setString(1, productType);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVO 也稱為 Domain objects
+				productVO = new ProductVO();
+				productVO.setProduct_id(rs.getString("product_id"));
+				productVO.setBand_id(rs.getString("band_id"));
+				productVO.setProduct_type(rs.getInt("product_type"));
+				productVO.setProduct_name(rs.getString("product_name"));
+				productVO.setProduct_intro(rs.getString("product_intro"));
+				productVO.setProduct_detail(rs.getString("product_detail"));
+				productVO.setProduct_price(rs.getDouble("product_price"));
+				productVO.setProduct_stock(rs.getInt("product_stock"));
+				productVO.setProduct_check_status(rs.getInt("product_check_status"));
+				productVO.setProduct_status(rs.getInt("product_status"));
+				productVO.setProduct_on_time(rs.getTimestamp("product_on_time"));
+				productVO.setProduct_off_time(rs.getTimestamp("product_off_time"));
+				productVO.setProduct_add_time(rs.getTimestamp("product_add_time"));
+				productVO.setProduct_discount(rs.getDouble("product_discount"));
+				productVO.setProduct_discount_on_time(rs.getTimestamp("product_discount_on_time"));
+				productVO.setProduct_discount_off_time(rs.getTimestamp("product_discount_off_time"));
+				productVO.setProduct_last_edit_time(rs.getTimestamp("product_last_edit_time"));
+				productVO.setProduct_last_editor(rs.getString("product_last_editor"));
+				list.add(productVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+//	public static void main(String[] args) {
+//
+//		ProductJDBCDAO dao = new ProductJDBCDAO();
+//
+//		// 新增
+//		ProductVO productVO1 = new ProductVO();
+//		productVO1.setBand_id("BAND00350");
+//		productVO1.setProduct_type(2);
+//		productVO1.setProduct_name("洪正出櫃");
+//		productVO1.setProduct_intro("洪正出櫃海報");
+//		productVO1.setProduct_detail("洪正出櫃海報");
+//		productVO1.setProduct_price(200.00);
+//		productVO1.setProduct_stock(30);
+//		productVO1.setProduct_check_status(1);
+//		productVO1.setProduct_status(1);
+//		productVO1.setProduct_on_time(java.sql.Timestamp.valueOf("2020-12-10 12:49:45"));
+//		productVO1.setProduct_off_time(java.sql.Timestamp.valueOf("2021-12-10 12:49:45"));
+//		productVO1.setProduct_add_time(java.sql.Timestamp.valueOf("2020-12-4 12:49:45"));
+//		productVO1.setProduct_discount(0.25);
+//		productVO1.setProduct_discount_on_time(java.sql.Timestamp.valueOf("2020-12-20 12:49:45"));
+//		productVO1.setProduct_discount_off_time(java.sql.Timestamp.valueOf("2021-5-20 12:49:45"));
+//		productVO1.setProduct_last_edit_time(new Timestamp(System.currentTimeMillis()));
+//		productVO1.setProduct_last_editor("BAND00350");
+//		dao.insert(productVO1);
 
 		// 修改
 //		ProductVO productVO2 = new ProductVO();
@@ -1191,5 +1357,5 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 //			System.out.println("======================================");
 //		}
 		
-	}
+//	}
 }

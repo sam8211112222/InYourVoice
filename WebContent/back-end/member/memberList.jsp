@@ -52,7 +52,7 @@ width:120px;
 <body id="page-top">
 
 
-	<%@ include file="/back-end/headerNfooter/header.file"%>
+	<%@ include file="/back-end/sb/page1.file"%>
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 
@@ -111,7 +111,7 @@ width:120px;
 	</div>
 	<!-- End of Main Content -->
 
-	<%@ include file="/back-end/headerNfooter/footer.file"%>
+	<%@ include file="/back-end/sb/page2.file"%>
 	<script>
 		$(".updatebtn")
 				.click(

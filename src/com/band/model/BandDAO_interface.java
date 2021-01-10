@@ -3,6 +3,8 @@ package com.band.model;
 import java.util.List;
 import java.util.Map;
 
+import com.member.model.MemberVo;
+
 import database.util.ConnectionInfo;
 
 public interface BandDAO_interface extends ConnectionInfo {
@@ -13,6 +15,8 @@ public interface BandDAO_interface extends ConnectionInfo {
     public BandVO findByPrimaryKey(String band_id);
     public List<BandVO> getAll();
   //萬用複合查詢(傳入參數型態Map)(回傳 List)
-    public List<BandVO> getAll(Map<String, String[]> map); 
+    public List<BandVO> getAll(Map<String, String[]> map);
+	public BandVO updateBandIntro(BandVO bandVO, String bandIntro);
+	void insertBand(BandVO bandVO, MemberVo memberVo);
 
 }
