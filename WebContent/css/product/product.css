@@ -1,0 +1,183 @@
+div#table-1 {
+	width: 260px;
+	background-color: #edf2fb;
+	font-size: 30px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 10px 20px;
+	border: 5px groove gray;
+	height: 70px;
+	text-align: center;
+	margin: 0px auto;
+	color: #3f8efc;
+	align: "center";
+	style: "position:relative";
+}
+
+div#select {
+	position: "relative";
+	top: 10px;
+	bottom: 10px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+button#searchTable {
+	margin-right: 6px;
+	margin-left: 6px;
+	background-color: #edf2fb;
+	border: 1px black solid;
+	color: #3f8efc;
+	font-size: 20px;
+	padding: 7px 7px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	border-radius: 15px;;
+	width: 180px;
+	height: 50px;
+}
+
+button#searchTable:hover {
+	margin-right: 6px;
+	margin-left: 6px;
+	background-color: #3d5a80;
+	border: 1px black solid;
+	color: #f8f9fa;
+	font-size: 20px;
+	padding: 7px 7px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	border-radius: 15px;;
+	width: 180px;
+	height: 50px;
+}
+
+div#table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	text-align: center;
+	padding-top: 10px;
+}
+
+table th {
+	border: 2px solid #cad9ea;
+	color: #012a4a;
+	text-align: center;
+	height: 30px;
+	min-width:70px;
+	font-size: 18px;
+	word-break: break-all;
+	table-layout: fixed
+}
+
+table td {
+	border: 2px solid #cad9ea;
+	color: #012a4a;
+	text-align: center;
+	height: 30px;
+	font-size: 14px;
+	word-break: break-all;
+	table-layout: fixed;
+	margin-bottom: 10px;
+}
+
+table thead th {
+	background-color: #CCE8EB;
+	text-align: center;
+	width: 100px;
+	word-break: break-all;
+	table-layout: fixed
+}
+
+table tr:nth-child(odd) {
+	background: #a2d2ff;
+	text-align: center;
+	word-break: break-all;
+	table-layout: fixed
+}
+
+table tr:nth-child(even) {
+	background: #edf2fb;
+	text-align: center;
+	word-break: break-all;
+	table-layout: fixed
+}
+
+table tr:nth-child(odd) input {
+	background-color: #add7f6;
+	border: 1px black solid;
+	border-radius: 2px;
+}
+
+table tr:nth-child(even) input {
+	background-color: #add7f6;
+	border: 1px black solid;
+	border-radius: 2px;
+}
+
+#submit {
+	background-color: #a2d2ff;
+	color: #012a4a;
+	font-size: 16px;
+	border: 1px black solid;
+	border-radius: 2px;
+}
+
+#submit:hover {
+	background-color: #3d5a80;
+	color: #f8f9fa;
+	font-size: 16px;
+	border: 1px black solid;
+	border-radius: 2px;
+}
+
+#submit1 {
+	background-color: #bde0fe;
+	color: #012a4a;
+	font-size: 16px;
+	border: 1px black solid;
+	border-radius: 7px;
+}
+
+#submit1:hover {
+	background-color: #a2d2ff;
+	color: #f8f9fa;
+	font-size: 16px;
+	border: 1px black solid;
+	border-radius: 7px;
+}
+
+#submit2 {
+	background-color: #eaf4f4;
+	color: #012a4a;
+	font-size: 14px;
+	border: 1px black solid;
+	border-radius: 7px;
+}
+
+#submit2:hover {
+	background-color: #3d5a80;
+	color: #f8f9fa;
+	font-size: 14px;
+	border: 1px black solid;
+	border-radius: 7px;
+}
+select{
+background-color:#eaf4f4;
+border-radius: 2px; 
+border: 1px black solid;
+} 	
+
+
+option{ 
+background-color:#eaf4f4;
+border-radius: 2px; 
+border: 1px black solid;
+} 
+option:not(:checked) { 
+    background-color: #eaf4f4;
+    border-radius: 2px; 
+    border: 1px black solid;
+} 
