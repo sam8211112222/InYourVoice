@@ -3,7 +3,9 @@ package com.album.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -26,10 +28,12 @@ import javax.websocket.Session;
 import com.album.model.AlbumService;
 import com.album.model.AlbumVO;
 import com.google.gson.Gson;
+import com.pieces.model.PiecesService;
+import com.pieces.model.PiecesVO;
 
 @WebServlet("/album/album.do")
 @MultipartConfig
-public class albumServlet extends HttpServlet {
+public class AlbumServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -327,24 +331,52 @@ public class albumServlet extends HttpServlet {
 			
 			res.setCharacterEncoding("UTF-8");
 			
+			String action_type = req.getParameter("action_type");
+			
 			String album_id = req.getParameter("album_id");
 			String band_id = req.getParameter("band_id");
+			String member_id = req.getParameter("member_id");
+			System.out.println(member_id);
 			String album_name = req.getParameter("album_name");
 			String album_intro = req.getParameter("album_intro");
+			int shelf_status = Integer.parseInt(req.getParameter("shelf_status"));
+			
+			String on_shelf_time = req.getParameter("on_shelf_time").trim();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			java.sql.Timestamp on_shelf_time_timestamp = null;
+			if (shelf_status == 2) {
+				
+				try {
+					on_shelf_time_timestamp = new Timestamp(sdf.parse(on_shelf_time).getTime());
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+			}else if (shelf_status == 1) {
+				on_shelf_time_timestamp = new Timestamp(System.currentTimeMillis());
+			}
 			
 			Part album_photo = req.getPart("album_photo");
 //			System.out.println(album_photo.getSubmittedFileName());
 			InputStream in = album_photo.getInputStream();
 //			System.out.println(in.available());
+			int photo_file_length = in.available();
+			String filename = album_photo.getSubmittedFileName();
+			filename = filename.length() == 0 ? null : filename;
 			byte[] album_photo_byte = new byte[in.available()];
+			
 			in.read(album_photo_byte);
+//			for(int i = 0 ; i<album_photo_byte.length;i++) {
+//				System.out.println(album_photo_byte[i]);
+//			}
+			
 			in.close();
 			
 //			System.out.println(album_id);
 //			System.out.println(band_id);
 //			System.out.println(album_name);
 //			System.out.println(album_intro);
-			System.out.println(album_photo.getSubmittedFileName());
+			System.out.println("filename = " + album_photo.getSubmittedFileName());
 			
 			// 用album_id找看看是否新增過
 			AlbumService albumSvc = new AlbumService();
@@ -358,41 +390,68 @@ public class albumServlet extends HttpServlet {
 				albumVO.setBand_id(band_id);
 				albumVO.setAlbum_name(album_name);
 				albumVO.setAlbum_intro(album_intro);
-				if(album_photo_byte.length != 0) {
+				albumVO.setAlbum_status(shelf_status);
+				albumVO.setAlbum_release_time(on_shelf_time_timestamp);
+//				System.out.println( "length = " + photo_file_length);
+				if(filename != null) {
 					albumVO.setAlbum_photo(album_photo_byte);
+				}else {
+					albumVO.setAlbum_photo(albumSvc.getOneAlbum(album_id).getAlbum_photo());							
 				}	
-				albumVO.setAlbum_last_editor(band_id);
+				albumVO.setAlbum_last_editor(member_id);
+				albumVO.setAlbum_last_edit_time(new Timestamp(System.currentTimeMillis()));
 				
-				// 寫入資料庫
+//				 寫入資料庫
 				AlbumVO newAlbumVO = albumSvc.insertAlbum(albumVO);
 				newAlbumVO.setAlbum_photo(new byte[1]);
-				// 回傳json給ajax
-				Gson gson = new Gson();
-				String jsonStr = gson.toJson(newAlbumVO);
-				System.out.println(jsonStr);
-				PrintWriter out = res.getWriter();
-				out.write(jsonStr);
 				
+				if("updateAlbumPage".equals(action_type)) {
+					String url = "/back-end/album/album_manage.jsp";
+					RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
+					successView.forward(req, res);
+				}else {
+					
+					// 回傳json給ajax
+					Gson gson = new Gson();
+					String jsonStr = gson.toJson(newAlbumVO);
+					System.out.println(jsonStr);
+					PrintWriter out = res.getWriter();
+					out.write(jsonStr);
+				}
+//				
 			}else {
 				// 若有則更新資料
 				albumVO.setAlbum_name(album_name);
 				albumVO.setAlbum_intro(album_intro);
-				if(album_photo_byte.length != 0) {
+				albumVO.setAlbum_status(shelf_status);
+				albumVO.setAlbum_release_time(on_shelf_time_timestamp);
+//				System.out.println( "length = " + photo_file_length);
+				if(filename != null) {
 					albumVO.setAlbum_photo(album_photo_byte);
 				}else {
 					albumVO.setAlbum_photo(albumSvc.getOneAlbum(album_id).getAlbum_photo());					
 				}
-				albumVO.setAlbum_last_editor(band_id);
+				albumVO.setAlbum_last_editor(member_id);
+				albumVO.setAlbum_last_edit_time(new Timestamp(System.currentTimeMillis()));
 				
 				// 寫入資料庫
 				AlbumVO newAlbumVO = albumSvc.updateAlbum(albumVO);
 				newAlbumVO.setAlbum_photo(new byte[1]);
-//				// 回傳json給ajax
-				Gson gson = new Gson();
-				String jsonStr = gson.toJson(newAlbumVO);
-				System.out.println(jsonStr);
-				PrintWriter out = res.getWriter();
-				out.write(jsonStr);
+				
+				if("updateAlbumPage".equals(action_type)) {
+					String url = "/back-end/album/album_manage.jsp";
+					RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
+					successView.forward(req, res);
+				}else {
+					
+					// 回傳json給ajax
+					Gson gson = new Gson();
+					String jsonStr = gson.toJson(newAlbumVO);
+					System.out.println(jsonStr);
+					PrintWriter out = res.getWriter();
+					out.write(jsonStr);
+				}
+				
 			}
 			
 			
@@ -403,8 +462,18 @@ public class albumServlet extends HttpServlet {
 		if("deleteAlbum".equals(action)) {
 			System.out.println("delete!");
 			String album_id = req.getParameter("album_id");
+			// 因為有設定piece的外鍵，若piece未刪除就刪除album，會發生錯誤(仍有參考存在，所以不可刪)
+			// 先找到參考過來的Piece，刪除完再刪album
+			PiecesService piecesSvc = new PiecesService();
+			List<PiecesVO> piecesVOList = piecesSvc.getAllByAlbumId(album_id);
+			Connection conForTrx = null;
+			for(PiecesVO piecesVO:piecesVOList) {
+				System.out.println("piece_id=" + piecesVO.getPiece_id());
+				conForTrx = piecesSvc.deletePiece(conForTrx, piecesVO.getPiece_id());
+			}
+			
 			AlbumService albumSvc = new AlbumService();
-			albumSvc.deleteAlbum(album_id);
+			albumSvc.deleteAlbum(conForTrx, album_id);
 			String url = "/back-end/album/album_manage.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
 			successView.forward(req, res);
@@ -427,7 +496,15 @@ public class albumServlet extends HttpServlet {
 			
 		}
 			
-		
+		//冠華的方法==================		
+				if("searchName".equals(action)) {
+					
+					String name = req.getParameter("search");
+					
+					req.getSession().setAttribute("name", name);
+					res.sendRedirect(req.getContextPath() + "/front-end/query/query_album.jsp");
+				}
+
 		
 
 	}

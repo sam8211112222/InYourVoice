@@ -139,8 +139,7 @@
                      success: function (result) {
                     	 if(result.msg==="true"){
                          alert("已更改完成,請用新密碼登入");
-                         window.location.replace("<%=request.getContextPath()%>
-		/front-end/member/Login.jsp");
+                         window.location.replace("<%=request.getContextPath()%>/front-end/member/Login.jsp");
 												}
 											},
 											error : function(err) {

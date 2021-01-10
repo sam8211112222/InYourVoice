@@ -1,5 +1,6 @@
 package com.pieces.model;
 
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
@@ -75,9 +76,23 @@ public class PiecesService {
 
 		return piecesVO;
 	}
+	
+	public void updatePieces(String piece_id, int piece_play_count) {
+		
+		PiecesVO piecesVO = dao.findByPrimaryKey(piece_id);
+		int new_count = piecesVO.getPiece_play_count() + piece_play_count;
+		piecesVO.setPiece_play_count(new_count);
+		
+		dao.update(piecesVO);
+
+	}
 
 	public void deletePiece(String piece_id) {
 		dao.delete(piece_id);
+	}
+	
+	public Connection deletePiece(Connection con, String piece_id) {
+		return dao.delete(con, piece_id);
 	}
 
 	public PiecesVO getOnePiece(String piece_id) {

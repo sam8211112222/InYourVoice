@@ -83,7 +83,7 @@ public class AlbumVO implements Serializable {
 	@Override
 	public String toString() {
 		return "AlbumVO [album_id=" + album_id + ", band_id=" + band_id + ", album_name=" + album_name
-				+ ", album_intro=" + album_intro + ", album_photo=" + Arrays.toString(album_photo) + ", album_status="
+				+ ", album_intro=" + album_intro + ", album_photo=" + album_photo.length + ", album_status="
 				+ album_status + ", album_add_time=" + album_add_time + ", album_release_time=" + album_release_time
 				+ ", album_last_edit_time=" + album_last_edit_time + ", album_last_editor=" + album_last_editor + "]";
 	}

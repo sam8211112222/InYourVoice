@@ -211,7 +211,9 @@ public class Login extends HttpServlet {
 			java.util.Date date = new java.util.Date();
 			Timestamp addTime = new Timestamp(date.getTime());
 			String bandId = null;
-			InputStream in = new FileInputStream(request.getContentType()+"/images/無圖片.png");
+//			InputStream in = new FileInputStream(request.getContentType()+"/images/無圖片.png");
+			String path = getServletContext().getRealPath("/images/無圖片.png");
+			InputStream in = new FileInputStream(path);
 			byte[] pic = new byte[in.available()];
 			in.read(pic);
 		

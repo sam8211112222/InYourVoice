@@ -1,6 +1,12 @@
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="com.member.model.MemberVo"%>
+<%@page import="com.favorites.model.FavoritesVO"%>
+<%@page import="java.util.List"%>
+<%@page import="com.favorites.model.FavoritesService"%>
 <%@page import="org.apache.tomcat.util.codec.binary.Base64"%>
 <%@page import="com.band.model.BandVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="bandSvc" scope="page" class="com.band.model.BandService"></jsp:useBean>
 <!-- http://localhost:8081/TEA102G6/band/band.do?action=getBandMain&band_id=BAND00000 -->
 
@@ -11,11 +17,14 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>樂團資訊 – 樂團詳情 - 音樂作品 band_album.jsp</title>
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/css/band/index_band.css">
+        <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-minimal.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
     </head>
 
-    <body>
+    <body onload="connect();" onunload="disconnect();">
 
         <!-- start of include header -->
 
@@ -133,7 +142,7 @@
                                     </li> -->
                                     <!-- 被追蹤數量 -->
                                     <!-- <li class="list-inline-item ml-3">
-                                        <h4 class="font-weight-normal">粉絲</h4>
+                                        <h4 class="font-weight-normal" style="color:white;">追蹤數</h4>
                                         <a href="/collage7275/followers/" class="modal_box" data-toggle="modal"
                                             data-target="#modal-subscription">
                                             <h4 class="mb-0 font-size-h1" id="countup-follower">0</h4>
@@ -166,15 +175,54 @@
                         <li class="nav-item"><a class="nav-link" id="event_btn" data-band_id="${bandVO.band_id}" data-href="<%=request.getContextPath()%>">演出活動</a></li>
                         <li class="nav-item"><a class="nav-link" id="product_btn" data-band_id="${bandVO.band_id}" data-href="<%=request.getContextPath()%>">周邊商品</a></li>
                         <li class="nav-item"><a class="nav-link" id="intro_btn" data-band_id="${bandVO.band_id}" data-href="<%=request.getContextPath()%>">樂團介紹</a></li>
+                        <li class="nav-item ml-auto col-4" style="color:blue; font-size: 20px;">追蹤數<div class="odometer animated fadeIn" id="odometer"></div></li>
                         <li class="nav-item ml-auto col-md-4 col-lg-3 col-xl-2">
 
-                            <a data-ga-on="click" data-ga-event-category="follow"
-                                data-ga-event-action="珂拉琪 Collage (2429455)" data-ga-dimension-value="User profile"
-                                data-id="2429455" class="btn btn-primary btn-lg btn-block js-follow" href="#">
-                                <span class="follow_text">＋ 追蹤</span>
-                            </a>
+						<%
+							MemberVo memeberVO = (MemberVo) session.getAttribute("memberVo");
+							String member_id = memeberVO.getMemberId();
+							
+							String band_id = bandVO.getBand_id();
+							
+							
+							FavoritesService favSvc = new FavoritesService();
+							List<FavoritesVO> favoriteVOList = favSvc.getAll().stream()
+								.filter(f -> f.getMember_id().equals( member_id ))
+								.filter(f -> f.getFavorite_id().equals(band_id))
+								.collect(Collectors.toList());
+						
+							boolean ifExisted = favoriteVOList.size() > 0;
+							pageContext.setAttribute("ifExisted", ifExisted);
+						%>
+						
+						<c:choose>
+						
+						    <c:when test="${ifExisted }">
+								<a data-ga-on="click" data-ga-event-category="follow"
+	                                data-ga-event-action="珂拉琪 Collage (2429455)" data-ga-dimension-value="User profile"
+	                                data-id="2429455" class="btn btn-primary btn-lg btn-block js-follow delfavorite" >
+	                                <span class="follow_text"><i class="fas fa-check"></i>追蹤</span>
+	                            </a>
+						    </c:when>
+						    
+						    <c:when test="${not ifExisted }">
+							   	<a data-ga-on="click" data-ga-event-category="follow"
+	                                data-ga-event-action="珂拉琪 Collage (2429455)" data-ga-dimension-value="User profile"
+	                                data-id="2429455" class="btn btn-primary btn-lg btn-block js-follow addfavorite" >
+	                                <span class="follow_text"><i class="fas fa-plus"></i>追蹤</span>
+	                            </a>
+						    </c:when>
+						    
+						    <c:otherwise>
+						    </c:otherwise>
+						    
+						</c:choose>
+                            
+                            
+                            
                         </li>
                     </ul>
+                    
                 </nav>
             </div>
         </div>
@@ -268,6 +316,168 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.js"></script>
 		<script src="<%=request.getContextPath()%>/js/band/index_band.js"></script>
         <!-- script -->
+        <script src="https://github.hubspot.com/odometer/odometer.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+        <script>
+            $(function(){
+
+                $(document).on("click", ".addfavorite", function(){
+                    $.ajax({
+                        url: "<%=request.getContextPath()%>/band/band.do",           // 資料請求的網址
+                        type: "POST",                  // GET | POST | PUT | DELETE | PATCH
+                        data: {
+                            action : "addFavorite",
+                            type : "band",
+                            band_id : "${bandVO.band_id}"
+                        },                  // 傳送資料到指定的 url
+                        dataType: "json",             // 預期會接收到回傳資料的格式： json | xml | html
+                        timeout: 0,                   // request 可等待的毫秒數 | 0 代表不設定 timeout
+                       
+                        success: function(data){      // request 成功取得回應後執行
+                            console.log(data);
+                            if(data == "added"){
+                            	console.log("data added");
+                                $(".addfavorite").find("i.fas").addClass("fa-check");
+                                $(".addfavorite").find("i.fas").removeClass("fa-plus");
+                                $(".addfavorite").addClass("delfavorite");
+                                $(".addfavorite").removeClass("addfavorite");
+                            }
+                        }
+                        
+                    });
+                })
+                
+                $(document).on("click", ".delfavorite", function(){
+                    $.ajax({
+                        url: "<%=request.getContextPath()%>/band/band.do",           // 資料請求的網址
+                        type: "POST",                  // GET | POST | PUT | DELETE | PATCH
+                        data: {
+                            action : "delFavorite",
+                            type : "band",
+                            band_id : "${bandVO.band_id}"
+                        },                  // 傳送資料到指定的 url
+                        dataType: "json",             // 預期會接收到回傳資料的格式： json | xml | html
+                        timeout: 0,                   // request 可等待的毫秒數 | 0 代表不設定 timeout
+                       
+                        success: function(data){      // request 成功取得回應後執行
+                            console.log(data);
+                            if(data == "deleted"){
+                            	console.log("data deleted");
+                                $(".delfavorite").find("i.fas").addClass("fa-plus");
+                                $(".delfavorite").find("i.fas").removeClass("fa-check");
+                                $(".delfavorite").addClass("addfavorite");
+                                $(".delfavorite").removeClass("delfavorite");
+                            }
+                        }
+                        
+                    });
+                })
+                
+				<%
+					List<FavoritesVO> followCount = favSvc.getAll().stream()
+					.filter(f -> f.getFavorite_id().equals(band_id))
+					.collect(Collectors.toList());
+                	
+                	pageContext.setAttribute("followCount", followCount.size());
+				%>
+                var odometer = new Odometer({ 
+			        el: $('.odometer')[0], 
+			        value: 0, 
+			        theme: 'minimal',
+			        duration: 3000
+			      });
+			      odometer.render();
+			      
+			      $('.odometer').text(${followCount});
+			      
+			      // TODO: To increase all numbers independently
+			      // TODO: Randomize fadeIn of different digits
+					
+			      
+			      	
+
+            })
+            
+           			var MyPoint = "/FolloWS/<%=member_id%>";
+           			console.log(MyPoint);
+					var host = window.location.host;
+					var path = window.location.pathname;
+					var webCtx = path.substring(0, path.indexOf('/', 1));
+					var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+									// ws://localhost:8081/WebSocketChatWeb/TogetherWS/james
+				
+// 					var statusOutput = document.getElementById("statusOutput");
+					var webSocket;
+				
+					function connect() {
+						// create a websocket
+						webSocket = new WebSocket(endPointURL);
+				
+						webSocket.onopen = function(event) {
+// 							updateStatus("WebSocket Connected");
+// 							document.getElementById('sendMessage').disabled = false;
+// 							document.getElementById('connect').disabled = true;
+// 							document.getElementById('disconnect').disabled = false;
+						};
+				
+						webSocket.onmessage = function(event) {
+// 							var messagesArea = document.getElementById("messagesArea");
+// 							var jsonObj = JSON.parse(event.data);
+// 							var message = jsonObj.userName + ": " + jsonObj.message + "\r\n";
+// 							messagesArea.value = messagesArea.value + message;
+// 							messagesArea.scrollTop = messagesArea.scrollHeight;
+
+							// 更新追蹤數
+// 							alert("onmessage!");
+// 							alert(event.data);
+							$('.odometer').text(event.data);
+						};
+				
+						webSocket.onclose = function(event) {
+// 							updateStatus("WebSocket Disconnected");
+						};
+					}
+				
+// 					var inputUserName = document.getElementById("userName");
+// 					inputUserName.focus();
+				
+// 					function sendMessage() {
+// 						var userName = inputUserName.value.trim();
+// 						if (userName === "") {
+// 							alert("Input a user name");
+// 							inputUserName.focus();
+// 							return;
+// 						}
+				
+// 						var inputMessage = document.getElementById("message");
+// 						var message = inputMessage.value.trim();
+				
+// 						if (message === "") {
+// 							alert("Input a message");
+// 							inputMessage.focus();
+// 						} else {
+// 							var jsonObj = {
+// 								"userName" : userName,
+// 								"message" : message
+// 							};
+// 							webSocket.send(JSON.stringify(jsonObj));
+// 							inputMessage.value = "";
+// 							inputMessage.focus();
+// 						}
+// 					}
+				
+					function disconnect() {
+						webSocket.close();
+// 						document.getElementById('sendMessage').disabled = true;
+// 						document.getElementById('connect').disabled = false;
+// 						document.getElementById('disconnect').disabled = true;
+					}
+				
+// 					function updateStatus(newStatus) {
+// 						statusOutput.innerHTML = newStatus;
+// 					}
+        </script>
 
     </body>
 

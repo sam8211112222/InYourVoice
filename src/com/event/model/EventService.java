@@ -101,5 +101,11 @@ public class EventService {
 		return bandEvent;
 
 	}
+	
+	//===============================
+	
+		public List<EventVO> getEventByName(String event_title) {
+			return dao.findByName(event_title);
+		}
 
 }

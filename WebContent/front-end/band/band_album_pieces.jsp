@@ -17,7 +17,7 @@
 
 <body>
 <ol>
-<% String band_id = "BAND00250"; request.setAttribute("band_id", band_id); %>
+<%-- <% String band_id = "BAND00250"; request.setAttribute("band_id", band_id); %> --%>
 	<li>band banner</li>
 		<img class="small" src="<%=request.getContextPath()%>/band/getBandBanner.do?band_id=${band_id}">
 	<li>band photo</li>

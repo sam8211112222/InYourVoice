@@ -67,7 +67,7 @@ $(function(){
     $(document).on("click", ".update_album_btn", function(){
         let btn_box = $(this).closest(".btn_box");
         btn_box.find(".update_album_btn").addClass("hide");
-        btn_box.find(".add_piece_btn").removeClass("hide");
+        btn_box.find(".add_piece_btn").addClass("hide");
         btn_box.find(".delete_album_btn").removeClass("hide");
         btn_box.find(".cancel_update_album_btn").removeClass("hide");
         btn_box.find(".confirm_update_album_btn").removeClass("hide");
@@ -77,6 +77,35 @@ $(function(){
         // 專輯介紹可編輯
         btn_box.closest(".my_album_card").find(".my_album_body_intro span.name_text").addClass("hide");
         btn_box.closest(".my_album_card").find(".my_album_body_intro textarea.name_text").removeClass("hide");
+        // 上下架選單
+        btn_box.closest(".my_album_card").find(".album_status1").addClass("hide");
+        btn_box.closest(".my_album_card").find(".album_status2").removeClass("hide");
+
+        // btn_box.closest(".my_album_card").find(".my_album_body_intro div.album_release_date1").removeClass("hide");
+        // btn_box.closest(".my_album_card").find(".my_album_body_intro div.album_release_date2").removeClass("hide");
+
+        // 把外面顯示的上下架狀態帶入上下架選項
+        let status_text = btn_box.closest(".my_album_card").find(".album_status1").text().trim();
+        console.log(status_text);
+        // $('#selectBox option[value=C]').attr('selected', 'selected');
+        if(status_text == "下架中"){
+            console.log("1");
+            $(".album_status_select option[value='0']").prop('selected', true);
+        }else if(status_text == "上架中"){
+            console.log("2");
+            $(".album_status_select option[value='1']").prop('selected', true);
+        }else if(status_text == "預約上架"){
+            console.log("3");
+            $(".album_status_select option[value='2']").prop('selected', true);
+        }
+
+        if(status_text == "預約上架"){
+            btn_box.closest(".my_album_card").find(".album_release_date1").removeClass("hide");
+            btn_box.closest(".my_album_card").find(".album_release_date2").removeClass("hide");
+        }else{
+            btn_box.closest(".my_album_card").find(".album_release_date1").addClass("hide");
+            btn_box.closest(".my_album_card").find(".album_release_date2").addClass("hide");
+        }
         
     })
 
@@ -85,7 +114,7 @@ $(function(){
         let btn_box = $(this).closest(".btn_box");
         // 切換按鈕顯示
         btn_box.find(".update_album_btn").removeClass("hide");
-        // btn_box.find(".add_piece_btn").addClass("hide");
+        btn_box.find(".add_piece_btn").removeClass("hide");
         btn_box.find(".delete_album_btn").addClass("hide");
         btn_box.find(".cancel_update_album_btn").addClass("hide");
         btn_box.find(".confirm_update_album_btn").addClass("hide");
@@ -104,7 +133,27 @@ $(function(){
         btn_box.closest(".my_album_card").find(".my_album_body_intro textarea.name_text").val(btn_box.closest(".my_album_card").find(".my_album_body_intro span.name_text").text());
         btn_box.closest(".my_album_card").find(".my_album_body_intro span.name_text").removeClass("hide");
         btn_box.closest(".my_album_card").find(".my_album_body_intro textarea.name_text").addClass("hide");
-        
+        // 上下架選單
+        btn_box.closest(".my_album_card").find(".album_status1").removeClass("hide");
+        btn_box.closest(".my_album_card").find(".album_status2").addClass("hide");
+
+        // 把外面顯示的上下架狀態帶入上下架選項
+        let status_text = btn_box.closest(".my_album_card").find(".album_status1").text().trim();
+        console.log(status_text);
+        // $('#selectBox option[value=C]').attr('selected', 'selected');
+        if(status_text == "下架中"){
+            console.log("1");
+            $(".album_status_select option[value='0']").prop('selected', true);
+        }else if(status_text == "上架中"){
+            console.log("2");
+            $(".album_status_select option[value='1']").prop('selected', true);
+        }else if(status_text == "預約上架"){
+            console.log("3");
+            $(".album_status_select option[value='2']").prop('selected', true);
+        }
+
+        btn_box.closest(".my_album_card").find(".album_release_date1").addClass("hide");
+        btn_box.closest(".my_album_card").find(".album_release_date2").addClass("hide");
 
     })
 
@@ -116,6 +165,7 @@ $(function(){
         let path = $(".add_new_album_btn").attr("data-path");
         let album_id = btn_box.closest(".my_album_card").attr("data-album_id");
         let band_id = btn_box.closest(".my_album_card").attr("data-band_id");
+        let member_id = btn_box.closest(".my_album_card").attr("data-member_id");
         let album_name = btn_box.closest(".my_album_card").find(".album_name input").val().trim();
         let album_intro = btn_box.closest(".my_album_card").find(".my_album_body_intro textarea").val().trim();
         let album_photo = btn_box.closest(".my_album_card").find(".album_photo_file")[0].files[0];
@@ -125,6 +175,12 @@ $(function(){
         let album_id_tag1 = btn_box.closest(".my_album_card");
         let album_id_tag2 = btn_box.closest(".my_album_card").find(".update_photo");
         let album_id_tag3 = btn_box.closest(".my_album_card").find(".album_photo_file");
+        // 選項選中的上下架狀態
+        let shelf_status = btn_box.closest(".my_album_card").find(".album_status_select").val();
+        // console.log("確定編輯:" + shelf_status);
+        // 預約上架的時間
+        let on_shelf_time = btn_box.closest(".my_album_card").find(".f_date1").val().trim();
+        console.log(on_shelf_time);
 
         // 用album_id確認是否為new
         let is_new;
@@ -136,7 +192,7 @@ $(function(){
 
         // 如果trim完都非空白
         if(album_name!="" && album_intro!="" && (album_photo_thumb!="" || album_photo!=null)){
-            confirm_album(is_new, path, album_id, band_id, album_name, album_intro, album_photo, album_id_tag1, album_id_tag2, album_id_tag3);
+            confirm_album(is_new, path, album_id, band_id, album_name, album_intro, album_photo, album_id_tag1, album_id_tag2, album_id_tag3, shelf_status, on_shelf_time, member_id);
 
             // 切換按鈕顯示
             btn_box.find(".update_album_btn").removeClass("hide");
@@ -166,6 +222,29 @@ $(function(){
             btn_box.closest(".my_album_card").find(".my_album_body_intro span.name_text").text(btn_box.closest(".my_album_card").find(".my_album_body_intro textarea.name_text").val())
             btn_box.closest(".my_album_card").find(".my_album_body_intro span.name_text").removeClass("hide");
             btn_box.closest(".my_album_card").find(".my_album_body_intro textarea.name_text").addClass("hide");
+            // 上下架選單
+            btn_box.closest(".my_album_card").find(".album_status1").removeClass("hide");
+            btn_box.closest(".my_album_card").find(".album_status2").addClass("hide");
+
+            // 把上下架選項的內容放回外面
+            console.log("選項=" + btn_box.closest(".my_album_card").find(".album_status_select").val());
+            let option_val = btn_box.closest(".my_album_card").find(".album_status_select").val();
+            if( option_val== 0 ){
+                console.log("option_val" + option_val);
+                btn_box.closest(".my_album_card").find(".album_status1").text("下架中");
+            }else if( option_val == 1 ){
+                console.log("option_val" + option_val);
+                btn_box.closest(".my_album_card").find(".album_status1").text("上架中");
+            }else if( option_val == 2 ){
+                console.log("option_val" + option_val);
+                btn_box.closest(".my_album_card").find(".album_status1").text("預約上架");
+            }
+
+            btn_box.closest(".my_album_card").find(".album_release_date1").addClass("hide");
+            btn_box.closest(".my_album_card").find(".album_release_date2").addClass("hide");
+
+            // 更新 原預約上架時間 的內容
+            // btn_box.closest(".my_album_card").find(".time_text").text(on_shelf_time);
 
         }else{
             let errMsg = "";
@@ -224,6 +303,7 @@ $(function(){
         let album_id = $(this).closest(".my_album_card").attr("data-album_id");
         let piece_id = $(this).closest(".my_album_body_item").attr("data-piece_id");
         let band_id = $(this).closest(".my_album_card").attr("data-band_id");
+        let member_id = $(this).closest(".my_album_card").attr("data-member_id");
         let my_album_body_item_tag = $(this).closest(".my_album_body_item");
 
         // 確認欄位不為空才可以按確認
@@ -239,7 +319,7 @@ $(function(){
         // 如果trim完都非空白
         if(piece_name!="" && (is_new == "" || piece_file!=null)){
 
-            confirm_piece(is_new, path, album_id, piece_name, piece_file, piece_id, band_id, my_album_body_item_tag);
+            confirm_piece(is_new, path, album_id, piece_name, piece_file, piece_id, band_id, my_album_body_item_tag, member_id);
 
             btn_box.find(".update_piece_btn").removeClass("hide");
             btn_box.find(".delete_piece_btn").addClass("hide");
@@ -254,7 +334,7 @@ $(function(){
             btn_box.closest(".my_album_body_item").find(".piece_name span.name_text").removeClass("hide");
             btn_box.closest(".my_album_body_item").find(".piece_name input.name_text").addClass("hide");
             // 隱藏選擇檔案
-            btn_box.closest(".my_album_body_item").find(".upload_audio").addClass("hide");
+            btn_box.closest(".my_album_body_item").find(".upload_audio").addClass("hide");           
 
         }else{
             let errMsg = "";
@@ -297,8 +377,7 @@ $(function(){
     var i = 0;
     let path = $(".add_new_album_btn").attr("data-path");
     let band_id = $(".my_album_card").attr("data-band_id");
-    $(".add_new_album_btn").on("click", function(){
-        console.log("add_new_album")
+    function addAlbumHTML(){
         $(".album_area").prepend(`
             <!-- for each album -->
             <div class="row col-12 my_album_card justify-content-center" data-album_id="new_album_${i}" data-band_id="${band_id}">
@@ -316,13 +395,20 @@ $(function(){
                             <input type="file" id="new_album_${i++}" class="album_photo_file hide" accept="image/*">
                         </label>
                     </div>
-                    <div class="album_name col-4">
+                    <div class="album_name col-3">
                         <span class="name_text hide" placeholder="請輸入專輯名稱"></span>
-                        <input type="text" class="name_text" placeholder="請輸入專輯名稱">
+                        <input type="text" class="name_text" placeholder="請輸入專輯名稱" size="15">
 
                     </div>
                     <!-- <div class="album_status col-2">下架中<input type="checkbox" class="check_one_album" name="check_album"></div> -->
-                    <div class="btn_box col-3">
+                    <div class="album_status2 col-2">
+                        <select class="album_status_select" name="album_status">
+                            <option value="0">下架</option>
+                            <option value="1">上架</option>
+                            <option value="2">預約上架</option>
+                        </select>
+                    </div>
+                    <div class="btn_box col-4">
                                     <button type="button" class="update_album_btn btn btn-primary hide"><i class="fas fa-edit"></i></button>
 
                                     
@@ -341,7 +427,14 @@ $(function(){
                         <div class="col-9">
                             <span class="name_text hide">請輸入專輯介紹</span>
                             <!-- <input type="text" class="name_text" value=""> -->
-                            <textarea class="name_text" cols="30" rows="5">請輸入專輯介紹</textarea>
+                            <textarea class="name_text" cols="30" rows="5" placeholder="請輸入專輯介紹"></textarea>
+                        </div>
+
+                        <div class="col-3 album_release_date1 hide">
+                            預約上架時間
+                        </div>
+                        <div class="col-9 album_release_date2 hide">
+                            <input name="album_release_date" id="f_date1" class="f_date1" type="text" >
                         </div>
 
                         <hr size="1px" width="100%">
@@ -349,7 +442,26 @@ $(function(){
                 </div>
             </div>
             <!-- for each album -->
-        `)
+        `);
+    }
+
+
+    $(document).on("click", ".add_new_album_btn", function(){
+        console.log("add_new_album")
+        addAlbumHTML();
+
+        $(".f_date1").datetimepicker({
+            theme: '',          //theme: 'dark',
+            timepicker: true,   //timepicker: false,
+            step: 60,            //step: 60 (這是timepicker的預設間隔60分鐘)
+            format: 'Y-m-d H:i',
+            value: new Date(),
+            //disabledDates:    ['2017/06/08','2017/06/09','2017/06/10'], // 去除特定不含
+            //startDate:	        '2017/07/10',  // 起始日
+            minDate:           '-1970-01-01', // 去除今日(不含)之前
+            //maxDate:           '+1970-01-01'  // 去除今日(不含)之後
+         });
+        
     })
 
     // 新增歌曲
@@ -358,17 +470,18 @@ $(function(){
 
         $(this).closest(".my_album_card").find(".my_album_body_intro").after(`
             <!-- for each piece -->
-            <div class="row col-12 my_album_body_item justify-content-center" data-piece_id="new_piece_${piece_count}"  data-album_id="">
+            <div class="row col-12 my_album_body_item justify-content-start" data-piece_id="new_piece_${piece_count}"  data-album_id="">
                 <div class="piece_name col-5">
                     <span class="name_text hide"></span>
                     <input type="text" class="name_text" value="" placeholder="請輸入歌曲名稱">
                     <input style="font-size: 12px; margin-left: 0px;" type="file" name="piece" class="upload_audio" accept="audio/*">
                 </div>                            
                 <!-- <div class="piece_status col-4">下架中<input type="checkbox" class="check_one_piece" name="check_piece"></div> -->
-                <div class="col-3 btn_box">
+                <div class="piece_status col-3"></div>
+                <div class="row my_row col-4 btn_box justify-content-start">
                     <button type="button" class="update_piece_btn btn btn-primary hide"><i class="fas fa-edit"></i></button>
-                    <button type="button" class="delete_piece_btn btn btn-primary"><i class="fas fa-trash-alt"></i></button>
                     <button type="button" class="cancel_update_piece_btn btn btn-primary hide"><i class="fas fa-ban"></i></button>
+                    <button type="button" class="delete_piece_btn btn btn-primary"><i class="fas fa-trash-alt"></i></button>
                     <button type="button" class="confirm_update_piece_btn btn btn-primary"><i class="fas fa-check"></i></button>
                 </div>
                 <div class="col-3"></div>
@@ -377,6 +490,21 @@ $(function(){
             </div>
             <!-- for each piece -->  
         `)
+    })
+
+
+    // 選擇預約上架時，顯示dateTimePicker
+    $(document).on("change", ".album_status_select", function(e){
+        let val = $(this).val();
+        // alert($(this).val());
+
+        if(val == 2){
+            $(this).closest(".my_album_card").find(".album_release_date1").removeClass("hide");
+            $(this).closest(".my_album_card").find(".album_release_date2").removeClass("hide");
+        }else{
+            $(this).closest(".my_album_card").find(".album_release_date1").addClass("hide");
+            $(this).closest(".my_album_card").find(".album_release_date2").addClass("hide");
+        }
     })
 
 
@@ -414,12 +542,12 @@ $(function(){
 //   });
 
 
-function confirm_album(is_new, path, album_id, band_id, album_name, album_intro, album_photo, album_id_tag1, album_id_tag2, album_id_tag3){
-    console.log(path);
-    console.log(album_id);
-    console.log(album_name);
-    console.log(album_intro);
-    console.log(album_photo);
+function confirm_album(is_new, path, album_id, band_id, album_name, album_intro, album_photo, album_id_tag1, album_id_tag2, album_id_tag3, shelf_status, on_shelf_time, member_id){
+    // console.log(path);
+    // console.log(album_id);
+    // console.log(album_name);
+    // console.log(album_intro);
+    // console.log(album_photo);
     let action = "updateAlbum";
 
     let data = new FormData();
@@ -429,6 +557,11 @@ function confirm_album(is_new, path, album_id, band_id, album_name, album_intro,
     data.append("album_name", album_name);
     data.append("album_intro", album_intro);
     data.append("album_photo", album_photo);
+    data.append("shelf_status", shelf_status);
+    data.append("on_shelf_time", on_shelf_time);
+    data.append("member_id", member_id);
+
+    
     let url = path + "/album/album.do";
 
     $.ajax({
@@ -448,15 +581,15 @@ function confirm_album(is_new, path, album_id, band_id, album_name, album_intro,
             // 如果是新增專輯時(is_new == "new")，新增的要把album_id置入原本的html裡面
             console.log(is_new)
             if(is_new == "new"){
-                console.log(album_id_tag1.attr("data-album_id"));
-                console.log(album_id_tag2.attr("for"));
-                console.log(album_id_tag3.attr("id"));
+                // console.log(album_id_tag1.attr("data-album_id"));
+                // console.log(album_id_tag2.attr("for"));
+                // console.log(album_id_tag3.attr("id"));
                 album_id_tag1.attr("data-album_id", data.album_id);
                 album_id_tag2.attr("for", data.album_id);
                 album_id_tag3.attr("id", data.album_id);
-                console.log(album_id_tag1.attr("data-album_id"));
-                console.log(album_id_tag2.attr("for"));
-                console.log(album_id_tag3.attr("id"));
+                // console.log(album_id_tag1.attr("data-album_id"));
+                // console.log(album_id_tag2.attr("for"));
+                // console.log(album_id_tag3.attr("id"));
 
             }
             
@@ -488,7 +621,7 @@ function deleteAlbum(path, album_id){
 }
 
 
-function confirm_piece(is_new, path, album_id, piece_name, piece_file, piece_id, band_id, my_album_body_item_tag){
+function confirm_piece(is_new, path, album_id, piece_name, piece_file, piece_id, band_id, my_album_body_item_tag, member_id){
 
     let url = path + "/pieces/pieces.do";
     let action = "updatePiece";
@@ -496,10 +629,11 @@ function confirm_piece(is_new, path, album_id, piece_name, piece_file, piece_id,
     let data = new FormData();
     data.append("action", action);
     data.append("album_id", album_id);
+    data.append("member_id", member_id);
     data.append("piece_id", piece_id);
     data.append("piece_name", piece_name);
     data.append("piece_file", piece_file);
-    data.append("piece_last_editor", band_id);
+    data.append("band_id", band_id);
 
     $.ajax({
             url: url,           // 資料請求的網址
@@ -512,18 +646,18 @@ function confirm_piece(is_new, path, album_id, piece_name, piece_file, piece_id,
             cache: false,        // 避免有圖片 cache 狀況
             
             success: function(data){      // request 成功取得回應後執行
-              console.log(data);
-              console.log(data.album_id);
-              console.log(data.piece_id);
+            //   console.log(data);
+            //   console.log(data.album_id);
+            //   console.log(data.piece_id);
               if(is_new == "new"){
-                console.log(my_album_body_item_tag.attr("data-album_id"));
-                console.log(my_album_body_item_tag.attr("data-piece_id"));
+                // console.log(my_album_body_item_tag.attr("data-album_id"));
+                // console.log(my_album_body_item_tag.attr("data-piece_id"));
 
                 my_album_body_item_tag.attr("data-album_id", data.album_id);
                 my_album_body_item_tag.attr("data-piece_id", data.piece_id);
 
-                console.log(my_album_body_item_tag.attr("data-album_id"));
-                console.log(my_album_body_item_tag.attr("data-piece_id"));
+                // console.log(my_album_body_item_tag.attr("data-album_id"));
+                // console.log(my_album_body_item_tag.attr("data-piece_id"));
 
               }
 

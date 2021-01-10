@@ -2,8 +2,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	session.setAttribute("memberVO", "MEMBER00999");
-	session.setAttribute("bandVO", "BAND00200");
+// 	session.setAttribute("memberVO", "MEMBER00999");
+// 	session.setAttribute("bandVO", "BAND00200");
 %>
 <!DOCTYPE html>
 <html>
