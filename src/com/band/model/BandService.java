@@ -14,7 +14,8 @@ public class BandService {
 	private BandDAO_interface dao;
 
 	public BandService() {
-		dao = new BandDAO();
+//		dao = new BandDAO();
+		dao = new BandDAOJDBC();
 	}
 
 	public BandVO insertBand(String band_name, String band_intro, byte[] band_photo, byte[] band_banner, byte[] band_piece_check, java.sql.Timestamp band_add_time, Integer band_status, java.sql.Timestamp band_last_edit_time, String band_last_editor) {

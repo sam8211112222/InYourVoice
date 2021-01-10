@@ -10,6 +10,7 @@ public class BandTagService {
 	
 	public BandTagService() {
 		dao = new BandTagDAO();
+		dao = new BandTagDAOJDBC();
 	}
 	
 	public static void main(String[] args) {

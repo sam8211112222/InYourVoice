@@ -12,7 +12,8 @@ public class AlbumService {
 	private AlbumDAO_interface dao;
 
 	public AlbumService() {
-		dao = new AlbumDAO();
+//		dao = new AlbumDAO();
+		dao = new AlbumDAOJDBC();
 	}
 	
 	public static void main(String[] args) {

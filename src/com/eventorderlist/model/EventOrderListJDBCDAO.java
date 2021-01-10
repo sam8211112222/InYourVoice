@@ -25,29 +25,37 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 	private static final String UPDATE = "UPDATE eventorderlist set ticket_id = ?,event_order_id = ?,orderlist_goods_amount = ?,orderlist_remarks = ? where orderlist_id=? ";
 	private static final String GET_LIST_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks FROM  eventorderlist WHERE event_order_id = ?";
 	
-	public void insert(EventOrderListVO eventOrderListVO) {
+	@Override
+	public String insert(Connection con, EventOrderListVO eventOrderListVO) {
 
-		Connection con = null;
 		PreparedStatement pstmt = null;
-
+		String pk = null;
 		try {
 
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, userid, passwd);
-			pstmt = con.prepareStatement(INSERT_STMT);
+			String[] cols = { "orderlist_id" };
+			pstmt = con.prepareStatement(INSERT_STMT, cols);
 
 			pstmt.setString(1, eventOrderListVO.getTicket_id());
 			pstmt.setString(2, eventOrderListVO.getEvent_order_id());
 			pstmt.setInt(3, eventOrderListVO.getOrderlist_goods_amount());
 			pstmt.setString(4, eventOrderListVO.getOrderlist_remarks());
+			pstmt.setInt(5, eventOrderListVO.getOrderlist_status());
 
 			pstmt.executeUpdate();
 
-			// Handle any driver errors
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			ResultSet rs = pstmt.getGeneratedKeys();
+
+			while (rs.next()) {
+				pk = rs.getString(1);
+			}
+
 			// Handle any SQL errors
 		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
@@ -58,15 +66,9 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 					se.printStackTrace(System.err);
 				}
 			}
-			if (con != null) {
-				try {
-					con.close();
-				} catch (Exception e) {
-					e.printStackTrace(System.err);
-				}
-			}
 		}
-
+		
+		return pk;
 	}
 
 	@Override
@@ -338,10 +340,5 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 //		return eventOrderListVO;
 	}
 
-	@Override
-	public String insert(Connection con, EventOrderListVO eventOrderListVO) {
-		return driver;
-		// TODO Auto-generated method stub
-		
-	}
+	
 }

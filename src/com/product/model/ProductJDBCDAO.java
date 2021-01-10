@@ -60,6 +60,8 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 	private static final String GET_TIME = "SELECT * FROM product ORDER BY product_last_edit_time DESC";
 	private static final String GET_ORDER = "SELECT p.band_id, o.orderlist_id, o.order_id, o.product_id, o.orderlist_goods_amount,o.orderlist_remarks,o.review_score, o.review_msg, o.review_time, o.review_hidden, o.price FROM product p,orderlist o WHERE p.product_id=o.product_id AND p.band_id = ?";	
 	
+	
+	
 	/**
 	 * added by  鈺涵
 	 */

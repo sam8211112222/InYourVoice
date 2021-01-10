@@ -34,7 +34,8 @@ public class EventOrderService {
 	EventOrderDAO dao = null;
 
 	public EventOrderService() {
-		dao = new EventOrderJNDIDAO();
+//		dao = new EventOrderJNDIDAO();
+		dao = new EventOrderJDBCDAO();
 	}
 
 	public Map<String, List<String>> addOrder(String member_id, String event_id, Timestamp order_place_time,

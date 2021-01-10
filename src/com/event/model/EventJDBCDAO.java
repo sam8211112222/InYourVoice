@@ -34,6 +34,7 @@ public class EventJDBCDAO implements EventDAO {
 	private static final String GET_LIST_BY_BANDID = "SELECT event_id, band_id, event_type, event_sort, event_title, event_detail, event_poster, event_area, event_place, event_city,event_cityarea, event_address, event_start_time, event_on_time, event_last_edit_time,event_last_editor, event_status, event_seat FROM event WHERE BAND_ID = ?  ORDER BY EVENT_SORT";
 	// Kevin
 	private static final String GET_ALL_EVENT = "select * from event order by event_start_time desc";
+	
 	@Override
 	public String insert(EventVO eventVO) {
 		Connection con = null;

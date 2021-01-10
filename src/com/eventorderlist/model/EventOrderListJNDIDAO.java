@@ -60,7 +60,6 @@ public class EventOrderListJNDIDAO implements EventOrderListDAO {
 			try {
 				con.rollback();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			throw new RuntimeException("A database error occured. " + se.getMessage());

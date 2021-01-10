@@ -105,10 +105,10 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 			pstmt.setString(1, piecesVO.getAlbum_id());
 			pstmt.setBytes(2, piecesVO.getPiece());
 			pstmt.setString(3, piecesVO.getPiece_name());
-			pstmt.setInt(4, 0);
-			pstmt.setInt(5, 0);
-			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+			pstmt.setInt(4, 1); // 新增時預設上架
+			pstmt.setInt(5, 0); // 播放次數新增時先設0
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis())); // 新增時間
+			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis())); // 最後編輯時間
 			pstmt.setString(8, piecesVO.getPiece_last_editor());
 
 			pstmt.executeUpdate();
@@ -154,14 +154,14 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 
 	@Override
 	public void update(PiecesVO piecesVO) {
-		Connection conn = null;
+		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
 
 			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(UPDATE_PSTMT);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			pstmt = con.prepareStatement(UPDATE_PSTMT);
 
 			pstmt.setString(1, piecesVO.getAlbum_id());
 			pstmt.setString(2, piecesVO.getPiece_name());
@@ -169,28 +169,31 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 			pstmt.setInt(4, piecesVO.getPiece_status());
 			pstmt.setInt(5, piecesVO.getPiece_play_count());
 			pstmt.setTimestamp(6, piecesVO.getPiece_add_time());
-			pstmt.setTimestamp(7, piecesVO.getPiece_last_edit_time());
+			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(8, piecesVO.getPiece_last_editor());
 			pstmt.setString(9, piecesVO.getPiece_id());
 			
 			pstmt.executeUpdate();
 
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
+			e.printStackTrace();
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
 				}
 			}
-			if (conn != null) {
+			if (con != null) {
 				try {
-					conn.close();
-				} catch (SQLException e) {
+					con.close();
+				} catch (Exception e) {
 					e.printStackTrace(System.err);
 				}
 			}
@@ -200,261 +203,42 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 
 	@Override
 	public void delete(String piece_id) {
-		Connection conn = null;
+		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		try {
 
 			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(DELETE_PSTMT);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			pstmt = con.prepareStatement(DELETE_PSTMT);
 
 			pstmt.setString(1, piece_id);
 
 			pstmt.executeUpdate();
 
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
-		} finally {
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-		}
-	}
-
-	@Override
-	public PiecesVO findByPrimaryKey(String piece_id) {
-		PiecesVO piecesVO = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(GET_ONE_PSTMT);
-
-			pstmt.setString(1, piece_id);
-
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-
-				piecesVO = new PiecesVO();
-				piecesVO.setPiece_id(rs.getString("PIECE_ID"));
-				piecesVO.setAlbum_id(rs.getString("ALBUM_ID"));
-				piecesVO.setPiece_name(rs.getString("PIECE_NAME"));
-				piecesVO.setPiece(rs.getBytes("PIECE"));
-				piecesVO.setPiece_status(rs.getInt("PIECE_STATUS"));
-				piecesVO.setPiece_play_count(rs.getInt("PIECE_PLAY_COUNT"));
-				piecesVO.setPiece_add_time(rs.getTimestamp("PIECE_ADD_TIME"));
-				piecesVO.setPiece_last_edit_time(rs.getTimestamp("PIECE_LAST_EDIT_TIME"));
-				piecesVO.setPiece_last_editor(rs.getString("PIECE_LAST_EDITOR"));
-
-			}
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
-		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-
-		}
-
-		return piecesVO;
-	}
-
-	@Override
-	public List<PiecesVO> getAll() {
-
-		List<PiecesVO> list = new ArrayList();
-		PiecesVO piecesVO = null;
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(GET_ALL_PSTMT);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-
-				piecesVO = new PiecesVO();
-				piecesVO.setPiece_id(rs.getString("PIECE_ID"));
-				piecesVO.setAlbum_id(rs.getString("ALBUM_ID"));
-				piecesVO.setPiece_name(rs.getString("PIECE_NAME"));
-				piecesVO.setPiece(rs.getBytes("PIECE"));
-				piecesVO.setPiece_status(rs.getInt("PIECE_STATUS"));
-				piecesVO.setPiece_play_count(rs.getInt("PIECE_PLAY_COUNT"));
-				piecesVO.setPiece_add_time(rs.getTimestamp("PIECE_ADD_TIME"));
-				piecesVO.setPiece_last_edit_time(rs.getTimestamp("PIECE_LAST_EDIT_TIME"));
-				piecesVO.setPiece_last_editor(rs.getString("PIECE_LAST_EDITOR"));
-				list.add(piecesVO);
-
-			}
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
-		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-			if (pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-			if (conn != null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
-
-		}
-
-		return list;
-	}
-
-	@Override
-	public PiecesVO getPiece(String piece_id) {
-		
-		Connection con;
-		PreparedStatement pstmt;
-		ResultSet rs;
-		PiecesVO piecesVO = null;
-		
-		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = con.prepareStatement(GET_ONE_PIECE_PSTMT);
-			pstmt.setString(1, piece_id);
-			
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				piecesVO = new PiecesVO();
-				piecesVO.setPiece(rs.getBytes("piece"));
-			}
-			
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
-		return piecesVO;
-	}
-	
-	public List<PiecesVO> getAllByAlbumId(String album_id) {
-
-		List<PiecesVO> list = new ArrayList();
-		PiecesVO piecesVO = null;
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			Class.forName(DRIVER);
-			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			pstmt = conn.prepareStatement(GET_ALL_BY_ALBUM_ID_PSTMT);
-			pstmt.setString(1, album_id);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-
-				piecesVO = new PiecesVO();
-				piecesVO.setPiece_id(rs.getString("PIECE_ID"));
-				piecesVO.setAlbum_id(rs.getString("ALBUM_ID"));
-				piecesVO.setPiece_name(rs.getString("PIECE_NAME"));
-				piecesVO.setPiece(rs.getBytes("PIECE"));
-				piecesVO.setPiece_status(rs.getInt("PIECE_STATUS"));
-				piecesVO.setPiece_play_count(rs.getInt("PIECE_PLAY_COUNT"));
-				piecesVO.setPiece_add_time(rs.getTimestamp("PIECE_ADD_TIME"));
-				piecesVO.setPiece_last_edit_time(rs.getTimestamp("PIECE_LAST_EDIT_TIME"));
-				piecesVO.setPiece_last_editor(rs.getString("PIECE_LAST_EDITOR"));
-				list.add(piecesVO);
-
-			}
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace(System.err);
-		} catch (SQLException e) {
-			e.printStackTrace(System.err);
 		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
-				}
-			}
 			if (pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException e) {
-					e.printStackTrace(System.err);
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
 				}
 			}
-			if (conn != null) {
+			if (con != null) {
 				try {
-					conn.close();
-				} catch (SQLException e) {
+					con.close();
+				} catch (Exception e) {
 					e.printStackTrace(System.err);
 				}
 			}
-
 		}
-
-		return list;
 	}
 	
 	@Override
@@ -499,6 +283,230 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 			
 		}
 		return con;
+	}
+
+	@Override
+	public PiecesVO findByPrimaryKey(String piece_id) {
+		PiecesVO piecesVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			Class.forName(DRIVER);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			pstmt = con.prepareStatement(GET_ONE_PSTMT);
+
+			pstmt.setString(1, piece_id);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+
+				piecesVO = new PiecesVO();
+				piecesVO.setPiece_id(rs.getString("PIECE_ID"));
+				piecesVO.setAlbum_id(rs.getString("ALBUM_ID"));
+				piecesVO.setPiece_name(rs.getString("PIECE_NAME"));
+				piecesVO.setPiece(rs.getBytes("PIECE"));
+				piecesVO.setPiece_status(rs.getInt("PIECE_STATUS"));
+				piecesVO.setPiece_play_count(rs.getInt("PIECE_PLAY_COUNT"));
+				piecesVO.setPiece_add_time(rs.getTimestamp("PIECE_ADD_TIME"));
+				piecesVO.setPiece_last_edit_time(rs.getTimestamp("PIECE_LAST_EDIT_TIME"));
+				piecesVO.setPiece_last_editor(rs.getString("PIECE_LAST_EDITOR"));
+
+			}
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+		return piecesVO;
+	}
+
+	@Override
+	public List<PiecesVO> getAll() {
+
+		List<PiecesVO> list = new ArrayList();
+		PiecesVO piecesVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			Class.forName(DRIVER);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			pstmt = con.prepareStatement(GET_ALL_PSTMT);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+
+				piecesVO = new PiecesVO();
+				piecesVO.setPiece_id(rs.getString("PIECE_ID"));
+				piecesVO.setAlbum_id(rs.getString("ALBUM_ID"));
+				piecesVO.setPiece_name(rs.getString("PIECE_NAME"));
+				piecesVO.setPiece(rs.getBytes("PIECE"));
+				piecesVO.setPiece_status(rs.getInt("PIECE_STATUS"));
+				piecesVO.setPiece_play_count(rs.getInt("PIECE_PLAY_COUNT"));
+				piecesVO.setPiece_add_time(rs.getTimestamp("PIECE_ADD_TIME"));
+				piecesVO.setPiece_last_edit_time(rs.getTimestamp("PIECE_LAST_EDIT_TIME"));
+				piecesVO.setPiece_last_editor(rs.getString("PIECE_LAST_EDITOR"));
+				list.add(piecesVO);
+
+			}
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+		return list;
+	}
+
+	@Override
+	public PiecesVO getPiece(String piece_id) {
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs;
+		PiecesVO piecesVO = null;
+		
+		try {
+			Class.forName(DRIVER);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			pstmt = con.prepareStatement(GET_ONE_PIECE_PSTMT);
+			pstmt.setString(1, piece_id);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				piecesVO = new PiecesVO();
+				piecesVO.setPiece(rs.getBytes("piece"));
+			}
+			
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+		return piecesVO;
+	}
+	
+	public List<PiecesVO> getAllByAlbumId(String album_id) {
+
+		List<PiecesVO> list = new ArrayList();
+		PiecesVO piecesVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			Class.forName(DRIVER);
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			pstmt = con.prepareStatement(GET_ALL_BY_ALBUM_ID_PSTMT);
+			pstmt.setString(1, album_id);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+
+				piecesVO = new PiecesVO();
+				piecesVO.setPiece_id(rs.getString("PIECE_ID"));
+				piecesVO.setAlbum_id(rs.getString("ALBUM_ID"));
+				piecesVO.setPiece_name(rs.getString("PIECE_NAME"));
+//				piecesVO.setPiece(rs.getBytes("PIECE"));
+				piecesVO.setPiece_status(rs.getInt("PIECE_STATUS"));
+				piecesVO.setPiece_play_count(rs.getInt("PIECE_PLAY_COUNT"));
+				piecesVO.setPiece_add_time(rs.getTimestamp("PIECE_ADD_TIME"));
+				piecesVO.setPiece_last_edit_time(rs.getTimestamp("PIECE_LAST_EDIT_TIME"));
+				piecesVO.setPiece_last_editor(rs.getString("PIECE_LAST_EDITOR"));
+				list.add(piecesVO);
+
+			}
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+		return list;
 	}
 
 }
