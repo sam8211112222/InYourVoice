@@ -79,7 +79,7 @@
                                 <i class="fas fa-store"></i>
                                 <span class="ml-2 text-sm font-medium">賣場管理</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/band/album_management.jsp">
                                 <i class="fas fa-music"></i>
                                 <span class="ml-2 text-sm font-medium">作品管理</span>
                             </a>

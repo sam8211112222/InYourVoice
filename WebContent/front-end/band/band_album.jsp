@@ -9,7 +9,7 @@
 	String band_id = request.getParameter("band_id");
 // 	String album_id = request.getParameter("album_id");
 	// 用band id 找出屬於這個樂團的所有專輯
-	List<AlbumVO> albumVOList = albumSvc.getBandAlbums(band_id);
+	List<AlbumVO> albumVOList = albumSvc.getBandAlbumsReleasable(band_id);
 	pageContext.setAttribute("albumVOList", albumVOList);
 	// 列出所有專輯 並預設顯示第一個
 	// 找出第一個專輯的所有歌曲 並列出歌曲
@@ -61,6 +61,7 @@
                         <div class="albums col-10">
                             <div class="row justify-content-between album_cards">
 								<c:forEach var="albumVO" items="${albumVOList}">
+								<c:if test="${albumVO.album_status == 1 }">
 
 	                                <!-- <div class="album_card col-10 col-md-3" data-contextpath="<%= request.getContextPath() %>" data-album_id="${albumVO.album_id}" data-href="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" data-piece_href="<%= request.getContextPath() %>/pieces/pieces.do?action=getPieceList&album_id=${albumVO.album_id}">
 	                                    <img class="album_photo"
@@ -77,7 +78,7 @@
                                             <p></p>
                                         </div> -->
                                     </div>
-
+								</c:if>
 								</c:forEach>
                             </div>
                         </div>
@@ -90,6 +91,7 @@
                             <div id="player1" class="aplayer"></div>
                             <% int i = 1; %>
                             <c:forEach var="piecesVO" items="${piecesVOList}" >
+                            <c:if test="${piecesVO.piece_status == 1 }">
 	                            <li class="piece_card" data-title="${piecesVO.piece_name}" data-author="" data-url="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" data-pic="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${piecesVO.album_id}" data-lrc="">
 	                                <!-- <div class="row piece_card justify-content-between"></div>
  	                                    <div class="piece_order col-1 outer"><%= i++ %></div>
@@ -103,6 +105,7 @@
 <!-- 	                            <audio controls muted autoplay> -->
 <%-- 								<source src="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" type="audio/mpeg"> --%>
 <!-- 								</audio> -->
+							</c:if>
                             </c:forEach>
                         </ul>
                     </div>

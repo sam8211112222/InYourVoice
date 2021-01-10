@@ -122,7 +122,8 @@ public class ProductService {
 		Long nowTime = System.currentTimeMillis();
 		List<ProductVO> bandProduct = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
 				.filter(e -> e.getProduct_on_time().getTime() < nowTime)
-				.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+				.filter(e -> e.getProduct_off_time().getTime() > nowTime)
+				.filter(e -> e.getProduct_status() == 1)
 				.collect(Collectors.toList());
 		return bandProduct;
 	}

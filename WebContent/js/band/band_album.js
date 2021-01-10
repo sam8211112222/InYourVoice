@@ -14,7 +14,35 @@ $(function(){
 			ap1.seek(sessionStorage.audioCurrentTime);
 			ap1.play();
 		}
-	});
+    });
+    
+    ap1.on('play', function(){
+        console.log("play")
+        let src = ap1.audio.src;
+        let piece_id = src.substr(src.lastIndexOf("=")+1);
+        let path = src.substr(0, src.lastIndexOf("?"));
+//        console.log(ap1.audio.src)
+//        console.log(ap1.audio.src.substr(ap1.audio.src.lastIndexOf("=")+1))
+        console.log(piece_id);
+        console.log(path);
+        let url = path + "?action=piecePlayCount&piece_id=" + piece_id;
+        console.log(url);
+        
+        $.ajax({
+            url:  url,           // 資料請求的網址
+            type: "GET",                            // GET | POST | PUT | DELETE | PATCH
+            data: "",                         // 傳送資料到指定的 url
+            // processData: false,
+            // contentType : false,
+            // cache: false,
+            dataType: "json",                        // 預期會接收到回傳資料的格式： json | xml | html
+            timeout: 0,                              //  request 可等待的毫秒數 | 0 代表不設定 timeout
+            success: function(data){    
+               
+            }
+        });
+        
+    })
 	
 
 	setInterval(function(){

@@ -862,6 +862,16 @@ public class EventServlet extends HttpServlet {
 			
 			
 		}
+		
+		//==================================
+				if ("searchName".equals(action)) {
+
+					String name = req.getParameter("search");
+
+					req.getSession().setAttribute("name", name);
+					res.sendRedirect(req.getContextPath() + "/front-end/query/query_event.jsp");
+				}
+		
 	}
 	
 	public void destroy() {

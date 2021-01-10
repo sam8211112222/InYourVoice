@@ -91,8 +91,10 @@ public class YUProductServlet extends HttpServlet {
 
 		if (req.getParameter("action").equals("show_me_band")) {
 			String band_id = req.getParameter("band_id");
+			System.out.println(band_id);
 
 			List<ProductVO> bandProduct = proService.getAllByBand(band_id);
+			System.out.println(bandProduct.size());
 			req.setAttribute("bandProduct", bandProduct);
 
 			String url = "/front-end/product/bandID_product.jsp";

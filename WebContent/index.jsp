@@ -22,14 +22,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>InYourVoice</title>
-<link rel="stylesheet" href="./vendors/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/bootstrap/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="./vendors/slick/slick.css" />
-<link rel="stylesheet" href="./vendors/slick/slick-theme.css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/slick/slick.css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/slick/slick-theme.css" />
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 
-<link rel="stylesheet" href="./css/homepage.css" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/homepage.css" />
 </head>
 <body onload="connect();" onunload="disconnect();">
 
@@ -48,8 +48,8 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li> -->
 					<li class="nav-item"><a class="nav-link" href="#">活動資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">樂團資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">專輯作品</a></li>
+					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/band/band.do?action=listAllBand">樂團資訊</a></li>
+<!-- 					<li class="nav-item"><a class="nav-link" href="#">專輯作品</a></li> -->
 					<li class="nav-item"><a class="nav-link" href="#">周邊商品</a></li>
 
 					<!-- <li class="nav-item">
@@ -78,7 +78,7 @@
 					<img src="./images/logo.jpg">
 				</div>
 				<div>帳號xxxx</div>
-				<a class="dropdown-item" href="#">會員中心</a> <a class="dropdown-item" href="#">通知中心</a> <a class="dropdown-item" href="#">購物車</a> <a class="dropdown-item" href="#">我的最愛</a> <a class="dropdown-item"
+				<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/memberCenter.jsp">會員中心</a> <a class="dropdown-item" href="#">通知中心</a> <a class="dropdown-item" href="#">購物車</a> <a class="dropdown-item" href="#">我的最愛</a> <a class="dropdown-item"
 					href="#">登出</a>
 			</div>
 		</div>
@@ -447,7 +447,7 @@
 		<div class="card-deck">
 			<div class="card">
 				<!-- 			<img src="./images/美日好聲音1.jpg" class="card-img-top" alt="..."> -->
-				<img src="<%=request.getContextPath()%>/photoProvider/photoProvider.do?action=getPhoto&band_id=BAND00000" class="card-img-top" alt="">
+				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00000" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00000").band_name}</h5>
 					<!-- 					<p class="card-text">歌手</p> -->
@@ -457,25 +457,25 @@
 				</div>
 			</div>
 			<div class="card">
-				<img src="<%=request.getContextPath()%>/photoProvider/photoProvider.do?action=getPhoto&band_id=BAND00050" class="card-img-top" alt="">
+				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00050" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00050").band_name}</h5>
 				</div>
 			</div>
 			<div class="card">
-				<img src="<%=request.getContextPath()%>/photoProvider/photoProvider.do?action=getPhoto&band_id=BAND00100" class="card-img-top" alt="">
+				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00100" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00100").band_name}</h5>
 				</div>
 			</div>
 			<div class="card">
-				<img src="<%=request.getContextPath()%>/photoProvider/photoProvider.do?action=getPhoto&band_id=BAND00150" class="card-img-top" alt="">
+				<img src="<%=request.getContextPath()%>//band/band.do?action=getBandPhoto&band_id=BAND00150" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00150").band_name}</h5>
 				</div>
 			</div>
 			<div class="card">
-				<img src="<%=request.getContextPath()%>/photoProvider/photoProvider.do?action=getPhoto&band_id=BAND00200" class="card-img-top" alt="">
+				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00200" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00200").band_name}</h5>
 				</div>
@@ -755,12 +755,12 @@
 	</div>
 
 
-	<script src="./vendors/jquery/jquery-3.4.1.min.js"></script>
-	<script src="./vendors/popper/popper.min.js"></script>
-	<script src="./vendors/bootstrap/js/bootstrap.min.js"></script>
+	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
+	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
+	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 
 
-	<script type="text/javascript" src="./vendors/slick/slick.min.js"></script>
+	<script type="text/javascript" src="<%=request.getContextPath()%>/vendors/slick/slick.min.js"></script>
 
 	<!-- 輪播 -->
 	<script>

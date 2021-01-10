@@ -1,8 +1,10 @@
 package com.album.model;
 
+import java.sql.Connection;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class AlbumService {
@@ -82,6 +84,10 @@ public class AlbumService {
 		dao.delete(album_id);
 	}
 	
+	public void deleteAlbum(Connection con, String album_id) {
+		dao.delete(con, album_id);
+	}
+	
 	public AlbumVO getOneAlbum(String album_id) {
 		return dao.findByPrimaryKey(album_id);
 	}
@@ -96,5 +102,20 @@ public class AlbumService {
 	
 	public List<AlbumVO> getBandAlbums(String band_id){
 		return dao.getAllByBandId(band_id);
+	}
+	
+	public List<AlbumVO> getBandAlbumsReleasable(String band_id){
+			
+		return dao.getAllByBandId(band_id).stream()
+				.filter(a -> a.getAlbum_status() != 0) // 非下架狀態
+				.filter(a -> a.getAlbum_release_time().getTime() <= System.currentTimeMillis()) // 
+				.collect(Collectors.toList());
+		
+	}
+	
+	//冠華的方法===============================
+	
+	public List<AlbumVO> getAlbumByName(String album_name) {
+		return dao.findByName(album_name);
 	}
 }

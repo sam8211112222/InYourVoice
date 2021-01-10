@@ -8,7 +8,9 @@ div{
 .hide{
     display: none !important;
 }
-
+input, textarea{
+	border: 1px solid black;
+}
 div.album_management_container{
     border: 3px solid grey;
     border-radius: 10px;

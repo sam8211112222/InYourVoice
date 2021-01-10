@@ -40,6 +40,22 @@
 							href="<%=request.getContextPath()%>/back-end/events/addEvent.jsp">活動新增</a>
 					</div>
 				</div></li>
+				
+			<!-- Nav Item - Test Collapse Menu -->
+			<li class="nav-item"><a class="nav-link collapsed" href="#"
+				data-toggle="collapse" data-target="#collapseTwo"
+				aria-expanded="true" aria-controls="collapseTwo"> <i
+					class="fas fa-fw fa-cog"></i> <span>測試中文</span>
+			</a>
+				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+					data-parent="#accordionSidebar">
+					<div class="bg-white py-2 collapse-inner rounded">
+						<h6 class="collapse-header">管理選項:</h6>
+						<a class="collapse-item" href="<%=request.getContextPath()%>/back-end/events/index.jsp">活動列表</a> <a
+							class="collapse-item"
+							href="<%=request.getContextPath()%>/back-end/events/addEvent.jsp">活動新增</a>
+					</div>
+				</div></li>
 
 			<!-- Nav Item - Utilities Collapse Menu -->
 			<li class="nav-item"><a class="nav-link collapsed" href="#"

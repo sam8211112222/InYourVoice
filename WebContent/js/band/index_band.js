@@ -15,12 +15,14 @@ $(function(){
 
     $("#product_btn").on("click", function(e){
 
+        let band_id = $(this).attr("data-band_id");
+
         $(".included_content").addClass("content_hide");
         $("#product_content").removeClass("content_hide");
 
         e.preventDefault();
         console.log("jquery.load");
-        let href = $(this).attr("data-href") + "/front-end/product/band_productAll.jsp";
+        let href = $(this).attr("data-href") + `/product/YUproductServlet?action=show_me_band&band_id=${band_id}`;
 
         $("#product_content").load(href, { band_id : $(this).attr("data-band_id"),action : "show_me_band"}, function(result){
         	//alert(result);
@@ -71,7 +73,8 @@ $(function(){
     	}).hide().fadeIn('slow'); 
     });
      
-   
+    
+      
     
     
 });

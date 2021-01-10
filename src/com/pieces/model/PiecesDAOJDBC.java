@@ -456,5 +456,49 @@ public class PiecesDAOJDBC implements PiecesDAO_interface {
 
 		return list;
 	}
+	
+	@Override
+	public Connection delete(Connection con, String piece_id) {
+		PreparedStatement pstmt = null;
+
+		try {
+
+			if(con == null) {
+				Class.forName(DRIVER);
+				con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			}
+			con.setAutoCommit(false);
+			pstmt = con.prepareStatement(DELETE_PSTMT);
+
+			pstmt.setString(1, piece_id);
+
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Rolled back when deleting pieces. "
+						+ e.getMessage());
+			}
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			
+		}
+		return con;
+	}
 
 }

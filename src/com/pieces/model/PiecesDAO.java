@@ -120,10 +120,10 @@ public class PiecesDAO implements PiecesDAO_interface {
 			pstmt.setString(1, piecesVO.getAlbum_id());
 			pstmt.setBytes(2, piecesVO.getPiece());
 			pstmt.setString(3, piecesVO.getPiece_name());
-			pstmt.setInt(4, 0);
-			pstmt.setInt(5, 0);
-			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis()));
-			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
+			pstmt.setInt(4, 1); // 新增時預設上架
+			pstmt.setInt(5, 0); // 播放次數新增時先設0
+			pstmt.setTimestamp(6, new Timestamp(System.currentTimeMillis())); // 新增時間
+			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis())); // 最後編輯時間
 			pstmt.setString(8, piecesVO.getPiece_last_editor());
 
 			pstmt.executeUpdate();
@@ -181,7 +181,7 @@ public class PiecesDAO implements PiecesDAO_interface {
 			pstmt.setInt(4, piecesVO.getPiece_status());
 			pstmt.setInt(5, piecesVO.getPiece_play_count());
 			pstmt.setTimestamp(6, piecesVO.getPiece_add_time());
-			pstmt.setTimestamp(7, piecesVO.getPiece_last_edit_time());
+			pstmt.setTimestamp(7, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(8, piecesVO.getPiece_last_editor());
 			pstmt.setString(9, piecesVO.getPiece_id());
 			
@@ -246,6 +246,47 @@ public class PiecesDAO implements PiecesDAO_interface {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public Connection delete(Connection con, String piece_id) {
+		PreparedStatement pstmt = null;
+
+		try {
+
+			if(con == null) {
+				con = ds.getConnection();
+			}
+			con.setAutoCommit(false);
+			pstmt = con.prepareStatement(DELETE_PSTMT);
+
+			pstmt.setString(1, piece_id);
+
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Rolled back when deleting pieces. "
+						+ e.getMessage());
+			}
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			
+		}
+		return con;
 	}
 
 	@Override
