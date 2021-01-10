@@ -12,7 +12,7 @@ public class EmpService {
 			dao = new EmpJDBCDAO();
 		}
 		
-		public EmpVO addEmp(byte[] emp_password, java.sql.Timestamp emp_add_time, String emp_mail, String emp_phone,
+		public EmpVO addEmp(String emp_password, java.sql.Timestamp emp_add_time, String emp_mail, String emp_phone,
 				Integer emp_status, Integer emp_auth, java.sql.Timestamp emp_last_edit_time, String emp_last_editor) {
 
 			EmpVO empVO = new EmpVO();
@@ -30,7 +30,7 @@ public class EmpService {
 
 			return empVO;
 		}
-		public EmpVO updateEmp(String emp_id, byte[] emp_password, java.sql.Timestamp emp_add_time, String emp_mail, String emp_phone,
+		public EmpVO updateEmp(String emp_id, String emp_password, java.sql.Timestamp emp_add_time, String emp_mail, String emp_phone,
 				Integer emp_status, Integer emp_auth, java.sql.Timestamp emp_last_edit_time, String emp_last_editor) {
 
 
@@ -64,6 +64,20 @@ public class EmpService {
 
 		public List<EmpVO> getAll() {
 			return dao.getAll();
+		}
+		//登入
+		public EmpVO login(String empEmail, String empPassword) {
+			EmpVO empVO = dao.findByAccount(empEmail);
+			if(empVO!=null) {
+				if(empPassword!=null && empPassword.length()!=0) {
+					String pass = empVO.getEmp_password();
+					System.out.println(pass);
+					if(pass.equals(empPassword)) {
+						return empVO;
+					}
+				}
+			}
+			return null;
 		}
 		
 		public static void main(String[] args) {

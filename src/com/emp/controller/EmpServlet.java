@@ -22,9 +22,39 @@ public class EmpServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		req.setCharacterEncoding("UTF-8");
+		res.setContentType("text/html;charset=UTF-8");
 		String action = req.getParameter("action");
+		if("login".equals(action)) {
+			String empEmail = req.getParameter("empEmail");
+			String empPassword = req.getParameter("empPassword");
+			Map<String,String> errors = new HashMap<String,String>();
+			req.setAttribute("errors", errors);
+			if(empEmail==null || empEmail.length()==0) {
+				errors.put("username", "請輸入帳號");
+			}
+			if(empPassword==null || empPassword.length()==0) {
+				errors.put("password", "請輸入密碼");
+			}
+			if(errors!=null && !errors.isEmpty()) {
+				req.getRequestDispatcher(
+						"/back-end/emp/LoginBackEnd.jsp").forward(req, res);
+				return;
+			}
+			EmpService empSvc = new EmpService();
+			EmpVO empVO = empSvc.login(empEmail, empPassword);
+			if(empVO == null) {
+				errors.put("password", "登入失敗 請檢查帳號密碼");
+				req.getRequestDispatcher(
+						"/back-end/emp/LoginBackEnd.jsp").forward(req, res);
+			} else {
+				HttpSession session = req.getSession();
+				session.setAttribute("empVO", empVO);
+				
+				String path = req.getContextPath();
+				res.sendRedirect(path+"/back-end/backEndHome.jsp");
+			}
 		
-		
+		}
 		if ("getOne_For_Display".equals(action)) { // �Ӧ�select_page.jsp���ШD
 
 			List<String> errorMsgs = new LinkedList<String>();
@@ -132,7 +162,7 @@ public class EmpServlet extends HttpServlet {
 				/***************************1.�����ШD�Ѽ� - ��J�榡�����~�B�z**********************/
 				String emp_id = new String(req.getParameter("emp_id").trim());
 				
-				byte[] emp_password = new byte[10];
+				String emp_password = req.getParameter("emp_password").trim();
 				
 				java.sql.Timestamp emp_add_time = null;
 				try {
@@ -193,7 +223,8 @@ public class EmpServlet extends HttpServlet {
 				
 				/***************************2.�}�l�ק���*****************************************/
 				EmpService empSvc = new EmpService();
-				empVO = empSvc.updateEmp(emp_id, emp_password, emp_add_time, emp_mail, emp_phone, emp_status, emp_auth, emp_last_edit_time, emp_last_editor);
+				empVO = empSvc.updateEmp(emp_id, emp_password, emp_add_time, emp_mailReg, emp_phoneReg, emp_status, emp_auth, emp_last_edit_time, emp_last_editor);
+				
 				
 				/***************************3.�ק粒��,�ǳ����(Send the Success view)*************/
 				req.setAttribute("empVO", empVO); // ��Ʈwupdate���\��,���T����empVO����,�s�Jreq
@@ -220,7 +251,7 @@ public class EmpServlet extends HttpServlet {
 			try {
 				/***********************1.�����ШD�Ѽ� - ��J�榡�����~�B�z*************************/
 				
-				byte[] emp_password = new byte[10];
+				String emp_password = req.getParameter("emp_password");
 		
 				
 				java.sql.Timestamp emp_add_time = null;
@@ -281,7 +312,7 @@ public class EmpServlet extends HttpServlet {
 				
 				/***************************2.�}�l�s�W���***************************************/
 				EmpService empSvc = new EmpService();
-				empVO = empSvc.addEmp(emp_password, emp_add_time, emp_mail, emp_phone, emp_status, emp_auth, emp_last_edit_time, emp_last_editor);
+				empVO = empSvc.addEmp(emp_password, emp_add_time, emp_mailReg, emp_phoneReg, emp_status, emp_auth, emp_last_edit_time, emp_last_editor);
 				
 				/***************************3.�s�W����,�ǳ����(Send the Success view)***********/
 				String url = "/back-end/emp/listAllEmp.jsp";
