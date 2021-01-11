@@ -34,82 +34,7 @@
 <body onload="connect();" onunload="disconnect();">
 
 
-	<header class="bg-light">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="logo">
-				<a class="navbar-brand" href="#"><img src="./images/logo.png"></a>
-			</div>
-			<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-					<!-- <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                    </li> -->
-					<li class="nav-item"><a class="nav-link" href="#">活動資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">樂團資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">周邊商品</a></li>
-
-					<!-- <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li> -->
-					<form action="<%=request.getContextPath()%>/album/album.do" method="get" class="form-inline my-2 my-lg-0">
-						<input class="form-control mr-sm-2" type="search" placeholder="搜尋" aria-label="Search" name="search" id="search"> <input type="hidden" name="action" value="searchName">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋</button>
-					</form>
-				</ul>
-			</div>
-
-		</nav>
-		
-		<!-- 小鈴鐺   -->
-        <div class="dropdown dropleft">
-             
-            <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <div class="notice">
-                    <span class="notice-number">1</span>
-                <i class="fas fa-bell" style="color: dimgrey;"></i>   
-                </div>
-            </div>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">通知</a>
-                <a class="dropdown-item" href="#">通知</a>
-                <a class="dropdown-item" href="#">通知</a>
-                <a class="dropdown-item" href="#">通知</a>
-                <a class="dropdown-item" href="#">通知</a>
-            </div>
-        </div> 
-		
-		
-		<div class="dropdown dropleft">
-			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<!-- <img src="./images/logo.jpg"> -->
-				<i class="far fa-user"></i>
-			</div>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<c:if test="${memberVo.memberId==null}">
-					<div class="userAvatar">
-						<!-- <img src="./images/logo.jpg"> -->
-						<i class="fas fa-meh" style="font-size: 79px;color: #888;"></i>
-					</div>
-				</c:if>
-				<c:if test="${memberVo.memberId!=null}">
-					<div class="userAvatar">
-					
-					</div>	
-				</c:if>
-				<div style= "color: #2cbcf4">${memberVo.memberName}</div>
-				<a class="dropdown-item" href="#">會員中心</a> <a class="dropdown-item" href="#">通知中心</a> <a class="dropdown-item" href="#">購物車</a> <a class="dropdown-item" href="#">我的最愛</a> 
-				<c:if test="${memberVo.memberId==null}">
-					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
-				</c:if>
-				<c:if test="${memberVo.memberId!=null}">
-					<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
-				</c:if>
-			</div>
-		</div>
-	</header>
+	<jsp:include page="/front-end/header_footer/header.jsp"></jsp:include>
 
 	<%
 		//step 1 拿到所有活動資料
@@ -765,21 +690,8 @@
 
 
 	<hr>
-	<!-- footer -->
-	<div class="wrap">
-		<footer class="footer">
-			<nav class="navfoot">
-				<div>
-					<h1 style="color: white">關於</h1>
-					<a href="#"><li style="color: white">關於我們</li></a> 
-				</div>
-				<div>
-					<h1 style="color: white">其他</h1>
-					<a href="#"><li style="color: white">聯絡我們</li></a>
-				</div>
-			</nav>
-		</footer>
-	</div>
+	
+	<jsp:include page="/front-end/header_footer/footer.jsp"></jsp:include>
 
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>

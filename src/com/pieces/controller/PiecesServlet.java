@@ -289,6 +289,7 @@ public class PiecesServlet extends HttpServlet {
 
 		if ("getPieceList".equals(action)) {
 
+			res.setCharacterEncoding("UTF-8");
 			String album_id = req.getParameter("album_id");
 //			AlbumService albumSvc = new AlbumService();
 //			AlbumVO albumVO = albumSvc.getOneAlbum(album_id);
@@ -299,7 +300,6 @@ public class PiecesServlet extends HttpServlet {
 					.filter(p -> p.getPiece_status() == 1)
 //					.filter(p -> albumReleaseTimeInLong > System.currentTimeMillis())
 					.collect(Collectors.toList());
-
 			PrintWriter out = res.getWriter();
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson(piecesVOs);
