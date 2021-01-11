@@ -111,7 +111,14 @@ width:120px;
 	</div>
 	<!-- End of Main Content -->
 
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<%@ include file="/back-end/sb/page2.file"%>
+	
 	<script>
 		$(".updatebtn")
 				.click(
@@ -127,7 +134,9 @@ width:120px;
 									list.push(info);
 								}
 							}
+							console.log(list);
 							if (list.length == 3) {
+								console.log("list.length == 3")
 								const phoneReg = new RegExp("^0(9)[0-9]{8}$");
 								if (list[2].match(phoneReg)) {
 									let memberPhone = list[2];

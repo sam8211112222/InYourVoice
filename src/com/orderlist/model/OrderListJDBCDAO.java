@@ -316,15 +316,15 @@ public class OrderListJDBCDAO implements OrderListDAO_interface {
 			while (rs.next()) {
 				// vo �]�٬� Domain objects
 				OrderListVO vo = new OrderListVO();
-				vo.setOrder_id(rs.getString("ORDER_ID"));
-				vo.setOrderlist_goods_amount(rs.getInt("ORDERLIST_GOODS_AMOUNT"));
 				vo.setOrderlist_id(rs.getString("ORDERLIST_ID"));
-				vo.setOrderlist_remarks(rs.getString("ORDERLIST_REMARKS"));
+				vo.setOrder_id(rs.getString("ORDER_ID"));
 				vo.setProduct_id(rs.getString("PRODUCT_ID"));
-				vo.setReview_hidden(rs.getInt("REVIEW_HIDDEN"));
-				vo.setReview_msg(rs.getString("REVIEW_MSG"));
+				vo.setOrderlist_goods_amount(rs.getInt("ORDERLIST_GOODS_AMOUNT"));
+				vo.setOrderlist_remarks(rs.getString("ORDERLIST_REMARKS"));
 				vo.setReview_score(rs.getInt("REVIEW_SCORE"));
+				vo.setReview_msg(rs.getString("REVIEW_MSG"));
 				vo.setReview_time(rs.getTimestamp("REVIEW_TIME"));
+				vo.setReview_hidden(rs.getInt("REVIEW_HIDDEN"));
 				vo.setPrice(rs.getInt("PRICE"));
 				list.add(vo); // Store the row in the list
 			}
@@ -606,6 +606,71 @@ public class OrderListJDBCDAO implements OrderListDAO_interface {
 			}
 
 			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	
+	// Sam=======================================================================================
+	@Override
+	public List<OrderListVO> findByOrderIdB(String order_Id) {
+		List<OrderListVO> list = new ArrayList<OrderListVO>();
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, password);
+			pstmt = con.prepareStatement(FIND_BY_ORDER_ID_STMT);
+			pstmt.setString(1, order_Id);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				// vo �]�٬� Domain objects
+				OrderListVO vo = new OrderListVO();
+				vo.setOrder_id(rs.getString("ORDER_ID"));
+				vo.setOrderlist_goods_amount(rs.getInt("ORDERLIST_GOODS_AMOUNT"));
+				vo.setOrderlist_id(rs.getString("ORDERLIST_ID"));
+				vo.setOrderlist_remarks(rs.getString("ORDERLIST_REMARKS"));
+				vo.setProduct_id(rs.getString("PRODUCT_ID"));
+				vo.setReview_hidden(rs.getInt("REVIEW_HIDDEN"));
+				vo.setReview_msg(rs.getString("REVIEW_MSG"));
+				vo.setReview_score(rs.getInt("REVIEW_SCORE"));
+				vo.setReview_time(rs.getTimestamp("REVIEW_TIME"));
+				vo.setPrice(rs.getInt("PRICE"));
+				list.add(vo); // Store the row in the list
+			}
+			
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
 			// Handle any SQL errors

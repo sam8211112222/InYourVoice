@@ -123,5 +123,10 @@ public class OrderListService {
 
 		return list;
 	}
+	
+	// Sam========================================================
+	public List<OrderListVO> findByOrderIdB(String order_Id){
+		return dao.findByOrderIdB(order_Id);
+	}
 
 }

@@ -30,6 +30,17 @@
 <link
  href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.css"
  rel="stylesheet">
+  <style>
+	.nowrap {
+	   white-space:nowrap;
+	}
+	img.poster{
+		width:200px;
+	}
+	img.seat{
+		width:100px;
+	}
+ </style>
 </head>
 <body bgcolor='white'>
 <%@ include file="/back-end/sb/page1.file" %>
@@ -37,15 +48,15 @@
 	票卷訂單資料 
 </div>
 
-<div align="center" id="select">
-<a href='<%=request.getContextPath()%>/back-end/product/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/select_page.jsp')">回後台商品首頁</button></a>
-<a href='<%=request.getContextPath()%>/back-end/product/protect/listAllProductManagement.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllProductManagement.jsp')">列出全部商品</button></a>
-<a href='<%=request.getContextPath()%>/back-end/product/protect/listAllProductUnapproval.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllProductUnapproval.jsp')">商品審核</button></a>
-</div>
-<div align="center" id="select">
-<a href='<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp')">列出商品訂單</button></a>
-<a href='<%=request.getContextPath()%>/back-end/productphoto/listAllProductPhoto.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/productphoto/listAllProductPhoto.jsp')">列出商品照片</button></a>
-</div>
+<!-- <div align="center" id="select"> -->
+<%-- <a href='<%=request.getContextPath()%>/back-end/product/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/select_page.jsp')">回後台商品首頁</button></a> --%>
+<%-- <a href='<%=request.getContextPath()%>/back-end/product/protect/listAllProductManagement.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllProductManagement.jsp')">列出全部商品</button></a> --%>
+<%-- <a href='<%=request.getContextPath()%>/back-end/product/protect/listAllProductUnapproval.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllProductUnapproval.jsp')">商品審核</button></a> --%>
+<!-- </div> -->
+<!-- <div align="center" id="select"> -->
+<%-- <a href='<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp')">列出商品訂單</button></a> --%>
+<%-- <a href='<%=request.getContextPath()%>/back-end/productphoto/listAllProductPhoto.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/productphoto/listAllProductPhoto.jsp')">列出商品照片</button></a> --%>
+<!-- </div> -->
 
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
@@ -57,11 +68,13 @@
 	</ul>
 </c:if>
 
+
 <div class="table">
-<table>
-	<tbody>
 	<%@ include file="page1.file" %> 	
-	<c:forEach var="eventVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">	
+<div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered nowrap"  id="dataTable" cellspacing="0">
+                <thead>
 	<tr>
 		<th>活動編號</th>
 		<th>樂團編號</th>
@@ -75,7 +88,16 @@
 		<th>活動縣市</th>
 		<th>活動縣市分區</th>
 		<th>活動地址</th>
+		<th>活動開始時間</th>
+		<th>活動上架時間</th>
+		<th>最後修改時間</th>
+		<th>最後修改者</th>
+		<th>活動狀態</th>
+		<th>座位圖</th>
 	</tr>
+	</thead>
+	<tbody>
+	<c:forEach var="eventVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">	
 		<tr>
 			<td>${eventVO.event_id}</td>
 			<td>${eventVO.band_id}</td>
@@ -83,32 +105,29 @@
 			<td>${eventVO.event_sort}</td>
 			<td>${eventVO.event_title}</td>
 			<td>${eventVO.event_detail}</td>
-			<td><img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></td>
+			<td><img class="poster" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></td>
 			<td>${eventVO.event_area}</td>
 			<td>${eventVO.event_place}</td>
 			<td>${eventVO.event_city}</td>
 			<td>${eventVO.event_cityarea}</td>
 			<td>${eventVO.event_address}</td>
-		</tr>
-		<tr>
-			<th>活動開始時間</th>
-			<th>活動上架時間</th>
-			<th>最後修改時間</th>
-			<th>最後修改者</th>
-			<th>活動狀態</th>
-			<th>座位圖</th>
-		</tr>
-		<tr>
 			<td>${eventVO.event_start_time}</td>
 			<td>${eventVO.event_on_time}</td>
 			<td>${eventVO.event_last_edit_time}</td>
 			<td>${eventVO.event_last_editor}</td>
 			<td>${eventVO.event_status}</td>
-			<td><img src="<%=request.getContextPath()%>/EventPicController?action=getEventSeat&event_id=${eventVO.event_id}"></td>		
+			<td><img class="seat" src="<%=request.getContextPath()%>/EventPicController?action=getEventSeat&event_id=${eventVO.event_id}"></td>		
 		</tr>	
 	</c:forEach>
+	</tbody>
 </table>
 </div>
+<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <%@ include file="page2.file" %>
 <%@ include file="/back-end/sb/page2.file" %>
 </body>

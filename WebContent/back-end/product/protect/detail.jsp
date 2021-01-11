@@ -31,9 +31,10 @@
 </div>
 
 <div align="center" id="select">
-<a href='<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp')">回商品訂單</button></a>
+<%-- <a href='<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/back-end/product/protect/listAllOrdersMView.jsp')">回商品訂單</button></a> --%>
 </div>
-<table width="60%">
+<div style="width:80%; margin:0 auto;">
+<table width="100%">
 <tr>
 <th>訂單編號:</th>
 <th>下單時間:</th>
@@ -51,7 +52,7 @@
 </table>
 
 <h4>訂單明細:</h4>
-	<Table width="60%" border="1">
+	<Table width="100%" border="1">
 			<tr>
 				<th align="left">商品編號</th>
 				<th align="left">數量</th>
@@ -67,6 +68,14 @@
 				</tr>
 			</c:forEach>
 	</Table>
+</div>
+<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script>
 <%@ include file="/back-end/sb/page2.file" %>
 </body>
 </html>
