@@ -74,6 +74,43 @@ public class TicketJDBCDAO implements TicketDAO {
 		}
 
 	}
+	
+	@Override
+	public void insert(TicketVO ticketVO ,Connection con ) {
+
+		PreparedStatement pstmt = null;
+
+		try {
+
+			pstmt = con.prepareStatement(INSERT_STMT);
+
+			pstmt.setString(1, ticketVO.getEvent_id());
+			pstmt.setInt(2, ticketVO.getTicket_sort());
+			pstmt.setString(3, ticketVO.getTicket_name());
+			pstmt.setInt(4, ticketVO.getTicket_amount());
+			pstmt.setInt(5, ticketVO.getTicket_price());
+			pstmt.setTimestamp(6, ticketVO.getTicket_onsale_time());
+			pstmt.setTimestamp(7, ticketVO.getTicket_endsale_time());
+			pstmt.setTimestamp(8, ticketVO.getTicket_edit_time());
+			pstmt.setInt(9, ticketVO.getTicket_status());
+
+			pstmt.executeUpdate();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
 
 	@Override
 	public void update(TicketVO ticketVO) {

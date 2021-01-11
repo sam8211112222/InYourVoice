@@ -370,12 +370,12 @@ div.add{
     cursor: pointer;
 }
 
-/* 疆簫�色�甄淦over疇職�� */
+/* ��鬥嚙踐�嚙賜�椰over��嚙踝蕭 */
 .song-line-hover{
     background-color: #444444b7;
 }
 
-/* 疆簫�色�甄淦over疇職�� */
+/* ��鬥嚙踐�嚙賜�椰over��嚙踝蕭 */
 
 div.heart{
     width: 90px;
@@ -538,17 +538,20 @@ header{
 .navbar{
     width: calc(100% - 40px);
 }
+
 #dropdownMenuButton{
     width: 40px;
-    height: 40px;
-    margin-left: 20px;
-    margin-right: 25px;
-    border: 1px solid #000;
-    border-radius: 50%;
-    overflow: hidden;
+    height: 22px;
+    margin-right: 10px;
+    border-radius: 50%;   
     position: relative;
     cursor: pointer;
 }
+
+.fa-user:before{
+    font-size: 25px;
+}
+
 #dropdownMenuButton img, #dropdownMenuButton .fa-user{
     position: absolute;
     top: 50%;
@@ -579,12 +582,12 @@ header{
 .dropdown-menu.show {
     display: block;
     text-align: center;
-    top: 48px !important;
+     top: 45px !important;
     left: 52px !important;
 }
 
 .logo{
-    width: 60px;
+    width: 250px;
     margin-left: 40px;
     position: relative;
     cursor: pointer;
@@ -743,7 +746,7 @@ hr {
     border-top: 2px solid rgba(255, 255, 255, 0.397);
 }
 
-/* ===========客服聊天========== */
+/* ===========摰Ｘ��予========== */
 
 
 #chat-circle {

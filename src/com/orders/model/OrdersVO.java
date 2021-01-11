@@ -16,6 +16,7 @@ public class OrdersVO implements java.io.Serializable {
 	private String order_phone;
 	private Timestamp order_delivery_time;
 	private Timestamp order_received_time;
+	private Integer total_price;
 
 	public OrdersVO() {
 
@@ -91,6 +92,14 @@ public class OrdersVO implements java.io.Serializable {
 
 	public void setOrder_received_time(Timestamp order_received_time) {
 		this.order_received_time = order_received_time;
+	}
+
+	public Integer getTotal_price() {
+		return total_price;
+	}
+
+	public void setTotal_price(Integer total_price) {
+		this.total_price = total_price;
 	}
 
 	@Override

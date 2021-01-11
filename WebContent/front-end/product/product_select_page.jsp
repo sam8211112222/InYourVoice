@@ -7,6 +7,6 @@
 <title>樂團周邊商品(鈺涵)</title>
 </head>
 <body>
-<a href='${pageContext.request.contextPath}/front-end/product/band_productAll.jsp'>周邊商品</a>  
+<a href='${pageContext.request.contextPath}/product/YUproductServlet'>周邊商品</a>  
 </body>
 </html>

@@ -5,15 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-
-import com.orders.model.OrdersDAO_interface;
-import com.orders.model.OrdersJDBCDAO;
-import com.orders.model.OrdersVO;
 
 public class OrderListJDBCDAO implements OrderListDAO_interface {
 	String driver = "oracle.jdbc.OracleDriver";
@@ -35,6 +28,10 @@ public class OrderListJDBCDAO implements OrderListDAO_interface {
 
 	private static final String FIND_BY_POUDUCT_ID_STMT = "SELECT * FROM ORDERLIST where PRODUCT_ID = ?";
 
+	private static final String UPDATE_REVIEW = "UPDATE orderlist set review_score=?, review_msg=?, review_time=? where orderlist_id=?";
+
+	private static final String FIND_REVIEW_BY_PRODUCT_ID = "select ol.REVIEW_SCORE,ol.REVIEW_MSG,ol.REVIEW_TIME,o.member_id,m.member_name,m.member_nickname,m.member_photo from orderlist ol join orders o on ol.order_id=o.order_id join members m on o.member_id=m.member_id where ol.product_id=? and ol.review_time is not null order by ol.review_time desc";
+	
 	@Override
 	public OrderListVO insert(OrderListVO orderListVO) {
 		Connection con = null;
@@ -540,6 +537,105 @@ public class OrderListJDBCDAO implements OrderListDAO_interface {
 			}
 		}
 
+	}
+
+	public void updeteReview(OrderListVO orderListVO) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, password);
+			pstmt = con.prepareStatement(UPDATE_REVIEW);
+
+			pstmt.setInt(1, orderListVO.getReview_score() != null ? orderListVO.getReview_score() : 0);
+			pstmt.setString(2, orderListVO.getReview_msg());
+			pstmt.setTimestamp(3, orderListVO.getReview_time());
+			pstmt.setString(4, orderListVO.getOrderlist_id());
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+	}
+	
+	public List<ReviewVO> findReviewByProductId(String productId) {
+		List<ReviewVO> list = new ArrayList<ReviewVO>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, password);
+			pstmt = con.prepareStatement(FIND_REVIEW_BY_PRODUCT_ID);
+
+			pstmt.setString(1, productId);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				ReviewVO vo = new ReviewVO();
+				vo.setMember_id(rs.getString("member_id"));
+				vo.setMember_name(rs.getString("member_name"));
+				vo.setMember_nickname(rs.getString("member_nickname"));
+				vo.setReview_msg(rs.getString("review_msg"));
+				vo.setReview_score(rs.getInt("review_score"));
+				vo.setReview_time(rs.getTimestamp("review_time"));
+				vo.setMember_photo(rs.getBytes("member_photo"));
+				list.add(vo);
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 
 //	public static void main(String[] args) {

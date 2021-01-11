@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import com.band.model.BandService;
+import com.band.model.BandVO;
 import com.event.model.EventService;
 import com.event.model.EventVO;
 import com.eventorderlist.model.EventOrderListService;
@@ -38,6 +40,7 @@ import jdk.nashorn.internal.runtime.Context;
 @MultipartConfig
 public class EventServlet extends HttpServlet {
 	Timer timer;
+
 	public void init() throws ServletException {
 		timer = new Timer();
 		TimerTask task = new TimerTask() {
@@ -47,10 +50,11 @@ public class EventServlet extends HttpServlet {
 				EventService eventSvc = new EventService();
 				List<EventVO> onEventList = eventSvc.getAll();
 				Iterator<EventVO> it = onEventList.iterator();
-				while(it.hasNext()) {
+				while (it.hasNext()) {
 					EventVO event = it.next();
 					Long nowTime = System.currentTimeMillis();
-					if (event.getEvent_on_time().getTime()> nowTime||event.getEvent_status()!=1) {
+					if (event.getEvent_on_time().getTime() > nowTime || event.getEvent_status() != 1
+							|| event.getEvent_start_time().getTime() < nowTime) {
 						it.remove();
 					}
 				}
@@ -123,24 +127,34 @@ public class EventServlet extends HttpServlet {
 
 				String event_id = "EVENT" + strEnd;
 				/*************************** 2.開始查詢資料 *****************************************/
+				ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) getServletContext()
+						.getAttribute("ticketRestAmount");
 				EventService eventSvc = new EventService();
 				EventVO eventVO = eventSvc.getOneEvent(event_id);
+				BandVO bandVO = new BandService().getOneBand(eventVO.getBand_id());
 				TicketService ticketSvc = new TicketService();
 				List<TicketVO> ticketList = ticketSvc.getTicketByEventId(event_id);
-				if (eventVO == null) {
-					errorMsgs.add("查無資料");
-				} else if (ticketList != null) {
-//					for (TicketVO ticketVO : ticketList) {
+				if (ticketList != null) {
 					Iterator<TicketVO> it = ticketList.iterator();
 					while (it.hasNext()) {
 						TicketVO ticketVO = it.next();
 						Integer ticketStatus = ticketVO.getTicket_status();
+						Integer ticket_amount = ticketVO.getTicket_amount();
+						if (ticketRestAmount.containsKey(ticketVO)) {
+							ticket_amount = ticketRestAmount.get(ticketVO.getTicket_id());
+						} else {
+							ticketRestAmount.put(ticketVO.getTicket_id(), ticket_amount);
+						}
+
 						Long ticketOnsaleTime = ticketVO.getTicket_onsale_time().getTime();
 						Long ticketEndsaleTime = ticketVO.getTicket_endsale_time().getTime();
 						Long serverTime = System.currentTimeMillis();
 
-						if (ticketStatus == 0 || ticketOnsaleTime > serverTime || ticketEndsaleTime < serverTime) {
+						if (ticketStatus == 0 || ticketOnsaleTime > serverTime || ticketEndsaleTime < serverTime
+								|| ticket_amount == 0) {
 							it.remove();
+						} else {
+							ticketVO.setTicket_amount(ticket_amount);
 						}
 					}
 				}
@@ -153,6 +167,8 @@ public class EventServlet extends HttpServlet {
 				}
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
+
+				req.setAttribute("bandVO", bandVO);
 				req.setAttribute("eventVO", eventVO); // 資料庫取出的eventVO物件,存入req
 				req.setAttribute("ticketList", ticketList); // 資料庫取出此event的ticketVO(List)
 				String url = "/front-end/event/listOneEvent.jsp";
@@ -216,12 +232,14 @@ public class EventServlet extends HttpServlet {
 				}
 
 				String event_title = req.getParameter("event_title");
-				String inputWord = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,10}$";
+//				String inputWord = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,10}$";
 				if (event_title == null || event_title.trim().length() == 0) {
 					errorMsgs.add("活動標題: 請勿空白");
-				} else if (!event_title.trim().matches(inputWord)) { // 以下練習正則(規)表示式(regular-expression)
-					errorMsgs.add("活動標題: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間");
-				}
+				} /*
+					 * else if (!event_title.trim().matches(inputWord)) { //
+					 * 以下練習正則(規)表示式(regular-expression)
+					 * errorMsgs.add("活動標題: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間"); }
+					 */
 
 				String band_id = req.getParameter("band_id").trim();
 				if (band_id == null || band_id.trim().length() == 0) {
@@ -523,11 +541,8 @@ public class EventServlet extends HttpServlet {
 			try {
 				/*********************** 1.接收請求參數 - 輸入格式的錯誤處理 *************************/
 				String event_title = req.getParameter("event_title");
-				String inputWord = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{2,10}$";
 				if (event_title == null || event_title.trim().length() == 0) {
 					errorMsgs.add("活動標題: 請勿空白");
-				} else if (!event_title.trim().matches(inputWord)) { // 以下練習正則(規)表示式(regular-expression)
-					errorMsgs.add("活動標題: 只能是中、英文字母、數字和_ , 且長度必需在2到10之間");
 				}
 
 				String band_id = req.getParameter("band_id").trim();
@@ -844,36 +859,56 @@ public class EventServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
-		
-		if(req.getParameter("action").equals("band_event")) {
+
+		if ("band_event".equals(action)) {
 			String band_id = req.getParameter("band_id");
 			System.out.println(band_id);
 			EventService eventsvc = new EventService();
 			List<EventVO> band_event = eventsvc.getEventsByBandId(band_id);
 			System.out.println(band_event.size());
-			
-			
+
 			req.setAttribute("band_event", band_event);
-			
+
 			String url = "/front-end/event/band_event.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 			successView.forward(req, res);
-			
-			
-			
+
 		}
-		
-		//==================================
-				if ("searchName".equals(action)) {
+		if ("confirmList-display".equals(action)) {
+			EventService eventSvc = new EventService();
+			List<EventVO> list = eventSvc.getEventsToConfirm();
 
-					String name = req.getParameter("search");
-
-					req.getSession().setAttribute("name", name);
-					res.sendRedirect(req.getContextPath() + "/front-end/query/query_event.jsp");
-				}
-		
+			req.setAttribute("list", list);
+			String url = "/back-end/events/eventConfirm.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url);
+			successView.forward(req, res);
+		}
+		//審核通過
+		if ("pass".equals(action)) {
+			String event_id = req.getParameter("event_id");
+			EventService eventSvc = new EventService();
+			EventVO eventVO = eventSvc.getOneEvent(event_id);
+			Integer event_status = new Integer(1);
+			eventVO.setEvent_status(event_status);
+			eventSvc.setEventStatus(eventVO);
+			
+			//更新成功 開始轉交
+			res.sendRedirect(req.getContextPath()+"/event/EventServlet?action=confirmList-display");
+		}
+		//審核未通過
+		if ("pass-fail".equals(action)) {
+			String event_id = req.getParameter("event_id");
+			EventService eventSvc = new EventService();
+			EventVO eventVO = eventSvc.getOneEvent(event_id);
+			Integer event_status = new Integer(4);
+			eventVO.setEvent_status(event_status);
+			eventSvc.setEventStatus(eventVO);
+			
+			//更新成功 開始轉交
+			res.sendRedirect(req.getContextPath()+"/event/EventServlet?action=confirmList-display");
+		}
 	}
-	
+
 	public void destroy() {
 		timer.cancel();
 	}

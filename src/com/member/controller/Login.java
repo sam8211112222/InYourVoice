@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.band.model.BandService;
 import com.google.gson.Gson;
 import com.member.model.MemberService;
 import com.member.model.MemberVo;
@@ -73,7 +74,7 @@ public class Login extends HttpServlet {
 			session.setAttribute("memberVo", memberVo);
 			
 			String path = request.getContextPath();
-			response.sendRedirect(path+"/front-end/member/memberCenter2.jsp");
+			response.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
 		}
 		}
 		//ajax 驗證註冊帳號
@@ -211,12 +212,9 @@ public class Login extends HttpServlet {
 			java.util.Date date = new java.util.Date();
 			Timestamp addTime = new Timestamp(date.getTime());
 			String bandId = null;
-//			InputStream in = new FileInputStream(request.getContentType()+"/images/無圖片.png");
-			String path = getServletContext().getRealPath("/images/無圖片.png");
-			InputStream in = new FileInputStream(path);
-			byte[] pic = new byte[in.available()];
-			in.read(pic);
-		
+			InputStream in = new FileInputStream(getServletContext().getRealPath("/images/無圖片.png"));
+			byte[] memberPhoto = new byte[in.available()];
+			in.read(memberPhoto);
 //			MemberVo memberVo = new MemberVo();
 //			memberVo.setMemberAccount(memberAccount);
 //			memberVo.setMemberAddress(memberAddress);
@@ -232,7 +230,7 @@ public class Login extends HttpServlet {
 //						"/front-end/registered.jsp").forward(request, response);
 //				return;
 //			}
-			memberSvc.addMember(memberAccount, memberPassword, memberGender, memberPhone, memberAddress, memberName, memberNickname, memberBirth, memberMsgAuth, memberCardNumber, memberCardExpyear, memberCardExpmonth, addTime, bandId);
+			memberSvc.addMember(memberAccount, memberPassword, memberGender, memberPhone, memberAddress, memberName, memberNickname, memberBirth, memberMsgAuth, memberCardNumber, memberCardExpyear, memberCardExpmonth, addTime, bandId, memberPhoto);
 //			System.out.println("註冊成功");
 //			RequestDispatcher successView = request.getRequestDispatcher("/front-end/login.jsp"); // 新增成功後轉交listAllEmp.jsp
 //			successView.forward(request, response);
@@ -274,10 +272,10 @@ public class Login extends HttpServlet {
 			String memberNickname = (String)request.getParameter("memberNickname");
 			String memberGender = (String)request.getParameter("memberGender");
 			String memberPhone = (String)request.getParameter("memberPhone");
-			String phoneReg = "^0(9)[0-9]{8}$";
-			if(!(memberPhone.matches(phoneReg))&& !(memberPhone.length()==10)) {
-				
-			}
+//			String phoneReg = "^0(9)[0-9]{8}$";
+//			if(!(memberPhone.matches(phoneReg))&& !(memberPhone.length()==10)) {
+//				
+//			}
 			String memberAddress = (String)request.getParameter("memberAddress");
 			String memberCardNumber = (String)request.getParameter("memberCardNumber");
 			Integer memberCardExpyear = Integer.valueOf(request.getParameter("memberCardExpyear"));
@@ -317,6 +315,15 @@ public class Login extends HttpServlet {
 			msg.put("msg", "true");
 			pw.write(gson.toJson(msg));
 			pw.close();
+		}
+		//更新樂團介紹
+		if("updateBand".equals(str)) {
+			String bandIntro = request.getParameter("bandIntro");
+			String bandId = request.getParameter("bandId");
+			BandService bandSvc = new BandService();
+			bandSvc.updateBandIntro(bandId, bandIntro);
+			
+			
 		}
 		//登出
 		if("logout".equals(str)) {
@@ -372,7 +379,6 @@ public class Login extends HttpServlet {
 		}
 		if("forgetPasswordEmail".equals(str)) {
 			String memberAccount = (String)request.getParameter("memberAccount");
-			MemberService memberSvc = new MemberService();
 			Gson gson = new Gson();
 			Map<String,String> msg = new HashMap<String,String>();
 			PrintWriter pw = response.getWriter();
@@ -381,11 +387,32 @@ public class Login extends HttpServlet {
 			pw.close();
 			passwordMail(memberAccount);
 		}
+		if("google".equals(str)) {
+			String memberName = request.getParameter("memberName");
+			String memberAccount = request.getParameter("memberAccount");
+			MemberService memberSvc = new MemberService();
+			String memberPassword ="123456";
+			String memberPhone = "";
+			String memberAddress = "";
+			String memberNickname= "";
+			Integer memberMsgAuth = 1; //預設1
+			String memberCardNumber = "0"; //預設
+			Integer memberCardExpyear = 0;
+			Integer memberCardExpmonth = 0;
+			String memberGender = "";
+			java.sql.Date memberBirth = java.sql.Date.valueOf("1992-02-02");
+			java.util.Date date = new java.util.Date();
+			Timestamp addTime = new Timestamp(date.getTime());
+			String bandId = null;
+			InputStream in = new FileInputStream(getServletContext().getRealPath("/images/無圖片.png"));
+			byte[] memberPhoto = new byte[in.available()];
+			in.read(memberPhoto);
+			memberSvc.addMember(memberAccount, memberPassword, memberGender, memberPhone, memberAddress, memberName, memberNickname, memberBirth, memberMsgAuth, memberCardNumber, memberCardExpyear, memberCardExpmonth, addTime, bandId, memberPhoto);
+		}
 }
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		this.doGet(request, response);
 	}
 	public String genAuthCode() {

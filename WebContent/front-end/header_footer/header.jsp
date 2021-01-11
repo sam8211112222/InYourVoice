@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ page import="com.member.model.*"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<% 
+// 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo"); 
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -182,31 +186,59 @@ header{
 	        </div> 
 			
 			<div class="dropdown dropleft">
-	            <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                <!-- <img src="./img/logo.jpg"> -->
-	                <i class="far fa-user"></i>
-	            </div>
-	            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	            
-	            <div class="user">
-	                <img src="<%= request.getContextPath() %>/images/logo.jpg">
-	            </div>    
-	            <div>帳號xxxx</div>
-	              <a class="dropdown-item" href="#">會員中心</a>
-	              <a class="dropdown-item" href="#">通知中心</a>
-	              <a class="dropdown-item" href="#">購物車</a>
-	              <a class="dropdown-item" href="#">我的最愛</a>
-	              <a class="dropdown-item" href="#">登出</a>
-	            </div>
-	        </div> 
-		</nav>
-		
-	
+			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<!-- <img src="./images/logo.jpg"> -->
+				<i class="far fa-user"></i>
+			</div>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<c:if test="${memberVo.memberId==null}">
+					<div class="userAvatar">
+						<!-- <img src="./images/logo.jpg"> -->
+						<i class="fas fa-meh" style="font-size: 79px;color: #888;"></i>
+					</div>
+				</c:if>
+				<c:if test="${memberVo.memberId!=null}">
+					<div class="userAvatar">
+					
+					</div>	
+				</c:if>
+				<div style= "color: #2cbcf4">${memberVo.memberName}</div>
+				<a class="dropdown-item" href="#">會員中心</a> <a class="dropdown-item" href="#">通知中心</a> <a class="dropdown-item" href="#">購物車</a> <a class="dropdown-item" href="#">我的最愛</a> 
+				<c:if test="${memberVo.memberId==null}">
+					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
+				</c:if>
+				<c:if test="${memberVo.memberId!=null}">
+					<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
+				</c:if>
+			</div>
+		</div>
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
 	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
 	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script>
+	//登出
+	$("#logoutBtn").click(function() {
+		let obj = new FormData();
+		obj.append("action", "logout");
+		$.ajax({
+			type : "POST",
+			url : "<%=request.getContextPath()%>/Login",
+			contentType : false,
+			processData : false,
+			cache : false,
+			data : obj,
 
+			success : function(result) {
+				location.reload();
+			},
+			error : function(err) {
+				alert("系統錯誤");
+			}
+		});
+	})
+	</script>
 </body>
 </html>

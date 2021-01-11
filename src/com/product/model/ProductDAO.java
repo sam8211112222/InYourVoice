@@ -117,8 +117,11 @@ public class ProductDAO implements ProductDAO_interface {
 	private static final String GET_UNAPPROVAL = "SELECT * FROM product WHERE product_check_status=0 ORDER BY product_last_edit_time";
 	private static final String GET_BAND = "SELECT * FROM product WHERE band_id = ? ORDER BY product_id";
 	private static final String GET_TIME = "SELECT * FROM product ORDER BY product_last_edit_time DESC";	
-	private static final String GET_ORDER = "SELECT product.band_id, orderlist.orderlist_id, orderlist.order_id, orderlist.orderlist_good_amount, orderlist.orderlist_remarks, orderlist.review_score, orderlist.review_msg, orderlist.review_time, orderlist.review_hidden, orderlist.price FROM product LEFT JOIN orderlist ON product.productid=orderlist.product_id";	
-	
+	private static final String GET_ORDER = "SELECT p.band_id, o.orderlist_id, o.order_id, o.product_id, o.orderlist_goods_amount,o.orderlist_remarks,o.review_score, o.review_msg, o.review_time, o.review_hidden, o.price FROM product p,orderlist o WHERE p.product_id=o.product_id AND p.band_id = ?";	
+	private static final String GET_BANDLISTBYTIME = "SELECT * FROM product WHERE band_id =? ORDER BY product_last_edit_time DESC";
+	//這是鈺涵的方法
+	private static final String UPDATE_STOCK = "UPDATE PRODUCT SET PRODUCT_STOCK = PRODUCT_STOCK + ? where PRODUCT_ID = ?";
+
 	@Override
 	public void insert(ProductVO productVO) {
 		Connection con = null;
@@ -725,13 +728,9 @@ public class ProductDAO implements ProductDAO_interface {
 	}
 	
 	@Override
-	public List<ProductVO> getOrder(String product_id) {
-		List<ProductVO> list = new ArrayList<ProductVO>();
-		List<OrderListVO> list2 = new ArrayList<OrderListVO>();
-		
-		ProductVO productVO = null;
+	public List<OrderListVO> getOrder(String band_id) {
+		List<OrderListVO> list = new ArrayList<OrderListVO>();
 		OrderListVO orderListVO = null;
-		
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -740,31 +739,27 @@ public class ProductDAO implements ProductDAO_interface {
 			
 			con = ds.getConnection();
 			pstmt = con.prepareStatement(GET_ORDER);
-			pstmt.setString(1, product_id);
+			pstmt.setString(1, band_id);
 			rs = pstmt.executeQuery();
 			
-			while (rs.next()) {
-				// empVO 也稱為 Domain objects
-				productVO = new ProductVO();
+			while (rs.next()) {			
 				orderListVO = new OrderListVO();
-				productVO.setProduct_id(rs.getString("product_id"));
-				productVO.setBand_id(rs.getString("band_id"));
 				orderListVO.setOrderlist_id(rs.getString("orderlist_id"));
 				orderListVO.setOrder_id(rs.getString("order_id"));
+				orderListVO.setProduct_id(rs.getString("product_id"));
 				orderListVO.setOrderlist_goods_amount(rs.getInt("orderlist_goods_amount"));
 				orderListVO.setOrderlist_remarks(rs.getString("orderlist_remarks"));
 				orderListVO.setReview_score(rs.getInt("review_score"));
 				orderListVO.setReview_msg(rs.getString("review_msg"));
 				orderListVO.setReview_time(rs.getTimestamp("review_time"));
 				orderListVO.setReview_hidden(rs.getInt("review_hidden"));
-				orderListVO.setPrice(rs.getInt("price"));
-				list.add(productVO); // Store the row in the list
+				orderListVO.setPrice(rs.getInt("PRICE"));
+				list.add(orderListVO);
 			}
 			
 			// Handle any driver errors
 		} catch (SQLException se) {
-			throw new RuntimeException("A database error occured. "
-					+ se.getMessage());
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
 		} finally {
 			if (rs != null) {
@@ -862,10 +857,95 @@ public class ProductDAO implements ProductDAO_interface {
 		return list;
 	}
 	
+	@Override
+	public List<ProductVO> getBandListByTime(String band_id) {
+		List<ProductVO> list = new ArrayList<ProductVO>();
+		ProductVO productVO = null;
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_BANDLISTBYTIME);
+			pstmt.setString(1, band_id);
+			rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				// empVO 也稱為 Domain objects
+				productVO = new ProductVO();
+				productVO.setProduct_id(rs.getString("product_id"));
+				productVO.setBand_id(rs.getString("band_id"));
+				productVO.setProduct_type(rs.getInt("product_type"));
+				productVO.setProduct_name(rs.getString("product_name"));
+				productVO.setProduct_intro(rs.getString("product_intro"));
+				productVO.setProduct_detail(rs.getString("product_detail"));
+				productVO.setProduct_price(rs.getDouble("product_price"));
+				productVO.setProduct_stock(rs.getInt("product_stock"));
+				productVO.setProduct_check_status(rs.getInt("product_check_status"));
+				productVO.setProduct_status(rs.getInt("product_status"));
+				productVO.setProduct_on_time(rs.getTimestamp("product_on_time"));
+				productVO.setProduct_off_time(rs.getTimestamp("product_off_time"));
+				productVO.setProduct_add_time(rs.getTimestamp("product_add_time"));
+				productVO.setProduct_discount(rs.getDouble("product_discount"));
+				productVO.setProduct_discount_on_time(rs.getTimestamp("product_discount_on_time"));
+				productVO.setProduct_discount_off_time(rs.getTimestamp("product_discount_off_time"));
+				productVO.setProduct_last_edit_time(rs.getTimestamp("product_last_edit_time"));
+				productVO.setProduct_last_editor(rs.getString("product_last_editor"));
+				list.add(productVO); // Store the row in the list
+			}
+			
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
 	//這是鈺涵的方法
 	@Override
 	public void updateStock(String productId, int stockDifference) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	//這是鈺涵的方法
+	@Override
+	public List<ProductVO> findByProductName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	//這是鈺涵的方法
+	@Override
+	public List<ProductVO> findByProductType(String productType) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

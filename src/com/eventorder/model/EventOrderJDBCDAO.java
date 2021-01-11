@@ -6,8 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.eventorderlist.model.EventOrderListDAO;
+import com.eventorderlist.model.EventOrderListJNDIDAO;
 import com.eventorderlist.model.EventOrderListVO;
 
 public class EventOrderJDBCDAO implements EventOrderDAO {
@@ -282,8 +286,77 @@ public class EventOrderJDBCDAO implements EventOrderDAO {
 	}
 
 	@Override
-	public void insert(EventOrderVO eventOrderVO, List<EventOrderListVO> eventOrderList) {
-		// TODO Auto-generated method stub
+	public Map<String, List<String>> insert(EventOrderVO eventOrderVO, List<EventOrderListVO> eventOrderList) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		EventOrderListDAO dao = new EventOrderListJNDIDAO();
+		List<String> orderListIds = new ArrayList<String>();
+		String pk = null;
+		Map<String,List<String>> orders = new HashMap<String,List<String>>();
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			con.setAutoCommit(false);
+			String[] cols = { "event_order_id" };
+			pstmt = con.prepareStatement(INSERT_STMT, cols);
+
+			pstmt.setString(1, eventOrderVO.getMember_id());
+			pstmt.setString(2, eventOrderVO.getEvent_id());
+			pstmt.setTimestamp(3, eventOrderVO.getOrder_place_time());
+			pstmt.setString(4, eventOrderVO.getOrder_name());
+			pstmt.setString(5, eventOrderVO.getOrder_mail());
+			pstmt.setString(6, eventOrderVO.getOrder_phone());
+
+			pstmt.executeUpdate();
+
+			ResultSet rs = pstmt.getGeneratedKeys();
+			
+			while (rs.next()) {
+				 pk = rs.getString(1);
+			}
+			
+			for(EventOrderListVO eventOrderListVO:eventOrderList) {
+				eventOrderListVO.setEvent_order_id(pk);
+				String orderlist_id = dao.insert(con, eventOrderListVO);
+				orderListIds.add(orderlist_id);
+			}
+			
+			orders.put(pk, orderListIds);
+			
+			con.commit();
+
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			try {
+				con.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.setAutoCommit(true);
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		
+		return orders;
+
 		
 	}
 

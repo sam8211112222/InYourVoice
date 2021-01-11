@@ -1,6 +1,7 @@
 <%@page import="com.event.model.EventVO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.event.model.EventService"%>
+<%@ page import="com.member.model.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -9,12 +10,11 @@
 <jsp:useBean id="bandSvc" scope="page" class="com.band.model.BandService"></jsp:useBean>
 
 
-
 <!-- AlbumService albumSvc = new AlbumService(); -->
 <!-- AlbumVO albumVO = albumSvc.getOneAlbum("ALBUM00000"); -->
 <!-- String album_name = albumVO.getAlbum_name(); -->
 
-
+<% MemberVo memberVo = (MemberVo) session.getAttribute("memberVo"); %>
 
 <!DOCTYPE html>
 <html>
@@ -40,7 +40,7 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="logo">
-				<a class="navbar-brand" href="#"><img src="./images/logo2.jpg"></a>
+				<a class="navbar-brand" href="#"><img src="./images/logo.png"></a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -48,8 +48,7 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li> -->
 					<li class="nav-item"><a class="nav-link" href="#">活動資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/band/band.do?action=listAllBand">樂團資訊</a></li>
-<!-- 					<li class="nav-item"><a class="nav-link" href="#">專輯作品</a></li> -->
+					<li class="nav-item"><a class="nav-link" href="#">樂團資訊</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">周邊商品</a></li>
 
 					<!-- <li class="nav-item">
@@ -63,23 +62,51 @@
 			</div>
 
 		</nav>
+		
+		<!-- 小鈴鐺   -->
+        <div class="dropdown dropleft">
+             
+            <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="notice">
+                    <span class="notice-number">1</span>
+                <i class="fas fa-bell" style="color: dimgrey;"></i>   
+                </div>
+            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+            </div>
+        </div> 
+		
+		
 		<div class="dropdown dropleft">
-			<div class="notice">
-				<a href="#"> <span class="notice-number">1</span> <i class="fas fa-bell"></i>
-				</a>
-			</div>
 			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<!-- <img src="./images/logo.jpg"> -->
 				<i class="far fa-user"></i>
 			</div>
 			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-				<div class="userAvatar">
-					<img src="./images/logo.jpg">
-				</div>
-				<div>帳號xxxx</div>
-				<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/memberCenter.jsp">會員中心</a> <a class="dropdown-item" href="#">通知中心</a> <a class="dropdown-item" href="#">購物車</a> <a class="dropdown-item" href="#">我的最愛</a> <a class="dropdown-item"
-					href="#">登出</a>
+				<c:if test="${memberVo.memberId==null}">
+					<div class="userAvatar">
+						<!-- <img src="./images/logo.jpg"> -->
+						<i class="fas fa-meh" style="font-size: 79px;color: #888;"></i>
+					</div>
+				</c:if>
+				<c:if test="${memberVo.memberId!=null}">
+					<div class="userAvatar">
+					
+					</div>	
+				</c:if>
+				<div style= "color: #2cbcf4">${memberVo.memberName}</div>
+				<a class="dropdown-item" href="#">會員中心</a> <a class="dropdown-item" href="#">通知中心</a> <a class="dropdown-item" href="#">購物車</a> <a class="dropdown-item" href="#">我的最愛</a> 
+				<c:if test="${memberVo.memberId==null}">
+					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
+				</c:if>
+				<c:if test="${memberVo.memberId!=null}">
+					<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
+				</c:if>
 			</div>
 		</div>
 	</header>
@@ -469,7 +496,7 @@
 				</div>
 			</div>
 			<div class="card">
-				<img src="<%=request.getContextPath()%>//band/band.do?action=getBandPhoto&band_id=BAND00150" class="card-img-top" alt="">
+				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00150" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00150").band_name}</h5>
 				</div>
@@ -710,30 +737,30 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- 客服聊天室窗 -->
-	<div id="chat-circle" class="btn btn-raised">
-		<div id="chat-overlay"></div>
-		<i class="far fa-comment-dots"></i>
-	</div>
-
-	<div class="chat-box">
-		<div class="chat-box-header">
-			客服 <span class="chat-box-toggle"><i class="fas fa-times"></i></span>
+		<!-- 客服聊天室窗 -->
+	<c:if test="${memberVo.memberId!=null}">
+		<div id="chat-circle" class="btn btn-raised">
+			<div id="chat-overlay"></div>
+			<i class="far fa-comment-dots"></i>
 		</div>
-		<div class="chat-box-body">
-			<div class="chat-box-overlay"></div>
-			<div class="chat-logs" id="chat-logs"></div>
-			<!--chat-log -->
+	
+		<div class="chat-box">
+			<div class="chat-box-header">
+				客服 <span class="chat-box-toggle"><i class="fas fa-times"></i></span>
+			</div>
+			<div class="chat-box-body">
+				<div class="chat-box-overlay"></div>
+				<div class="chat-logs" id="chat-logs"></div>
+				<!--chat-log -->
+			</div>
+			<div class="chat-input">
+				<input type="text" id="chat-input" placeholder="請輸入您的問題" onkeydown="if (event.keyCode == 13) sendMessage();" />
+				<button type="submit" class="chat-submit" id="chat-submit">
+					<i class="fas fa-paper-plane"></i>
+				</button>
+			</div>
 		</div>
-		<div class="chat-input">
-			<input type="text" id="chat-input" placeholder="請輸入您的問題" />
-			<button type="submit" class="chat-submit" id="chat-submit">
-				<i class="fas fa-paper-plane"></i>
-			</button>
-		</div>
-	</div>
-
+	</c:if>
 
 
 
@@ -855,17 +882,18 @@
 			$(".chat-box").toggle('scale');
 		})
 
-		//=======改========
-		var userName = 'Roy';
-		var friend = '123';
-		var endPointURL = 'ws://localhost:8081/WebSocketChatWeb/FriendWS/' + userName;
-		//=================
+		var userName = '${memberVo.memberId}';
+		var friend = 'EMP00000';
+		var endPointURL = 'ws://localhost:8081/TEA102G6_20210102/FriendWS/' + userName;
 			
 		var messagesArea = document.getElementById("chat-logs");
 		var self = userName;
 		var webSocket;
 		
 		function connect() {
+			if (!userName) {
+				return;
+			}
 			// create a websocket
 			webSocket = new WebSocket(endPointURL);
 
@@ -928,6 +956,27 @@
 		function disconnect() {
 			webSocket.close();
 		}
+		
+		//登出
+		$("#logoutBtn").click(function() {
+			let obj = new FormData();
+			obj.append("action", "logout");
+			$.ajax({
+				type : "POST",
+				url : "<%=request.getContextPath()%>/Login",
+				contentType : false,
+				processData : false,
+				cache : false,
+				data : obj,
+
+				success : function(result) {
+					location.reload();
+				},
+				error : function(err) {
+					alert("系統錯誤");
+				}
+			});
+		})
 	</script>
 </body>
 </html>

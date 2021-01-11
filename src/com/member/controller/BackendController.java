@@ -11,7 +11,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.emp.model.EmpService;
+import com.emp.model.EmpVO;
 import com.member.model.MemberService;
 import com.member.model.MemberVo;
 
@@ -29,6 +32,36 @@ public class BackendController extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=UTF-8");
 		String str = request.getParameter("action");
+		if("login".equals(str)) {
+			String empEmail = request.getParameter("empEmail");
+			String empPassword = request.getParameter("empPassword");
+			Map<String,String> errors = new HashMap<String,String>();
+			request.setAttribute("errors", errors);
+			if(empEmail==null || empEmail.length()==0) {
+				errors.put("username", "請輸入帳號");
+			}
+			if(empPassword==null || empPassword.length()==0) {
+				errors.put("password", "請輸入密碼");
+			}
+			if(errors!=null && !errors.isEmpty()) {
+				request.getRequestDispatcher(
+						"/front-end/member/Login.jsp").forward(request, response);
+				return;
+			}
+			EmpService empSvc = new EmpService();
+			EmpVO empVO = empSvc.login(empEmail, empPassword);
+			if(empVO == null) {
+				errors.put("password", "登入失敗 請檢查帳號密碼");
+				request.getRequestDispatcher(
+						"/front-end/member/Login.jsp").forward(request, response);
+			} else {
+				HttpSession session = request.getSession();
+				session.setAttribute("empVO", empVO);
+				
+				String path = request.getContextPath();
+				response.sendRedirect(path+"/front-end/member/memberCenter2.jsp");
+			}
+		}
 		if ("addMember".equals(str)) {
 			String memberAccount = request.getParameter("memberAccount");
 			Map<String, String> errors = new HashMap<String, String>();
@@ -85,9 +118,7 @@ public class BackendController extends HttpServlet {
 				request.getRequestDispatcher("/back-end/addMember.jsp").forward(request, response);
 				return;
 			}
-			memberSvc.addMember(memberAccount, memberPassword, memberGender, memberPhone, memberAddress, memberName,
-					memberNickname, java.sql.Date.valueOf(memberBirth), memberMsgAuth, memberCardNumber,
-					memberCardExpyear, memberCardExpmonth, addTime, bandId);
+
 			System.out.println("註冊成功");
 			RequestDispatcher successView = request.getRequestDispatcher("/back-end/AllMember.jsp"); // 新增成功後轉交listAllEmp.jsp
 			successView.forward(request, response);
@@ -154,6 +185,14 @@ public class BackendController extends HttpServlet {
 			String url = "/back-end/AllMember.jsp";
 			RequestDispatcher successView = request.getRequestDispatcher(url);
 			successView.forward(request, response);
+		}
+		if ("update".equals(str)) {
+			String memberId = (String) request.getParameter("memberId");
+			String memberName = (String) request.getParameter("memberName");
+			String memberGender = (String) request.getParameter("memberGender");
+			String memberPhone = (String) request.getParameter("memberPhone");
+			memberService = new MemberService();
+			memberService.updateFromBackEnd(memberId, memberPhone, memberGender, memberName);
 		}
 	}
 

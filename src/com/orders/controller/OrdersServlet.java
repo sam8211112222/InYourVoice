@@ -48,10 +48,8 @@ public class OrdersServlet extends HttpServlet {
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		doPost(req, res);
-		
-		
-		
+		doPost(req,res);
+
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -117,7 +115,7 @@ public class OrdersServlet extends HttpServlet {
 			// Store this set in the request scope, in case we need to
 			// send the ErrorPage view.
 			req.setAttribute("errorMsgs", errorMsgs);
-			OrdersVO ordersVO =null;
+			OrdersVO ordersVO = null;
 			try {
 				String member_id = req.getParameter("member_id");
 				String member_idReg = "^[(A-Z0-9)]{11}$";
@@ -177,17 +175,15 @@ public class OrdersServlet extends HttpServlet {
 				ordersVO.setOrder_phone(order_phone);
 				ordersVO.setOrder_delivery_time(order_delivery_time);
 				ordersVO.setOrder_received_time(order_received_time);
-				
+
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("ordersVO", ordersVO); // 含有輸入格式錯誤的empVO物件,也存入req
-					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front_end/orders/addOrders.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front_end/orders/addOrders.jsp");
 					failureView.forward(req, res);
 					return;
 				}
-				
-				
+
 //			RequestDispatcher failureView = req.getRequestDispatcher("/orders/ordersServlet");
 //			failureView.forward(req, res);
 				/*********************** 新增資料 ***********************/
@@ -201,9 +197,9 @@ public class OrdersServlet extends HttpServlet {
 				failureView.forward(req, res);
 
 			} catch (Exception e) {
-				errorMsgs.add("新增沒有成功"+e.getMessage());
+				errorMsgs.add("新增沒有成功" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/orders/addOrders.jsp");
-				
+
 				failureView.forward(req, res);
 			}
 		}
@@ -232,7 +228,7 @@ public class OrdersServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/orders/listAllOrders.jsp");
-				
+
 				failureView.forward(req, res);
 			}
 		}
@@ -361,27 +357,31 @@ public class OrdersServlet extends HttpServlet {
 				e.printStackTrace();
 				errorMsgs.add("修改資料失敗:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/front_end/orders/update_orders.jsp");
-//				req.setAttribute(UPDATE_VO, ordersVO);
+//			req.setAttribute(UPDATE_VO, ordersVO);
 				failureView.forward(req, res);
 			}
 		}
-		
+
 		if ("checkout".equals(action)) {
+			List<String> errorMsgs = new LinkedList<String>();
+			
+			req.setAttribute("errorMsgs", errorMsgs);
+
 			try {
 				MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
+				
+//				if (memberVo == null) {
+//					// TODO 暫時的
+//					memberVo = new MemberVo();
+//
+//					memberVo.setMemberName("Sophia");
+//					memberVo.setMemberAccount("S0001");
+//					memberVo.setMemberAddress("台北市中山區xx路xx號");
+//					memberVo.setMemberId("MEMBERS00000");
+//
+//				}
 
-				if (memberVo == null) {
-					// TODO 暫時的
-					memberVo = new MemberVo();
-
-					memberVo.setMemberName("Sophia");
-					memberVo.setMemberAccount("S0001");
-					memberVo.setMemberAddress("台北市中山區xx路xx號");
-					memberVo.setMemberId("MEMBERS00000");
-
-				}
-
-				String memberId = memberVo.getMemberId();
+			String memberId = memberVo.getMemberId();
 
 				Timestamp order_place_time = new Timestamp(System.currentTimeMillis());
 
@@ -405,16 +405,15 @@ public class OrdersServlet extends HttpServlet {
 						totalPrice += tmp.getPrice() * tmp.getOrderlist_goods_amount();
 					}
 				}
-				//更新商品庫存
-				for(CartVO cartVo:cartList) {
+				// 更新商品庫存
+				for (CartVO cartVo : cartList) {
 					productService.updateStock(cartVo.getProduct_id(), -cartVo.getProduct_quantity());
 				}
-				
-				
-				//購物完成，移除session中購物車資料
-				session.removeAttribute(CartServlet.SESSION_CART_KEY);
 
-				RequestDispatcher successView = req.getRequestDispatcher("/front-end/cart/orderSuccess.jsp");
+				// 購物完成，移除session中購物車資料
+				session.removeAttribute(CartServlet.SESSION_CART_KEY);
+				
+				RequestDispatcher successView = req.getRequestDispatcher("/front-end/cart/protect/orderSuccess.jsp");
 				req.setAttribute("totalPrice", totalPrice);
 				req.setAttribute("order_place_time", order_place_time);
 				req.setAttribute("orderId", vo.getOrder_id());

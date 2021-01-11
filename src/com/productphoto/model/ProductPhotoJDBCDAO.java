@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import com.product.model.ProductVO;
 
 public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 	String driver = "oracle.jdbc.driver.OracleDriver";
@@ -16,10 +18,9 @@ public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 
 	private static final String INSERT_STMT = "INSERT INTO productphoto(productphoto_id,product_id,productphoto_photo,productphoto_sort,productphoto_add_time)"
 			+ "VALUES('PRODUCTPHOTO'||LPAD(PRODUCTPHOTO_SEQ.NEXTVAL, 5, '0'), ?, ?, ?, ?)";
-	private static final String GET_ALL_STMT = "SELECT * FROM productphoto ORDER BY productphoto_id";
-
 	private static final String GET_ONE_STMT = "SELECT * FROM productphoto WHERE productphoto_id = ?";
-
+	private static final String GET_ALL_STMT = "SELECT * FROM productphoto ORDER BY productphoto_id";
+	private static final String GET_ALL_STMTBYBAND = "SELECT p.band_id, o.productphoto_id, o.product_id, o.productphoto_photo,o.productphoto_sort, o.productphoto_add_time FROM product p, productphoto o WHERE p.product_id=o.product_id AND p.band_id = ?";
 	private static final String DELETE = "DELETE FROM productphoto where productphoto_id = ?";
 	private static final String UPDATE = "UPDATE productphoto set " + "product_id=?," + "productphoto_photo=?,"
 			+ "productphoto_sort=?," + "productphoto_add_time=?" + "where productphoto_id = ?";
@@ -85,7 +86,7 @@ public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 			pstmt.setString(1, productPhotoVO.getProduct_id());
 			pstmt.setBytes(2, productPhotoVO.getProductphoto_photo());
 			pstmt.setInt(3, productPhotoVO.getProductphoto_sort());
-			pstmt.setTimestamp(4, productPhotoVO.getProductphoto_add_time());
+			pstmt.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 			pstmt.setString(5, productPhotoVO.getProductphoto_id());
 			pstmt.executeUpdate();
 
@@ -160,7 +161,7 @@ public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 		}
 
 	}
-
+	
 	@Override
 	public ProductPhotoVO findByPrimaryKey(String productphoto_id) {
 		ProductPhotoVO productPhotoVO = null;
@@ -221,6 +222,69 @@ public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 			}
 		}
 		return productPhotoVO;
+	}
+
+	@Override
+	public List<ProductPhotoVO> getAllByBand(String band_id) {
+		List<ProductPhotoVO> list = new ArrayList<ProductPhotoVO>();
+		ProductPhotoVO productPhotoVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			con.setAutoCommit(false);
+			pstmt = con.prepareStatement(GET_ALL_STMTBYBAND);
+			pstmt.setString(1, band_id);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVO 也稱為 Domain objects
+				productPhotoVO = new ProductPhotoVO();
+				productPhotoVO.setProductphoto_id(rs.getString("productphoto_id"));
+				productPhotoVO.setProduct_id(rs.getString("product_id"));
+				productPhotoVO.setProductphoto_photo(rs.getBytes("productphoto_photo"));
+				productPhotoVO.setProductphoto_sort(rs.getInt("productphoto_sort"));
+				productPhotoVO.setProductphoto_add_time(rs.getTimestamp("productphoto_add_time"));
+				list.add(productPhotoVO); // Store the row in the list
+			}
+			System.out.println("Operation success!");
+			con.commit();
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -518,15 +582,6 @@ public class ProductPhotoJDBCDAO implements ProductPhotoDAO_interface {
 
 		// 刪除
 //		dao.delete("PRODUCTPHOTO00100");
-
-		// 以主鍵查詢
-		ProductPhotoVO productPhotoVO3 = dao.findByPrimaryKey("PRODUCTPHOTO00150");
-		System.out.println(productPhotoVO3.getProductphoto_id() + ",");
-		System.out.println(productPhotoVO3.getProduct_id() + ",");
-		System.out.println(productPhotoVO3.getProductphoto_photo() + ",");
-		System.out.println(productPhotoVO3.getProductphoto_sort() + ",");
-		System.out.println(productPhotoVO3.getProductphoto_add_time());
-		System.out.println("========================================");
 
 		// 查詢
 //		List<ProductPhotoVO> list = dao.getAll();

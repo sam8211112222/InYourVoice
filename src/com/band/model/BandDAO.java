@@ -14,6 +14,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import com.member.model.MemberVo;
+
 import jdbc.util.CompositeQuery.jdbcUtil_CompositeQuery_Band;
 
 public class BandDAO implements BandDAO_interface {
@@ -34,6 +36,11 @@ public class BandDAO implements BandDAO_interface {
 	private static final String DELETE_PSTMT = "DELETE FROM BAND WHERE BAND_ID = ?";
 	private static final String GET_ONE_PSTMT = "SELECT * FROM BAND WHERE BAND_ID = ?";
 	private static final String GET_ALL_PSTMT = "SELECT * FROM BAND ORDER BY BAND_ID";
+	// Kevin========================================================================================================
+		private static final String UPDATE_MEMBER_BAND_ID = "UPDATE MEMBERS SET BAND_ID=? WHERE MEMBER_ID=?";
+		private static final String UPDATE_BAND_INTRO ="UPDATE BAND SET BAND_INTRO=? WHERE BAND_ID=?";
+		private static final String UPDATE_BAND_STATUS_BACKEND ="UPDATE BAND SET BAND_STATUS=? WHERE BAND_ID=?";
+	//==============================================================================================================
 
 	@Override
 	public void insert(BandVO bandVO) {
@@ -332,5 +339,105 @@ public class BandDAO implements BandDAO_interface {
 		return list;
 	}
 	
+	// Kevin===========================================================================================
+		@Override
+		public BandVO updateBandIntro(BandVO bandVO,String bandIntro) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+
+			try {
+
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(UPDATE_BAND_INTRO);
+
+				pstmt.setString(1, bandIntro);
+				pstmt.setString(2, bandVO.getBand_id());
+				pstmt.executeUpdate();
+
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return bandVO;
+
+			
+		}
+		
+		@Override //新增交易 申請樂團INSERT 會員BAND_ID
+		public void insertBand(BandVO bandVO,MemberVo memberVo) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+
+			try {
+
+				con = ds.getConnection();
+				con.setAutoCommit(false);
+				String[] cols = { "BAND_ID" };
+				pstmt = con.prepareStatement(INSERT_PSTMT,cols);
+				pstmt.setString(1, bandVO.getBand_name());
+				pstmt.setString(2, bandVO.getBand_intro());
+				pstmt.setBytes(3, bandVO.getBand_photo());
+				pstmt.setBytes(4, bandVO.getBand_banner());
+				pstmt.setBytes(5, bandVO.getBand_piece_check());
+				pstmt.setTimestamp(6, bandVO.getBand_add_time());
+				pstmt.setInt(7, bandVO.getBand_status());
+				pstmt.setTimestamp(8, bandVO.getBand_last_edit_time());
+				pstmt.setString(9, bandVO.getBand_last_editor());
+				pstmt.executeUpdate();
+				ResultSet rs = pstmt.getGeneratedKeys();
+				String bandKey = null;
+				if (rs.next()) {
+					bandKey = rs.getString(1);
+				}
+				rs.close();
+				pstmt = con.prepareStatement(UPDATE_MEMBER_BAND_ID);
+				pstmt.setString(1, bandKey);
+				pstmt.setString(2, memberVo.getMemberId());
+				pstmt.executeUpdate();
+				con.commit();
+				con.setAutoCommit(true);
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				se.printStackTrace();
+				try {
+					con.rollback();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				// Clean up JDBC resources
+			} finally {
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+		}
 
 }

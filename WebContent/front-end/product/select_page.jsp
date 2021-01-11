@@ -6,57 +6,69 @@
 
 <html>
 <head>
-<title>Product: Band</title>
+<title>樂團商品首頁</title>
 
 <style>
-  table#table-1 {
-	width: 450px;
+  div#table-1 {
+	width: 330px;
 	background-color: #dee2e6;
-	margin-top: 5px;
-	margin-bottom: 5px;
-    border: 3px ridge Gray;
-    height: 80px;
+	font-size: 40px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding: 10px 20px;
+    border: 5px groove gray;
+    height: 50px;
     text-align: center;
     margin:0px auto;
-  }
-  table#table-1 h1{
-	color: #4f5d75;
-  }
-  table#table-1 h4 {
-    color: red;
-    display: block;
-    margin-bottom: 1px;
+    color: #4f5d75;
   }
   
   button#searchTable{
+  margin-right:8px;
+  margin-left:8px;
   background-color: #dee2e6;
   border: none;
-  color: white;
-  padding: 15px 32px;
+  color: #4f5d75;
+  font-size: 25px;
+  padding: 15px 15px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  border-radius: 12px;;
+  border-radius: 15px;;
+  width:190px;
+  height:60px;
   }
-  button#searchTable a{
-  color: #4f5d75;
+  
+  button#searchTable:hover{
+  margin-right:8px;
+  margin-left:8px;
+  background-color: #3d5a80;
+  border: none;
+  color: #f8f9fa;
   font-size: 25px;
+  padding: 15px 15px;
+  text-align: center;
   text-decoration: none;
+  display: inline-block;
+  border-radius: 15px;;
+  width:190px;
+  height:60px;
   }
+
 </style>
 
 </head>
 <body bgcolor='#f8f9fa'>
 
-<table id="table-1">
-   <tr><td><h1>樂團商品首頁</h1></td></tr>
-</table>
+<div align="center" style="position:relative" id="table-1">
+   樂團商品首頁
+</div>
 
-<div>
-<button id="searchTable"><a href='<%=request.getContextPath()%>/front-end/product/listAllProduct.jsp'>列出全部商品</a></button>
-<button id="searchTable"><a href='<%=request.getContextPath()%>/front-end/product/addProduct.jsp'>新增商品</a></button>
-<button id="searchTable"><a href='<%=request.getContextPath()%>/front-end/orders/listAllOrdersBandView.jsp'>列出商品訂單</a></button>
-<button id="searchTable"><a href='<%=request.getContextPath()%>/front-end/orders/listAllTicketBandView.jsp'>列出票卷訂單</a></button>
+<div align="center" style="position:relative;top:10px;">
+<a href='<%=request.getContextPath()%>/front-end/product/listAllProduct.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/listAllProduct.jsp')">列出全部商品</button></a>
+<a href='<%=request.getContextPath()%>/front-end/product/addProduct.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/addProduct.jsp')">新增商品</button></a>
+<a href='<%=request.getContextPath()%>/front-end/orders/listAllOrdersBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/orders/listAllOrdersBandView.jsp')">列出商品訂單</button></a>
+<a href='<%=request.getContextPath()%>/front-end/orders/listAllTicketBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/orders/listAllTicketBandView.jsp')">列出票卷訂單</button></a>
 </div>
 	
 <%-- 錯誤表列 --%>

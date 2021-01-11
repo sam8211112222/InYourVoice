@@ -5,15 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-
-import com.orderlist.model.OrderListDAO_interface;
-import com.orderlist.model.OrderListJDBCDAO;
-import com.orderlist.model.OrderListVO;
 
 public class OrdersJDBCDAO implements OrdersDAO_interface {
 	String driver = "oracle.jdbc.OracleDriver";
@@ -29,10 +22,14 @@ public class OrdersJDBCDAO implements OrdersDAO_interface {
 
 	private static final String GET_ONE_STMT_MAIL = "SELECT * FROM orders where order_mail=?";
 
+	private static final String GET_ONE_STMT_MEMBER_ID = "SELECT * FROM orders where member_id=?";
+	
 	private static final String DELETE = "DELETE FROM orders where order_id = ?";
 
 	private static final String UPDATE = "UPDATE orders set member_id=?, order_status=?, order_place_time=?, order_name=?, order_mail=?, order_phone=?, order_delivery_time=?, order_received_time=? where order_id=?";
 
+	private static final String GET_ONE_WITH_TOTAL_STMT_MEMBER_ID = "SELECT order_id,ORDERS.order_status,orders.order_place_time,sum(orderlist_goods_amount*price) as total_price FROM ORDERS INNER JOIN ORDERLIST USING(order_id) where orders.member_id = ? GROUP BY order_id,ORDERS.order_status,orders.order_place_time";
+	
 	@Override
 	public OrdersVO insert(OrdersVO ordersVO) {
 		Connection con = null;
@@ -335,6 +332,71 @@ public class OrdersJDBCDAO implements OrdersDAO_interface {
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<OrdersVO> findByMemberId(String memberId) {
+		List<OrdersVO> list = new ArrayList<OrdersVO>();
+
+		OrdersVO ordersVO = null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, password);
+			pstmt = con.prepareStatement(GET_ONE_WITH_TOTAL_STMT_MEMBER_ID);
+			pstmt.setString(1, memberId);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				ordersVO = new OrdersVO();
+				ordersVO.setOrder_id(rs.getString("order_id"));
+//				ordersVO.setMember_id(rs.getString("member_id"));
+				ordersVO.setOrder_status(rs.getInt("order_status"));
+				ordersVO.setOrder_place_time(rs.getTimestamp("order_place_time"));
+//				ordersVO.setOrder_name(rs.getString("order_name"));
+//				ordersVO.setOrder_mail(rs.getString("order_mail"));
+//				ordersVO.setOrder_phone(rs.getString("order_phone"));
+//				ordersVO.setOrder_delivery_time(rs.getTimestamp("order_delivery_time"));
+//				ordersVO.setOrder_received_time(rs.getTimestamp("order_received_time"));
+				ordersVO.setTotal_price(rs.getInt("total_price"));
+				list.add(ordersVO);
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			se.printStackTrace();
+			throw new RuntimeException("A database error occured. " + se.getMessage());
 		} finally {
 			if (rs != null) {
 				try {

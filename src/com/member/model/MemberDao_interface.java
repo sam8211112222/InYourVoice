@@ -17,5 +17,7 @@ public interface MemberDao_interface {
     public void uddateInfoBack(MemberVo memberVo);
     public void updatePassword(MemberVo memberVo,String memberPassword);
     public void updateAuth(MemberVo memberVo,Integer auth);
+    public void updateFromBackEnd(MemberVo memberVo);
+    public MemberVo findByBandId(String bandId);
 
 }

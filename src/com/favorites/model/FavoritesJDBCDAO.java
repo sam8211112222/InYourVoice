@@ -28,6 +28,17 @@ public class FavoritesJDBCDAO implements FavoritesDAO_interface {
 	private static final String UPDATE = 
 		"UPDATE favorites set member_id=?, favorite_type=?, favorite_id=?, Favorite_add_time=? where uniqueid = ?";
 	
+	/**
+	 * added by  鈺涵
+	 */
+	private static final String DELETE_BY_MEMBERID_AND_PRODUCTID = "DELETE FROM favorites where member_id = ? and favorite_id=? and favorite_type=2";
+	
+	/**
+	 * added by  鈺涵
+	 */
+	private static final String GET_ONE_BY_MEMBERID_AND_PRODUCTID_STMT = 
+			"SELECT * FROM favorites where member_id = ? and favorite_id=? and favorite_type=2";
+	
 	@Override
 	public void insert(FavoritesVO favoritesVO) {
 		
@@ -311,48 +322,158 @@ public class FavoritesJDBCDAO implements FavoritesDAO_interface {
 		}
 		return list;
 	}
-	public static void main(String[] args) {
+	
+	/**
+	 * added by Sophia
+	 */
+	@Override
+	public void deleteByMemberIdAndProductId(String memberId,String productId) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(DELETE_BY_MEMBERID_AND_PRODUCTID);
 
-		FavoritesJDBCDAO dao = new FavoritesJDBCDAO();
+			pstmt.setString(1, memberId);
+			pstmt.setString(2, productId);
 
-		// �s�W
-		FavoritesVO favoritesVO1 = new FavoritesVO();
-		favoritesVO1.setMember_id("1005");
-		favoritesVO1.setFavorite_type(1);
-		favoritesVO1.setFavorite_id("OOO");
-		favoritesVO1.setFavorite_add_time(java.sql.Timestamp.valueOf("2020-12-08 21:37:13"));
-		dao.insert(favoritesVO1);
+			pstmt.executeUpdate();
 
-		// �ק�
-		FavoritesVO favoritesVO2 = new FavoritesVO();
-		favoritesVO2.setUniqueid("FAVORITES00100");
-		favoritesVO2.setMember_id("1006");
-		favoritesVO2.setFavorite_type(3);
-		favoritesVO2.setFavorite_id("XXX");
-		favoritesVO2.setFavorite_add_time(java.sql.Timestamp.valueOf("2020-12-11 21:37:13"));
-		dao.update(favoritesVO2);
-
-		// �R��
-//		dao.delete("FAVORITES00100");
-
-		// �d��(�浧)
-		FavoritesVO favoritesVO3 = dao.findByPrimaryKey("FAVORITES00050");
-		System.out.print(favoritesVO3.getUniqueid() + ",");
-		System.out.print(favoritesVO3.getMember_id() + ",");
-		System.out.print(favoritesVO3.getFavorite_type() + ",");
-		System.out.print(favoritesVO3.getFavorite_id() + ",");
-		System.out.println(favoritesVO3.getFavorite_add_time() + ",");
-		System.out.println("---------------------");
-
-		// �d��(����)
-		List<FavoritesVO> list = dao.getAll();
-		for (FavoritesVO favoritesVO4 : list) {
-			System.out.print(favoritesVO4.getUniqueid() + ",");
-			System.out.print(favoritesVO4.getMember_id() + ",");
-			System.out.print(favoritesVO4.getFavorite_type() + ",");
-			System.out.print(favoritesVO4.getFavorite_id() + ",");
-			System.out.print(favoritesVO4.getFavorite_add_time() + ",");
-			System.out.println();
+			// Handle any SQL errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
 		}
+
+	}	
+
+	/**
+	 * added by Sophia
+	 */
+	@Override
+	public FavoritesVO findByMemberIdAndProductId(String memberId,String productId) {
+		FavoritesVO favoritesVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_ONE_BY_MEMBERID_AND_PRODUCTID_STMT);
+			pstmt.setString(1, memberId);
+			pstmt.setString(2, productId);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				
+				favoritesVO = new FavoritesVO();
+				favoritesVO.setUniqueid(rs.getString("uniqueid"));
+				favoritesVO.setMember_id(rs.getString("member_id"));
+				favoritesVO.setFavorite_type(rs.getInt("favorite_type"));
+				favoritesVO.setFavorite_id(rs.getString("favorite_id"));
+				favoritesVO.setFavorite_add_time(rs.getTimestamp("favorite_add_time"));
+			}
+
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return favoritesVO;
 	}
+//	public static void main(String[] args) {
+//
+//		FavoritesJDBCDAO dao = new FavoritesJDBCDAO();
+//
+//		// �s�W
+//		FavoritesVO favoritesVO1 = new FavoritesVO();
+//		favoritesVO1.setMember_id("1005");
+//		favoritesVO1.setFavorite_type(1);
+//		favoritesVO1.setFavorite_id("OOO");
+//		favoritesVO1.setFavorite_add_time(java.sql.Timestamp.valueOf("2020-12-08 21:37:13"));
+//		dao.insert(favoritesVO1);
+//
+//		// �ק�
+//		FavoritesVO favoritesVO2 = new FavoritesVO();
+//		favoritesVO2.setUniqueid("FAVORITES00100");
+//		favoritesVO2.setMember_id("1006");
+//		favoritesVO2.setFavorite_type(3);
+//		favoritesVO2.setFavorite_id("XXX");
+//		favoritesVO2.setFavorite_add_time(java.sql.Timestamp.valueOf("2020-12-11 21:37:13"));
+//		dao.update(favoritesVO2);
+//
+//		// �R��
+////		dao.delete("FAVORITES00100");
+//
+//		// �d��(�浧)
+//		FavoritesVO favoritesVO3 = dao.findByPrimaryKey("FAVORITES00050");
+//		System.out.print(favoritesVO3.getUniqueid() + ",");
+//		System.out.print(favoritesVO3.getMember_id() + ",");
+//		System.out.print(favoritesVO3.getFavorite_type() + ",");
+//		System.out.print(favoritesVO3.getFavorite_id() + ",");
+//		System.out.println(favoritesVO3.getFavorite_add_time() + ",");
+//		System.out.println("---------------------");
+//
+//		// �d��(����)
+//		List<FavoritesVO> list = dao.getAll();
+//		for (FavoritesVO favoritesVO4 : list) {
+//			System.out.print(favoritesVO4.getUniqueid() + ",");
+//			System.out.print(favoritesVO4.getMember_id() + ",");
+//			System.out.print(favoritesVO4.getFavorite_type() + ",");
+//			System.out.print(favoritesVO4.getFavorite_id() + ",");
+//			System.out.print(favoritesVO4.getFavorite_add_time() + ",");
+//			System.out.println();
+//		}
+//	}
 }

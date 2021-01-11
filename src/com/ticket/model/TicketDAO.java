@@ -1,9 +1,12 @@
 package com.ticket.model;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface TicketDAO {
 	public void insert(TicketVO ticketVO);
+	
+	public void insert(TicketVO ticketVO ,Connection con );
 
 	public void update(TicketVO ticketVO);
 

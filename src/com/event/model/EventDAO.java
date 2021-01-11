@@ -16,7 +16,8 @@ public interface EventDAO {
 	
 	public List<EventVO> findByBandId(String band_id);
 	
-	//====================
-		public List<EventVO> findByName(String event_title);
+	public List<EventVO> eventListOrderBy();
+	
+	public List<EventVO> eventSelcet(String sql);
 	
 }

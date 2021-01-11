@@ -32,30 +32,31 @@
 	height: 151px; /* height:  151px; */
 }
 
-div.inputblock	{
-	margin-bottom: 8px;
+div.inputblock {
+	margin: 4px 20px;
 }
 
-div.poster{
+div.poster {
 	width: 400px;
-    height: 210px;
-    border: 2px #4e73df solid;
-    box-sizing: border-box;
+	height: 210px;
+	border: 2px #4e73df solid;
+	box-sizing: border-box;
 }
 
-div.seat{
+div.seat {
 	width: 400px;
-    height: 500px;
-    border: 2px #4e73df solid;
-    box-sizing: border-box;
+	height: 500px;
+	border: 2px #4e73df solid;
+	box-sizing: border-box;
 }
+
 img {
- width: 100%;
- height:100%;
+	width: 100%;
+	height: 100%;
 }
 
-div.ticket{
-margin-bottom: 8px;
+div.ticket {
+	margin-bottom: 8px;
 }
 </style>
 <script
@@ -74,185 +75,184 @@ margin-bottom: 8px;
 <link
 	href="<%=request.getContextPath()%>/vendors/sb-admin-2/css/sb-admin-2.min.css"
 	rel="stylesheet">
-	<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.css" />
 <script
 	src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.js"></script>
 <script
 	src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.full.js"></script>
-	
+
 </head>
 
 <body id="page-top">
 
-<%@ include file="sb/page1.file" %>
-					<!-- Page Heading -->
-					<h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+	<%@ include file="/back-end/sb/page1.file"%>
+	<div class="inputblock">
+		<!-- Page Heading -->
+		<h1 class="h3 mb-4 text-gray-800">活動新增</h1>
 
-					<c:if test="${not empty errorMsgs}">
-						<font style="color: red">請修正以下錯誤:</font>
-						<ul>
-							<c:forEach var="message" items="${errorMsgs}">
-								<li style="color: red">${message}</li>
-							</c:forEach>
-						</ul>
-					</c:if>
+		<c:if test="${not empty errorMsgs}">
+			<font style="color: red">請修正以下錯誤:</font>
+			<ul>
+				<c:forEach var="message" items="${errorMsgs}">
+					<li style="color: red">${message}</li>
+				</c:forEach>
+			</ul>
+		</c:if>
 
-					<FORM METHOD="post"
-						ACTION="<%=request.getContextPath()%>/event/EventServlet"
-						name="form1" enctype="multipart/form-data">
-						<div>
-							<div class="inputblock">
-								<span>活動標題:
-								<input type="TEXT" name="event_title" size="45"
-									value="<%=(eventVO == null) ? "請輸入活動標題" : eventVO.getEvent_title()%>" />
-									</span>
-							</div>
-							<div class="inputblock">
-								<span>樂團編號:
-								<input type="TEXT" name="band_id" size="45"
-									value="<%=(eventVO == null) ? "請輸入活動標題" : eventVO.getBand_id()%>" /></span>
-							</div>
-							<div class="inputblock">
-								<span>活動類型:
-								<select name="event_type" size="1">
-										<option value="0"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 0) ? "selected" : ""%>>一般活動</option>
-										<option value="1"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 1) ? "selected" : ""%>>放鬆好去處</option>
-										<option value="2"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 2) ? "selected" : ""%>>特色活動</option>
-										<option value="3"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 3) ? "selected" : ""%>>主打活動</option>
-										<option value="4"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 4) ? "selected" : ""%>>最新消息</option>
-								</select></span>
-								<span>活動開始時間:
-								<input name="event_start_time" id="f_date1" type="text"></span>
-							</div>
-							<div class="inputblock">
-								<span>活動詳情:</span>
-								<textarea name="event_detail" rows="20" cols="80"><%=(eventVO == null) ? "請輸入活動詳情" : eventVO.getEvent_detail()%></textarea>
-							</div>
-							<div class="inputblock">
-								<span>活動排序:
-								<input type="TEXT" name="event_sort" size="46"
-									value="<%=(eventVO == null) ? "請輸入0-99的數字" : eventVO.getEvent_sort()%>" /></span>
-							</div>
-							<div class= "inputblock">
-								<span>活動海報:<input type="file" name="event_poster"
-									id="event_poster"></span>
-								
-								<div>預覽圖</div>
-								<div class="poster"><img id="event_poster_img"
-									<%=(eventVO == null)? "": "src=\"" + request.getContextPath() + "/EventPicController?action=getEventPoster&event_id="
-							+ eventVO.getEvent_id() + "\""%>></div>
-							</div>
+		<FORM METHOD="post"
+			ACTION="<%=request.getContextPath()%>/event/EventServlet"
+			name="form1" enctype="multipart/form-data">
+			<div>
+				<div class="inputblock">
+					<span>活動標題: <input type="TEXT" name="event_title" size="45"
+						value="<%=(eventVO == null) ? "請輸入活動標題" : eventVO.getEvent_title()%>" />
+					</span>
+				</div>
+				<div class="inputblock">
+					<span>樂團編號: <input type="TEXT" name="band_id" size="45"
+						value="<%=(eventVO == null) ? "請輸入活動標題" : eventVO.getBand_id()%>" /></span>
+				</div>
+				<div class="inputblock">
+					<span>活動類型: <select name="event_type" size="1">
+							<option value="0"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 0) ? "selected" : ""%>>一般活動</option>
+							<option value="1"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 1) ? "selected" : ""%>>放鬆好去處</option>
+							<option value="2"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 2) ? "selected" : ""%>>特色活動</option>
+							<option value="3"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 3) ? "selected" : ""%>>主打活動</option>
+							<option value="4"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_type() == 4) ? "selected" : ""%>>最新消息</option>
+					</select></span> <span>活動開始時間: <input name="event_start_time" id="f_date1"
+						type="text"></span>
+				</div>
+				<div class="inputblock">
+					<span>活動詳情:</span>
+					<textarea name="event_detail" rows="20" cols="80"><%=(eventVO == null) ? "請輸入活動詳情" : eventVO.getEvent_detail()%></textarea>
+				</div>
+				<div class="inputblock">
+					<span>活動排序: <input type="TEXT" name="event_sort" size="46"
+						value="<%=(eventVO == null) ? "請輸入0-99的數字" : eventVO.getEvent_sort()%>" /></span>
+				</div>
+				<div class="inputblock">
+					<span>活動海報:<input type="file" name="event_poster"
+						id="event_poster"></span>
 
-							<div class="inputblock">
-								<span>活動場地:</span>
-								<span><input type="TEXT" name="event_place" size="45"
-									value="<%=(eventVO == null) ? "請輸入活動場地" : eventVO.getEvent_place()%>" /></span>
-							</div>
-							<div class="inputblock">
-								<span>活動區域:</span>
-								<span><select name="event_area" size="1">
-										<option value="0"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 0) ? "selected" : ""%>>北部</option>
-										<option value="1"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 1) ? "selected" : ""%>>中部</option>
-										<option value="2"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 2) ? "selected" : ""%>>南部</option>
-										<option value="3"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 3) ? "selected" : ""%>>東部</option>
-										<option value="4"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 4) ? "selected" : ""%>>離島</option>
-								</select></span>
-							</div>
-							<div class="inputblock">
-								<span>活動縣市:</span>
-								<span><input type="TEXT" name="event_city" size="45"
-									value="<%=(eventVO == null) ? "請輸入活動縣市" : eventVO.getEvent_city()%>" /></span>
-							</div>
-							<div class="inputblock">
-								<span>活動縣市分區:</span>
-								<span><input type="TEXT" name="event_cityarea" size="45"
-									value="<%=(eventVO == null) ? "請輸入縣市地區" : eventVO.getEvent_cityarea()%>" /></span>
-							</div>
-							<div class="inputblock">
-								<span>活動地址:</span>
-								<span><input type="TEXT" name="event_address" size="45"
-									value="<%=(eventVO == null) ? "請輸入活動地址" : eventVO.getEvent_address()%>" /></span>
-							</div>
-							<div class="inputblock">
-								<span>活動上架時間:</span>
-								<span><input name="event_on_time" id="f_date2" type="text"></span>
-							</div>
-							<div class="inputblock">
-								<span>活動狀態:</span>
-								<span><select name="event_status" size="1">
-										<option value="0"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 0) ? "selected" : ""%>>下架</option>
-										<option value="1"
-											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 1) ? "selected" : ""%>>上架</option>
-								</select></span>
-							</div>
-							<div class="inputblock">
-								<span>座位圖:</span>
-								<span><input type="file" name="event_seat" size="45"
-									id="event_seat"></span>
-								<div>預覽圖</div>
-								<div class="seat"><img id="event_seat_img"
-									<%=(eventVO == null)
+					<div>預覽圖</div>
+					<div class="poster">
+						<img id="event_poster_img"
+							<%=(eventVO == null)
+					? ""
+					: "src=\"" + request.getContextPath() + "/EventPicController?action=getEventPoster&event_id="
+							+ eventVO.getEvent_id() + "\""%>>
+					</div>
+				</div>
+
+				<div class="inputblock">
+					<span>活動場地:</span> <span><input type="TEXT"
+						name="event_place" size="45"
+						value="<%=(eventVO == null) ? "請輸入活動場地" : eventVO.getEvent_place()%>" /></span>
+				</div>
+				<div class="inputblock">
+					<span>活動區域:</span> <span><select name="event_area" size="1">
+							<option value="0"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 0) ? "selected" : ""%>>北部</option>
+							<option value="1"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 1) ? "selected" : ""%>>中部</option>
+							<option value="2"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 2) ? "selected" : ""%>>南部</option>
+							<option value="3"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 3) ? "selected" : ""%>>東部</option>
+							<option value="4"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 4) ? "selected" : ""%>>離島</option>
+					</select></span>
+				</div>
+				活動縣市分區:
+				<div id="twzipcode_ADV" class="inputblock"></div>
+				<div class="inputblock">
+					<span>活動地址:</span> <span><input type="TEXT"
+						name="event_address" size="45"
+						value="<%=(eventVO == null) ? "請輸入活動地址" : eventVO.getEvent_address()%>" /></span>
+				</div>
+				<div class="inputblock">
+					<span>活動上架時間:</span> <span><input name="event_on_time"
+						id="f_date2" type="text"></span>
+				</div>
+				<div class="inputblock">
+					<span>活動狀態:</span> <span><select name="event_status"
+						size="1">
+							<option value="0"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 0) ? "selected" : ""%>>下架</option>
+							<option value="1"
+								<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 1) ? "selected" : ""%>>上架</option>
+					</select></span>
+				</div>
+				<div class="inputblock">
+					<span>座位圖:</span> <span><input type="file" name="event_seat"
+						size="45" id="event_seat"></span>
+					<div>預覽圖</div>
+					<div class="seat">
+						<img id="event_seat_img"
+							<%=(eventVO == null)
 					? ""
 					: "src=\"" + request.getContextPath() + "/EventPicController?action=getEventSeat&event_id="
-							+ eventVO.getEvent_id() + "\""%>></div>
+							+ eventVO.getEvent_id() + "\""%>>
+					</div>
+				</div>
+
+
+
+
+
+			</div>
+			<div id="ticket_block">
+				<c:if test="${not empty ticketVoList}">
+					<c:forEach var="ticketVO" items="${ticketVoList}">
+						<div class="ticket">
+							<div class="inputblock">
+								<span>請輸入票種名稱:<input type="text" name="ticket_name"
+									value="${ticketVO.ticket_name}"></span> <span>票種金額:<input
+									type="text" name="ticket_price"
+									value="${ticketVO.ticket_price}" size="5"></span> <span>票種總張數:<input
+									type="text" name="ticket_amount"
+									value="${ticketVO.ticket_amount}" size="5"></span> <span>票種排序:<input
+									type="text" name="ticket_sort" value="${ticketVO.ticket_sort}"
+									size="3"></span>
 							</div>
+							<div class="inputblock">
+								<span>開始販售時間:<input type="text" name="ticket_onsale_time"
+									class="ticket_onsale_time"
+									value="${ticketVO.ticket_onsale_time}" size="15"></span>
+							</div>
+							<div class="inputblock">
+								<span>結束販售時間:<input type="text"
+									name="ticket_endsale_time" class="ticket_endsale_time"
+									value="${ticketVO.ticket_endsale_time}" size="15"></span>
+							</div>
+							<div class="inputblock">
+								<span>票券販售狀態<select name="ticket_status" size="1">
+										<option value="0"
+											${ticketVO.ticket_status == 0 ? "selected" : ""}>下架</option>
+										<option value="1"
+											${ticketVO.ticket_status == 1 ? "selected" : ""}>上架</option>
 
-
-
-
-
+								</select></span>
+							</div>
+							<button type="button" class="delete">刪除</button>
 						</div>
-						<div id="ticket_block">
-							<c:if test="${not empty ticketVoList}">
-								<c:forEach var="ticketVO" items="${ticketVoList}">
-									<div class="ticket">
-										<div class="inputblock"><span>請輸入票種名稱:<input type="text" name="ticket_name"
-											value="${ticketVO.ticket_name}"></span> <span>票種金額:<input
-											type="text" name="ticket_price"
-											value="${ticketVO.ticket_price}" size="5"></span> <span>票種總張數:<input
-											type="text" name="ticket_amount"
-											value="${ticketVO.ticket_amount}" size="5"></span> <span>票種排序:<input
-											type="text" name="ticket_sort"
-											value="${ticketVO.ticket_sort}" size="3"></span></div><div class="inputblock"><span>開始販售時間:<input
-											type="text" name="ticket_onsale_time"
-											class="ticket_onsale_time"
-											value="${ticketVO.ticket_onsale_time}" size="15"></span></div><div class="inputblock"> <span>結束販售時間:<input
-											type="text" name="ticket_endsale_time"
-											class="ticket_endsale_time"
-											value="${ticketVO.ticket_endsale_time}" size="15"></span></div> <div class="inputblock"><span>票券販售狀態<select
-											name="ticket_status" size="1">
-												<option value="0"
-													${ticketVO.ticket_status == 0 ? "selected" : ""}>下架</option>
-												<option value="1"
-													${ticketVO.ticket_status == 1 ? "selected" : ""}>上架</option>
+					</c:forEach>
+				</c:if>
+			</div>
+			<br> <input type="hidden" name="action" value="insert">
+			<input type="submit" value="送出新增" id="submit">
+		</FORM>
+		<br>
+		<button type="button" id="addTicket">新增票種</button>
 
-										</select></span></div>
-										<button type="button" class="delete">刪除</button>
-									</div>
-								</c:forEach>
-							</c:if>
-						</div>
-						<br> <input type="hidden" name="event_last_editor"
-							value="members00000"> <input type="hidden" name="action"
-							value="insert"> <input type="submit" value="送出新增"
-							id="submit">
-					</FORM>
-					<br><button type ="button" id="addTicket">新增票種</button>
-
-
-<%@ include file="sb/page2.file" %>
+	</div>
+	<%@ include file="/back-end/sb/page2.file"%>
 
 	<!-- Bootstrap core JavaScript-->
 	<%
@@ -283,6 +283,8 @@ margin-bottom: 8px;
 
 		}
 	%>
+	<script
+		src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
 	<script>
         $.datetimepicker.setLocale('zh');
         $('#f_date1').datetimepicker({
@@ -438,19 +440,25 @@ margin-bottom: 8px;
     }
 	
 	CKEDITOR.replace( 'event_detail', {});
+	
+	$("#twzipcode_ADV").twzipcode({
+		zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+		countyName: "event_city", // 自訂城市 select 標籤的 name 值
+		districtName: "event_cityarea" // 自訂地區 select 標籤的 name 值
+		});
 </script>
-<!-- 	<script -->
-<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script> --%>
-<!-- 	<script -->
-<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> --%>
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script> --%>
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> --%>
 
-<!-- 	<!-- Core plugin JavaScript--> -->
-<!-- 	<script -->
-<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script> --%>
+	<!-- Core plugin JavaScript-->
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script> --%>
 
-<!-- 	<!-- Custom scripts for all pages--> -->
-<!-- 	<script -->
-<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/sb-admin-2.min.js"></script> --%>
+	<!-- Custom scripts for all pages-->
+	<!-- 	<script -->
+	<%-- 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/sb-admin-2.min.js"></script> --%>
 </body>
 
 </html>

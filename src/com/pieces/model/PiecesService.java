@@ -9,7 +9,8 @@ public class PiecesService {
 	private PiecesDAO_interface dao;
 
 	public PiecesService() {
-		dao = new PiecesDAO();
+//		dao = new PiecesDAO();
+		dao = new PiecesDAOJDBC();
 	}
 
 	public static void main(String[] args) {

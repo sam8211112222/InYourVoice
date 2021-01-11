@@ -19,6 +19,14 @@ public class OrdersService {
 		return null;
 	}
 	
+	public List<OrdersVO> findByMemberId(String memberId){
+		try {
+			return dao.findByMemberId(memberId);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 
 	public OrdersVO addOrders(String member_id, Integer order_status, Timestamp order_place_time, String order_name,

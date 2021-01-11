@@ -7,8 +7,8 @@ public interface ProductPhotoDAO_interface {
     public void update(ProductPhotoVO productPhotoVO);
     public void delete(String productphoto_id);
     public ProductPhotoVO findByPrimaryKey(String productphoto_id);
+    public List<ProductPhotoVO> getAllByBand(String band_id);
     public List<ProductPhotoVO> getAll();
-    
   //這是鈺涵的方法
     /**
      * 用產品id取得一張照片資料

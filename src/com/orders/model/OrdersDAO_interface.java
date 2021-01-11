@@ -24,5 +24,7 @@ public interface OrdersDAO_interface {
 	//�d�ߥ���
 	public List<OrdersVO> getAll();
 	
+	List<OrdersVO> findByMemberId(String memberId);
+	
 	 
 }

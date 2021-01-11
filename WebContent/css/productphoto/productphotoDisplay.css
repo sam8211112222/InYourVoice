@@ -1,4 +1,4 @@
-div.productphoto_photo_display {
+td.productphoto_photo_display {
 	margin: 15px 0 0 0;
 	border: 2px solid blue;
 	width: 300px;
@@ -10,5 +10,6 @@ div.productphoto_photo_display {
 }
 
 .pic_img {
-	max-width: 100%;
+	max-width: 200px;
+	max-height: 200px;
 }

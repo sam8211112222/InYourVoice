@@ -27,7 +27,7 @@ public class CartServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-		String url = "/front-end/cart/cart_page.jsp";
+		String url = "/front-end/cart/protect/cart_page.jsp";
 		RequestDispatcher rd = req.getRequestDispatcher(url);
 		rd.forward(req, res);
 		return;
@@ -76,7 +76,7 @@ public class CartServlet extends HttpServlet {
 //			String url = "/front-end/cart/cart_page.jsp";
 //			RequestDispatcher rd = req.getRequestDispatcher(url);
 //			rd.forward(req, res);
-			res.sendRedirect(req.getContextPath()+"/cart/cartServlet");
+			res.sendRedirect(req.getContextPath() + "/cart/cartServlet");
 		}
 
 		if ("addToCart".equals(action)) {
@@ -92,7 +92,6 @@ public class CartServlet extends HttpServlet {
 			return;
 		}
 
-		
 		if ("delete".equals(action)) {
 			String del = req.getParameter("del");
 			Iterator<CartVO> item = cartList.iterator();
@@ -104,9 +103,22 @@ public class CartServlet extends HttpServlet {
 				}
 			}
 			session.setAttribute(SESSION_CART_KEY, cartList);
-			String url = "/front-end/cart/cart_page.jsp";
+			String url = "/front-end/cart/protect/cart_page.jsp";
 			RequestDispatcher rd = req.getRequestDispatcher(url);
 			rd.forward(req, res);
+			return;
+
+		}
+		if ("updateQuantity".equals(action)) {
+			try {
+				cartList = updateQuantity(cartList, productId, quantity);
+
+				session.setAttribute(SESSION_CART_KEY, cartList);
+				res.getWriter().write("true");
+			} catch (Exception e) {
+				e.printStackTrace();
+				res.getWriter().write("false");
+			}
 			return;
 
 		}
@@ -222,6 +234,23 @@ public class CartServlet extends HttpServlet {
 			vo.setProductphoto_id(productPhotoId);
 
 			cartList.add(vo);
+
+		}
+		return cartList;
+	}
+
+	private List<CartVO> updateQuantity(List<CartVO> cartList, String productId, int quantity) {
+		for (CartVO vo : cartList) {
+			if (productId.equals(vo.getProduct_id())) {
+				// 如果productId一樣
+
+				// 最終數量等於原數量加新數量
+				int newQuantity = vo.getProduct_quantity() + quantity;
+				vo.setProduct_quantity(newQuantity);
+
+			}else {
+				System.out.println("有誤");
+			}
 
 		}
 		return cartList;

@@ -49,7 +49,7 @@
 <body>
 <%-- 	<%@ include file="/front-end/member/anotherMemberCenter.jsp" %> --%>
 	<%@ include file="/front-end/header_footer/header.jsp" %>
-	<%@ include file="/front-end/member/member_center_top.file" %>
+	<%@ include file="/css/member/member_center_top.file" %>
     <div class="container album_management_container">
 
         <div class="row search_table_title justify-content-center">
@@ -199,7 +199,7 @@
 
     </div>
 
-    <%@ include file="/front-end/member/member_center_bottom.file" %>
+    <%@ include file="/css/member/member_center_bottom.file" %>
     <%@ include file="/front-end/header_footer/footer.jsp" %>
     <!-- script from vendor -->
     <script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>

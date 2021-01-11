@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.event.model.EventService;
+import com.event.model.EventVO;
 import com.eventorder.model.EventOrderService;
+import com.eventorder.model.TicketRedisThread;
 import com.eventorderlist.model.EventOrderListService;
 import com.eventorderlist.model.EventOrderListVO;
 import com.member.model.MemberVo;
@@ -80,18 +82,25 @@ public class EventOrderController extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
-		if (req.getParameter("action").equals("go-check-out")) {
+		String action = req.getParameter("action");
+		if ("go-check-out".equals(action)) {
 			HttpSession session = req.getSession();
-			
+			System.out.println("有近來");
+			if (session.getAttribute("memberVo") == null) {
+				session.setAttribute("location", req.getRequestURI());
+				res.sendRedirect(req.getContextPath() + "/front-end/member/Login.jsp");
+				return;
+			}
 			MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
 			String member_id = memberVo.getMemberId();
 
 			if (session.getAttribute("ticket" + member_id) == null) {
 
+				System.out.println("購物車是空的");
+
 				String[] ticket_id_list = req.getParameterValues("ticket_id");
 				String[] orderList_goods_amount_list = req.getParameterValues("orderlist_goods_amount");
 				Map<String, Integer> cartList = new HashMap<String, Integer>();
-				TicketService ticketSvc = new TicketService();
 
 				for (int i = 0; i < ticket_id_list.length; i++) {
 					Integer orderList_goods_amount = null;
@@ -99,79 +108,189 @@ public class EventOrderController extends HttpServlet {
 					if (orderList_goods_amount.intValue() != 0 && orderList_goods_amount != null) {
 						cartList.put(ticket_id_list[i], orderList_goods_amount);
 					}
-
+				}
+				if (!cartList.isEmpty()) {
 					ServletContext context = getServletContext();
 					ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) context
 							.getAttribute("ticketRestAmount");
-					if (!cartList.isEmpty()) {
-						Set<String> cartListKeys = cartList.keySet();
-						Iterator<String> it = cartListKeys.iterator();
-						while (it.hasNext()) {
-							String ticket_id = (String) it.next();
-							if (ticketRestAmount.containsKey(ticket_id)) {
-								ticketRestAmount.replace(ticket_id,
-										ticketRestAmount.get(ticket_id) - cartList.get(ticket_id));
+					Set<String> cartListKeys = cartList.keySet();
+					Iterator<String> it = cartListKeys.iterator();
+					while (it.hasNext()) {
+						String ticket_id = (String) it.next();
+						if (ticketRestAmount.containsKey(ticket_id)) {
+							ticketRestAmount.replace(ticket_id,
+									ticketRestAmount.get(ticket_id) - cartList.get(ticket_id));
+						}
+					}
+
+					session.setAttribute("timer", timer);
+					session.setAttribute("ticket" + member_id, cartList);
+
+					Timer timer = new Timer();
+					TimerTask task = new TimerTask() {
+
+						public void run() {
+
+							Map<String, Integer> cartList = (HashMap<String, Integer>) session
+									.getAttribute("ticket" + member_id);
+							ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) context
+									.getAttribute("ticketRestAmount");
+							Set<String> cartListKeys = cartList.keySet();
+							Iterator<String> it = cartListKeys.iterator();
+							while (it.hasNext()) {
+								String ticket_id = (String) it.next();
+								if (ticketRestAmount.containsKey(ticket_id)) {
+									ticketRestAmount.replace(ticket_id,
+											ticketRestAmount.get(ticket_id) + cartList.get(ticket_id));
+								}
 							}
+							System.out.println("timer執行");
+							session.removeAttribute("ticket" + member_id);
+							System.out.println(TimeOut.connectedSessions);
+							if (TimeOut.connectedSessions.containsKey(member_id)) {
+								TimeOut.connectedSessions.get(member_id).getAsyncRemote().sendText("go-out");
+								System.out.println("訊息發送成功");
+							}
+
 						}
 
-						Timer timer = new Timer();
-						TimerTask task = new TimerTask() {
+					};
+					timer.schedule(task, 30 * 60 * 1000);
 
-							public void run() {
-
-								Map<String, Integer> cartList = (HashMap<String, Integer>) session
-										.getAttribute("ticket" + member_id);
-								ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) context
-										.getAttribute("ticketRestAmount");
-								Set<String> cartListKeys = cartList.keySet();
-								Iterator<String> it = cartListKeys.iterator();
-								while (it.hasNext()) {
-									String ticket_id = (String) it.next();
-									if (ticketRestAmount.containsKey(ticket_id)) {
-										ticketRestAmount.replace(ticket_id,
-												ticketRestAmount.get(ticket_id) - cartList.get(ticket_id));
-									}
-								}
-
-								session.removeAttribute("ticket" + member_id);
-							}
-
-						};
-						Calendar cal = Calendar.getInstance();
-						timer.schedule(task, (cal.getTimeInMillis()) + 10 * 60 * 1000);
-
-						session.setAttribute("timer", timer);
-						session.setAttribute("ticket" + member_id, cartList);
-					}
-					String url = "/front-end/eventorder/checkOutPage.jsp";
+					System.out.println(session.getAttribute("timer"));
+					req.setAttribute("event_id", req.getParameter("event_id"));
+					String url = "/front-end/eventorder/protect/checkOutPage.jsp";
 					RequestDispatcher successView = req.getRequestDispatcher(url);
 					successView.forward(req, res);
+					System.out.println("success");
+				} else {
+					System.out.println("沒選東西,重導回前頁");
+					res.sendRedirect(
+							"http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
+									+ req.getParameter("event_id"));
+				
 				}
 
+			} else {
+				req.setAttribute("event_id", req.getParameter("event_id"));
+				String url = "/front-end/eventorder/protect/checkOutPage.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
 			}
+
 		}
 
-		if (req.getParameter("action").equals("check-out")) {
+		if ("check-out".equals(action)) {
 			HttpSession session = req.getSession();
+			String member_id = null;
+
 			if (session.getAttribute("memberVo") != null) {
-				String member_id = ((MemberVo) session.getAttribute("memberVo")).getMemberId();
-				if (session.getAttribute("ticket" + member_id) != null) {
-					Map<String, Integer> cartList = (HashMap<String, Integer>) session
-							.getAttribute("ticket" + member_id);
-					TicketService ticketSvc = new TicketService();
-					String event_id = ticketSvc.getOneTicket(cartList.keySet().iterator().next()).getEvent_id();
-					Timestamp order_place_time = new Timestamp(System.currentTimeMillis());
-					String order_name = req.getParameter("order_name");
-					String order_mail = req.getParameter("orde_mail");
-					String order_phone = req.getParameter("order_phone");
-					EventOrderService eventOrderSvc = new EventOrderService();
-					eventOrderSvc.addOrder(member_id, event_id, order_place_time, order_name, order_mail, order_phone,
-							cartList);
-					
-					Timer timer = (Timer)session.getAttribute("timer");
+				member_id = ((MemberVo) session.getAttribute("memberVo")).getMemberId();
+			}
+
+			if (session.getAttribute("ticket" + member_id) != null) {
+				Map<String, Integer> cartList = (HashMap<String, Integer>) session.getAttribute("ticket" + member_id);
+				TicketService ticketSvc = new TicketService();
+				String event_id = ticketSvc.getOneTicket(cartList.keySet().iterator().next()).getEvent_id();
+				Timestamp order_place_time = new Timestamp(System.currentTimeMillis());
+				String order_name = req.getParameter("orderName");
+				String order_mail = req.getParameter("orderMail");
+				String order_phone = req.getParameter("orderPhone");
+				String orderlist_remarks = req.getParameter("remarks");
+				EventOrderService eventOrderSvc = new EventOrderService();
+				Map<String, List<String>> orders = eventOrderSvc.addOrder(member_id, event_id, order_place_time,
+						order_name, order_mail, order_phone, orderlist_remarks, cartList);
+				if (session.getAttribute("timer") != null) {
+					Timer timer = (Timer) session.getAttribute("timer");
 					timer.cancel();
 				}
+
+				Integer ticketPrice = new Integer(0);
+				Iterator<String> it = cartList.keySet().iterator();
+				while (it.hasNext()) {
+					String ticket_id = it.next();
+					ticketPrice += (ticketSvc.getOneTicket(ticket_id).getTicket_price() * cartList.get(ticket_id));
+				}
+
+				String ticketCheckInURL = req.getContextPath() + "/CheckTicketController?action=check-in&orderListId=";
+				String ticketGetQrCodeURL = req.getContextPath() + "/EventPicController?action=send-mail&orderListId=";
+
+				EventService eventSvc = new EventService();
+				EventVO eventVO = eventSvc.getOneEvent(event_id);
+				String event_title = eventVO.getEvent_title();
+
+				TicketRedisThread ticketRedisThread = new TicketRedisThread(order_mail, event_title, ticketCheckInURL,ticketGetQrCodeURL,
+						orders);
+				Thread th = new Thread(ticketRedisThread);
+				th.start();
+
+				session.removeAttribute("ticket" + member_id);
+				req.setAttribute("orders", orders);
+				req.setAttribute("order_place_time", order_place_time);
+				req.setAttribute("ticketPrice", ticketPrice);
+				String url = "/front-end/eventorder/checkoutsuccess.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher(url);
+				successView.forward(req, res);
+				System.out.println("success");
+
 			}
+
+		}
+
+		if ("cancel".equals(action)) {
+			HttpSession session = req.getSession();
+			ServletContext context = req.getServletContext();
+			if (session.getAttribute("memberVo") != null) {
+				MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
+				String member_id = memberVo.getMemberId();
+				if (session.getAttribute("ticket" + member_id) != null) {
+					System.out.println("有近來取消timer");
+					Map<String, Integer> cartList = (HashMap<String, Integer>) session
+							.getAttribute("ticket" + member_id);
+					ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) context
+							.getAttribute("ticketRestAmount");
+					Set<String> cartListKeys = cartList.keySet();
+					Iterator<String> it = cartListKeys.iterator();
+					while (it.hasNext()) {
+						String ticket_id = (String) it.next();
+						if (ticketRestAmount.containsKey(ticket_id)) {
+							ticketRestAmount.replace(ticket_id,
+									ticketRestAmount.get(ticket_id) + cartList.get(ticket_id));
+						}
+					}
+					if (session.getAttribute("timer") != null) {
+						Timer timer = (Timer) session.getAttribute("timer");
+						timer.cancel();
+					}
+					session.removeAttribute("ticket" + member_id);
+				}
+			}
+
+			res.sendRedirect("http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
+					+ req.getParameter("event_id"));
+		}
+
+		if ("getOrderDetail".equals(action)) {
+			String event_order_id = req.getParameter("event_order_id");
+
+			List<EventOrderListVO> list = new EventOrderListService().getListByEventOrderId(event_order_id);
+			TicketService ticketSvc = new TicketService();
+
+			Integer amountPrice = new Integer(0);
+
+			for (EventOrderListVO item : list) {
+				String ticket_id = item.getTicket_id();
+				TicketVO ticketVO = ticketSvc.getOneTicket(ticket_id);
+				amountPrice += ticketVO.getTicket_price() * item.getOrderlist_goods_amount();
+			}
+
+			req.setAttribute("list", list);
+			req.setAttribute("ticketSvc", ticketSvc);
+			req.setAttribute("amountPrice", amountPrice);
+
+			String url = "/front-end/orders/eventOrdersDetail.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url);
+			successView.forward(req, res);
 
 		}
 

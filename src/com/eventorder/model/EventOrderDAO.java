@@ -1,12 +1,13 @@
 package com.eventorder.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.eventorderlist.model.EventOrderListVO;
 
 
 public interface EventOrderDAO {
-	public void insert(EventOrderVO eventOrderVO,List<EventOrderListVO> eventOrderList);
+	public Map<String,List<String>> insert(EventOrderVO eventOrderVO,List<EventOrderListVO> eventOrderList);
 
 	public void update(EventOrderVO eventOrderVO);
 

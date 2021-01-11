@@ -6,7 +6,6 @@
 
 <%
 	EventVO eventVO = (EventVO) request.getAttribute("eventVO");
-	ArrayList<TicketVO> ticketVoList = (ArrayList<TicketVO>) request.getAttribute("ticketVoList");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -169,16 +168,7 @@ margin-bottom: 8px;
 											<%=(eventVO == null) ? "" : (eventVO.getEvent_area() == 4) ? "selected" : ""%>>離島</option>
 								</select></span>
 							</div>
-							<div class="inputblock">
-								<span>活動縣市:</span>
-								<span><input type="TEXT" name="event_city" size="45"
-									value="<%=(eventVO == null) ? "請輸入活動縣市" : eventVO.getEvent_city()%>" /></span>
-							</div>
-							<div class="inputblock">
-								<span>活動縣市分區:</span>
-								<span><input type="TEXT" name="event_cityarea" size="45"
-									value="<%=(eventVO == null) ? "請輸入縣市地區" : eventVO.getEvent_cityarea()%>" /></span>
-							</div>
+							活動縣市分區:<div id="twzipcode_ADV" class="inputblock"></div>
 							<div class="inputblock">
 								<span>活動地址:</span>
 								<span><input type="TEXT" name="event_address" size="45"
@@ -189,12 +179,18 @@ margin-bottom: 8px;
 								<span><input name="event_on_time" id="f_date2" type="text"></span>
 							</div>
 							<div class="inputblock">
-								<span>活動狀態:</span>
+								<span>活動狀態:</span>${eventVO.event_status == 1 ? "上架中":eventVO.event_status == 0 ? "下架": eventVO.event_status == 2 ? "審核中": eventVO.event_status == 3 ? "草稿":"未通過"}
 								<span><select name="event_status" size="1">
 										<option value="0"
 											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 0) ? "selected" : ""%>>下架</option>
 										<option value="1"
 											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 1) ? "selected" : ""%>>上架</option>
+										<option value="2"
+											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 2) ? "selected" : ""%>>審核中</option>
+										<option value="3"
+											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 3) ? "selected" : ""%>>草稿</option>
+										<option value="4"
+											<%=(eventVO == null) ? "" : (eventVO.getEvent_status() == 4) ? "selected" : ""%>>未通過</option>
 								</select></span>
 							</div>
 							<div class="inputblock">
@@ -247,7 +243,6 @@ margin-bottom: 8px;
 			</c:if>
 </div>
 <br>
-<input type="hidden" name="event_last_editor" value="members00000">
 <input type="hidden" name="event_id" value="${eventVO.event_id}">
 <input type="hidden" name="action" value="update">
 <input type="submit" value="送出修改" id="submit"></FORM>
@@ -279,6 +274,8 @@ margin-bottom: 8px;
 <script src="<%=request.getContextPath()%>/back-end/events/js/jquery-3.5.1.min.js"></script>
 <script src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.full.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
 
 <style>
   .xdsoft_datetimepicker .xdsoft_datepicker {
@@ -493,5 +490,14 @@ margin-bottom: 8px;
         
         
          CKEDITOR.replace( 'event_detail', {});
+		
+		$("#twzipcode_ADV").twzipcode({
+			zipcodeIntoDistrict: true, // 郵遞區號自動顯示在地區
+			countyName: "event_city", // 自訂城市 select 標籤的 name 值
+			districtName: "event_cityarea", // 自訂地區 select 標籤的 name 值
+			countySel: "<%=eventVO.getEvent_city()%>",
+			districSel: "<%=eventVO.getEvent_cityarea()%>",
+			css: ["inputborder","inputborder"]
+			});
 </script>
 </html>

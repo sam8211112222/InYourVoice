@@ -37,45 +37,48 @@ public class ProductPhotoService {
 	public void deleteProductPhoto(String productphoto_id) {
 		dao.delete(productphoto_id);
 	}
-
+	
 	public ProductPhotoVO getOneProductPhoto(String productphoto_id) {
 		return dao.findByPrimaryKey(productphoto_id);
 	}
-
+	
+	public List<ProductPhotoVO> getAllByBand(String band_id) {
+		return dao.getAllByBand(band_id);
+	}
+	
 	public List<ProductPhotoVO> getAll() {
 		return dao.getAll();
 	}
 	
 	//這是鈺涵的方法
-		public byte[] getImage(String id) {
-			byte[] result = null;
-			try {
-				result = dao.getFirstImageByProductId(id);
-			}catch(Exception e) {
-				e.printStackTrace();
+			public byte[] getImage(String id) {
+				byte[] result = null;
+				try {
+					result = dao.getFirstImageByProductId(id);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				return result;
 			}
-			return result;
-		}
-		
-		//這是鈺涵的方法
-		public byte[] getImageByPhotoId(String id) {
-			byte[] result = null;
-			try {
-				result = dao.getImageByPhotoId(id);
-			}catch(Exception e) {
-				e.printStackTrace();
+	//這是鈺涵的方法
+			public byte[] getImageByPhotoId(String id) {
+				byte[] result = null;
+				try {
+					result = dao.getImageByPhotoId(id);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				return result;
 			}
-			return result;
-		}
-		
-		//這是鈺涵的方法
-		public List<String> getIdListByProductId(String productId){
-			List<String> result = null;
-			try {
-				result = dao.getIdListByProductId(productId);
-			}catch(Exception e) {
-				e.printStackTrace();
+			
+			//這是鈺涵的方法
+			public List<String> getIdListByProductId(String productId){
+				List<String> result = null;
+				try {
+					result = dao.getIdListByProductId(productId);
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				return result;
 			}
-			return result;
-		}
-}
+	}

@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -42,11 +44,14 @@ public class EventOrderJNDIDAO implements EventOrderDAO {
 	private static final String UPDATE = "UPDATE eventorder set member_id = ?,event_id = ?,order_place_time = ?,order_name = ?,order_mail = ?,order_phone = ? where event_order_id=? ";
 
 	@Override
-	public void insert(EventOrderVO eventOrderVO,List<EventOrderListVO> eventOrderList) {
+	public Map<String, List<String>> insert(EventOrderVO eventOrderVO,List<EventOrderListVO> eventOrderList) {
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		EventOrderListDAO dao = new EventOrderListJNDIDAO();
+		List<String> orderListIds = new ArrayList<String>();
+		String pk = null;
+		Map<String,List<String>> orders = new HashMap<String,List<String>>();
 
 		try {
 
@@ -65,15 +70,18 @@ public class EventOrderJNDIDAO implements EventOrderDAO {
 			pstmt.executeUpdate();
 
 			ResultSet rs = pstmt.getGeneratedKeys();
-			String pk = null;
+			
 			while (rs.next()) {
 				 pk = rs.getString(1);
 			}
 			
 			for(EventOrderListVO eventOrderListVO:eventOrderList) {
 				eventOrderListVO.setEvent_order_id(pk);
-				dao.insert(con, eventOrderListVO);
+				String orderlist_id = dao.insert(con, eventOrderListVO);
+				orderListIds.add(orderlist_id);
 			}
+			
+			orders.put(pk, orderListIds);
 			
 			con.commit();
 
@@ -102,6 +110,8 @@ public class EventOrderJNDIDAO implements EventOrderDAO {
 				}
 			}
 		}
+		
+		return orders;
 
 	}
 

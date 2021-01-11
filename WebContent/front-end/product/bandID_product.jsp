@@ -2,16 +2,12 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="utf-8">
 <title>樂團ID周邊商品(鈺涵)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-	crossorigin="anonymous">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/bootstrap/css/*">
 
 <style>
 
@@ -22,13 +18,6 @@ margin:0px 0px 5px 0px;
 
 </head>
 <body>
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-		crossorigin="anonymous"></script>
-
 
 
 	<div class="container">
@@ -55,5 +44,7 @@ margin:0px 0px 5px 0px;
 		</div>
 	</div>
 	<a href="<%=request.getContextPath()%>/front-end/cart/cart_page.jsp">購物車</a>
+	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/*"></script>
+<script src="<%=request.getContextPath()%>/vendors/jquery/*"></script>
 </body>
 </html>

@@ -53,7 +53,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/select_page.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/protect/select_page.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -66,7 +66,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/select_page.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/protect/select_page.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -79,14 +79,14 @@ public class ProductPhotoServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/select_page.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/protect/select_page.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("productPhotoVO", productPhotoVO); // 資料庫取出的productPhotoVO物件,存入req
-				String url = "/front-end/productphoto/listOneProductPhoto.jsp";
+				String url = "/front-end/productphoto/protect/listOneProductPhoto.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 成功轉交 listOneProduct.jsp
 				successView.forward(req, res);
 
@@ -94,7 +94,7 @@ public class ProductPhotoServlet extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 				errorMsgs.add("無法取得資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/select_page.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/protect/select_page.jsp");
 				failureView.forward(req, res);
 			}
 			System.out.println("getOne_For_Display測試成功");
@@ -117,7 +117,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				System.out.println(2);
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("productPhotoVO", productPhotoVO); // 資料庫取出的productPhotoVO物件,存入req
-				String url = "/front-end/productphoto/update_productPhoto_input.jsp";
+				String url = "/front-end/productphoto/protect/update_productPhoto_input.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_product_input.jsp
 				successView.forward(req, res);
 				System.out.println(3);
@@ -125,7 +125,7 @@ public class ProductPhotoServlet extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/listAllProductPhoto.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/front-end/productphoto/protect/listAllProductPhoto.jsp");
 				failureView.forward(req, res);
 			}
 			System.out.println("getOne_For_Update測試成功");
@@ -193,12 +193,6 @@ public class ProductPhotoServlet extends HttpServlet {
 				System.out.println(productphoto_id);
 				
 				String product_id= new String(req.getParameter("product_id").trim());
-//				String enameReg = "^[(\u4e00-\u9fa5)(a-zA-Z0-9_)]{4,9}$";
-//				if (band_id == null || band_id.trim().length() == 0) {
-//					errorMsgs.add("樂團編號: 請勿空白");
-//				} else if(!band_id.trim().matches(enameReg)) { //以下練習正則(規)表示式(regular-expression)
-//					errorMsgs.add("樂團編號: 只能是中、英文字母、數字和_ , 且長度必需在4到9之間");
-//	            }
 
 				byte[] productphoto_photo=null;
 				
@@ -235,7 +229,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("productPhotoVO", productPhotoVO); // 含有輸入格式錯誤的productVO物件,也存入req
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/productphoto/update_productPhoto_input.jsp");
+							.getRequestDispatcher("/front-end/productphoto/protect/update_productPhoto_input.jsp");
 					failureView.forward(req, res);
 					return; //程式中斷
 				}
@@ -246,7 +240,7 @@ public class ProductPhotoServlet extends HttpServlet {
 						
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("productPhotoVO", productPhotoVO); // 資料庫update成功後,正確的的productVO物件,存入req
-				String url = "/front-end/productphoto/listOneProductPhoto.jsp";
+				String url = "/front-end/productphoto/protect/listAllProductPhoto.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 
@@ -255,7 +249,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				e.printStackTrace();
 				errorMsgs.add("修改資料失敗:"+e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/productphoto/update_productPhoto_input.jsp");
+						.getRequestDispatcher("/front-end/productphoto/protect/update_productPhoto_input.jsp");
 				failureView.forward(req, res);
 			}
 			System.out.println("update測試成功");
@@ -312,7 +306,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("productPhotoVO", productPhotoVO); // 含有輸入格式錯誤的productVO物件,也存入req
 					RequestDispatcher failureView = req
-							.getRequestDispatcher("/front-end/productphoto/update_productPhoto_input.jsp");
+							.getRequestDispatcher("/front-end/productphoto/protect/update_productPhoto_input.jsp");
 					failureView.forward(req, res);
 					return; //程式中斷
 				}
@@ -323,7 +317,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				System.out.println("2");
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("productPhotoVO", productPhotoVO); // 資料庫update成功後,正確的的productVO物件,存入req
-				String url = "/front-end/productphoto/listAllProductPhoto.jsp";
+				String url = "/front-end/productphoto/protect/listAllProductPhoto.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 				System.out.println("3");
@@ -332,7 +326,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				e.printStackTrace();
 				errorMsgs.add("修改資料失敗:"+e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/productphoto/addProductPhoto.jsp");
+						.getRequestDispatcher("/front-end/productphoto/protect/addProductPhoto.jsp");
 				failureView.forward(req, res);
 			}
 			System.out.println("insert測試成功");
@@ -353,7 +347,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				ProductPhotoSvc.deleteProductPhoto(productphoto_id);
 				
 				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
-				String url = "/front-end/productphoto/listAllProductPhoto.jsp";
+				String url = "/front-end/productphoto/protect/listAllProductPhoto.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
 				
@@ -361,7 +355,7 @@ public class ProductPhotoServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:"+e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/productphoto/listAllProductPhoto.jsp");
+						.getRequestDispatcher("/front-end/productphoto/protect/listAllProductPhoto.jsp");
 				failureView.forward(req, res);
 			}
 		}

@@ -4,7 +4,7 @@ package com.emp.model;
 public class EmpVO implements java.io.Serializable{
 	
 	private String emp_id;
-	private byte[] emp_password;
+	private String emp_password;
 	private java.sql.Timestamp emp_add_time;
 	private String emp_mail;
 	private String emp_phone;
@@ -19,10 +19,10 @@ public class EmpVO implements java.io.Serializable{
 	public void setEmp_id(String emp_id) {
 		this.emp_id = emp_id;
 	}
-	public byte[] getEmp_password() {
+	public String getEmp_password() {
 		return emp_password;
 	}
-	public void setEmp_password(byte[] emp_password) {
+	public void setEmp_password(String emp_password) {
 		this.emp_password = emp_password;
 	}
 	public java.sql.Timestamp getEmp_add_time() {

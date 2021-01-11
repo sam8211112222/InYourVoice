@@ -9,6 +9,17 @@ public class EventOrderListVO implements Serializable {
 	private String event_order_id;
 	private Integer orderlist_goods_amount;
 	private String orderlist_remarks;
+	private Integer orderlist_status;
+	
+	
+
+	public Integer getOrderlist_status() {
+		return orderlist_status;
+	}
+
+	public void setOrderlist_status(Integer orderlist_status) {
+		this.orderlist_status = orderlist_status;
+	}
 
 	public String getOrderlist_id() {
 		return orderlist_id;

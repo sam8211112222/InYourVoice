@@ -4,8 +4,10 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.orderlist.model.OrderListVO;
+
 public class ProductService {
-	
+
 	private ProductDAO_interface dao;
 
 	public ProductService() {
@@ -15,11 +17,10 @@ public class ProductService {
 	public ProductVO addProduct(String band_id, Integer product_type, String product_name, String product_intro,
 			String product_detail, Double product_price, Integer product_stock, Integer product_check_status,
 			Integer product_status, Timestamp product_on_time, Timestamp product_off_time, Timestamp product_add_time,
-			Double product_discount, Timestamp product_discount_on_time, Timestamp product_discount_off_time, Timestamp product_last_edit_time,
-			String product_last_editor) {
+			Double product_discount, Timestamp product_discount_on_time, Timestamp product_discount_off_time,
+			Timestamp product_last_edit_time, String product_last_editor) {
 		ProductVO productVO = new ProductVO();
-		
-		
+
 		productVO.setBand_id(band_id);
 		productVO.setProduct_type(product_type);
 		productVO.setProduct_name(product_name);
@@ -45,8 +46,8 @@ public class ProductService {
 	public ProductVO updateProduct(String product_id, String band_id, Integer product_type, String product_name,
 			String product_intro, String product_detail, Double product_price, Integer product_stock,
 			Integer product_check_status, Integer product_status, Timestamp product_on_time, Timestamp product_off_time,
-			Timestamp product_add_time, Double product_discount, Timestamp product_discount_on_time, Timestamp product_discount_off_time, Timestamp product_last_edit_time,
-			String product_last_editor) {
+			Timestamp product_add_time, Double product_discount, Timestamp product_discount_on_time,
+			Timestamp product_discount_off_time, Timestamp product_last_edit_time, String product_last_editor) {
 		ProductVO productVO = new ProductVO();
 
 		productVO.setProduct_id(product_id);
@@ -71,21 +72,21 @@ public class ProductService {
 		dao.update(productVO);
 		return productVO;
 	}
-	
+
 	public ProductVO launchProduct(String product_id) {
 		ProductVO productVO = new ProductVO();
 		productVO.setProduct_id(product_id);
 		dao.launch(productVO);
 		return productVO;
 	}
-	
+
 	public ProductVO approvalProduct(String product_id) {
 		ProductVO productVO = new ProductVO();
 		productVO.setProduct_id(product_id);
 		dao.approval(productVO);
 		return productVO;
 	}
-	
+
 	public ProductVO dislaunchProduct(String product_id) {
 		ProductVO productVO = new ProductVO();
 		productVO.setProduct_id(product_id);
@@ -104,35 +105,83 @@ public class ProductService {
 	public List<ProductVO> getAll() {
 		return dao.getAll();
 	}
+
 	public List<ProductVO> getApproval() {
 		return dao.getApproval();
 	}
+
 	public List<ProductVO> getUnapproval() {
 		return dao.getUnapproval();
 	}
-	public List<ProductVO> getBand(String band_id){
+
+	public List<ProductVO> getBand(String band_id) {
 		return dao.getBand(band_id);
 	}
+
+	public List<ProductVO> getBandListByTime(String band_id) {
+		return dao.getBandListByTime(band_id);
+	}
+
 	public List<ProductVO> getTime() {
 		return dao.getTime();
 	}
-	
-	//這是鈺涵的
+
+	public List<OrderListVO> getOrder(String band_id) {
+		return dao.getOrder(band_id);
+	}
+
+	// 這是鈺涵的
 	public List<ProductVO> getAllByBand(String band_id) {
 		Long nowTime = System.currentTimeMillis();
 		List<ProductVO> bandProduct = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
 				.filter(e -> e.getProduct_on_time().getTime() < nowTime)
-				.filter(e -> e.getProduct_off_time().getTime() > nowTime)
-				.filter(e -> e.getProduct_status() == 1)
+				.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
 				.collect(Collectors.toList());
 		return bandProduct;
 	}
 
+	// 這是鈺涵的
+	public List<ProductVO> getAllAvailableProduct() {
+		Long nowTime = System.currentTimeMillis();
+		List<ProductVO> productList = dao.getAll().stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+				.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+				.collect(Collectors.toList());
+		return productList;
+	}
+
+	// 這是鈺涵的
 	public void updateStock(String productId, int stockDifference) {
 		try {
+
 			dao.updateStock(productId, stockDifference);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// 這是鈺涵的
+	public List<ProductVO> findByProductName(String productName) {
+		try {
+			Long nowTime = System.currentTimeMillis();
+			return dao.findByProductName(productName).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+					.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+					.collect(Collectors.toList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// 這是鈺涵的
+	public List<ProductVO> findByProductType(String productType) {
+		Long nowTime = System.currentTimeMillis();
+		try {
+			return dao.findByProductType(productType).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+					.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+					.collect(Collectors.toList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

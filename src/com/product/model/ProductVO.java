@@ -129,5 +129,19 @@ public class ProductVO implements java.io.Serializable {
 	public void setProduct_last_editor(String product_last_editor) {
 		this.product_last_editor = product_last_editor;
 	}
+	@Override
+	public String toString() {
+		return "ProductVO [product_id=" + product_id + ", band_id=" + band_id + ", product_type=" + product_type
+				+ ", product_name=" + product_name + ", product_intro=" + product_intro + ", product_detail="
+				+ product_detail + ", product_price=" + product_price + ", product_stock=" + product_stock
+				+ ", product_check_status=" + product_check_status + ", product_status=" + product_status
+				+ ", product_on_time=" + product_on_time + ", product_off_time=" + product_off_time
+				+ ", product_add_time=" + product_add_time + ", product_discount=" + product_discount
+				+ ", product_discount_on_time=" + product_discount_on_time + ", product_discount_off_time="
+				+ product_discount_off_time + ", product_last_edit_time=" + product_last_edit_time
+				+ ", product_last_editor=" + product_last_editor + "]";
+	}
+	
+	
 	
 }

@@ -22,7 +22,8 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 		"DELETE FROM emp where emp_id = ?";
 	private static final String UPDATE = 
 		"UPDATE emp set emp_password=?, emp_add_time=?, emp_mail=?, emp_phone=?, emp_status=?, emp_auth=?, emp_last_edit_time=?, emp_last_editor=? where emp_id = ?";
-
+	private static final String FIND_BY_Account="select * from emp where emp_Mail = ?";
+	
 	@Override
 	public void insert(EmpVO empVO) {
 
@@ -36,7 +37,7 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 			pstmt = con.prepareStatement(INSERT_STMT);
 
 			
-			pstmt.setBytes(1, empVO.getEmp_password());
+			pstmt.setString(1, empVO.getEmp_password());
 			pstmt.setTimestamp(2, empVO.getEmp_add_time());
 			pstmt.setString(3, empVO.getEmp_mail());
 			pstmt.setString(4, empVO.getEmp_phone());
@@ -91,7 +92,7 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 			pstmt = con.prepareStatement(UPDATE);
 
 			
-			pstmt.setBytes(1, empVO.getEmp_password());
+			pstmt.setString(1, empVO.getEmp_password());
 			pstmt.setTimestamp(2, empVO.getEmp_add_time());
 			pstmt.setString(3, empVO.getEmp_mail());
 			pstmt.setString(4, empVO.getEmp_phone());
@@ -205,7 +206,7 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 				empVO = new EmpVO();
 								
 				empVO.setEmp_id(rs.getString("emp_id"));
-				empVO.setEmp_password(rs.getBytes("emp_password"));
+				empVO.setEmp_password(rs.getString("emp_password"));
 				empVO.setEmp_add_time(rs.getTimestamp("emp_add_time"));
 				empVO.setEmp_mail(rs.getString("emp_mail"));
 				empVO.setEmp_phone(rs.getString("emp_phone"));
@@ -283,7 +284,7 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 				// empVO �]�٬� Domain objects
 				empVO = new EmpVO();
 				empVO.setEmp_id(rs.getString("emp_id"));
-				empVO.setEmp_password(rs.getBytes("emp_password"));
+				empVO.setEmp_password(rs.getString("emp_password"));
 				empVO.setEmp_add_time(rs.getTimestamp("emp_add_time"));
 				empVO.setEmp_mail(rs.getString("emp_mail"));
 				empVO.setEmp_phone(rs.getString("emp_phone"));
@@ -340,6 +341,90 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 		}
 		return list;
 	}
+	//登入
+	@Override
+	public EmpVO findByAccount(String empMail) {
+	
+
+			EmpVO empVO = null;
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+
+				Class.forName(driver);
+				con = DriverManager.getConnection(url, userid, passwd);
+				pstmt = con.prepareStatement(FIND_BY_Account);
+
+				pstmt.setString(1, empMail);
+
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+					// empVo �]�٬� Domain objects
+					empVO = new EmpVO();
+									
+					empVO.setEmp_id(rs.getString("emp_id"));
+					empVO.setEmp_password(rs.getString("emp_password"));
+					empVO.setEmp_add_time(rs.getTimestamp("emp_add_time"));
+					empVO.setEmp_mail(rs.getString("emp_mail"));
+					empVO.setEmp_phone(rs.getString("emp_phone"));
+					empVO.setEmp_status(rs.getInt("emp_status"));
+					empVO.setEmp_auth(rs.getInt("emp_auth"));
+					empVO.setEmp_last_edit_time(rs.getTimestamp("emp_last_edit_time"));
+					empVO.setEmp_last_editor(rs.getString("emp_last_editor"));
+				}
+
+//				System.out.print(empVO.getEmp_id() + ",");
+//				System.out.print(empVO.getEmp_password() + ",");
+//				System.out.print(empVO.getEmp_add_time() + ",");
+//				System.out.print(empVO.getEmp_mail() + ",");
+//				System.out.print(empVO.getEmp_phone() + ",");
+//				System.out.print(empVO.getEmp_status() + ",");
+//				System.out.print(empVO.getEmp_auth() + ",");
+//				System.out.print(empVO.getEmp_last_edit_time() + ",");
+//				System.out.println(empVO.getEmp_last_editor());
+//				
+//				System.out.println("---------------------");
+
+				
+				// Handle any driver errors
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Couldn't load database driver. "
+						+ e.getMessage());
+				// Handle any SQL errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return empVO;
+		}
+	
+	
 	
 	public static void main(String[] args) {
 		
@@ -347,7 +432,7 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 
 		// �s�W
 		EmpVO empVO1 = new EmpVO();
-		empVO1.setEmp_password(new byte[10]);
+		empVO1.setEmp_password("kjijij");
 		empVO1.setEmp_add_time(java.sql.Timestamp.valueOf("2020-12-11 21:37:13"));
 		empVO1.setEmp_mail("dsaf@gmail.com");
 		empVO1.setEmp_phone("0900-00007");
@@ -360,7 +445,7 @@ public class EmpJDBCDAO implements EmpDAO_interface {
 		// �ק�
 		EmpVO empVO2 = new EmpVO();
 		empVO2.setEmp_id("250");
-		empVO2.setEmp_password(new byte[11]);
+		empVO2.setEmp_password("jiji");
 		empVO2.setEmp_add_time(java.sql.Timestamp.valueOf("2020-12-11 21:37:13"));
 		empVO2.setEmp_mail("XXXXX@gmail.com");
 		empVO2.setEmp_phone("0900-06060");

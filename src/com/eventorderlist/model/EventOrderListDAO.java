@@ -7,7 +7,7 @@ import com.event.model.EventVO;
 
 public interface EventOrderListDAO {
 
-	public void insert(Connection con,EventOrderListVO eventOrderListVO);
+	public String insert(Connection con,EventOrderListVO eventOrderListVO);
 
 	public void update(EventOrderListVO eventOrderListVO);
 

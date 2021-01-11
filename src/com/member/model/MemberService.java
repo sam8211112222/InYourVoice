@@ -3,6 +3,8 @@ package com.member.model;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MemberService {
 	private MemberDao_interface memberDao;
@@ -18,8 +20,9 @@ public class MemberService {
 	}
 	public  MemberVo addMember(String memberAccount,String memberPassword,
 			String memberGender,String memberPhone,String memberAddress,String memberName,String memberNickname,java.sql.Date memberBirth,
-			Integer memberMsgAuth,String memberCardNumber,Integer memberCardExpyear,Integer memberCardExpmonth,Timestamp addTime,String bandId) {
+			Integer memberMsgAuth,String memberCardNumber,Integer memberCardExpyear,Integer memberCardExpmonth,Timestamp addTime,String bandId,byte[] memberPhoto) {
 				MemberVo memberVo = new MemberVo();
+				
 				memberVo.setMemberAccount(memberAccount);
 				memberVo.setMemberPassword(memberPassword);
 				memberVo.setMemberGender(memberGender);
@@ -29,9 +32,13 @@ public class MemberService {
 				memberVo.setMemberNickname(memberNickname);
 				memberVo.setMemberBirth(memberBirth);
 				memberVo.setMemberMsgAuth(memberMsgAuth);
+				memberVo.setMemberPhoto(memberPhoto);
 				memberVo.setMemberCardNumber(memberCardNumber);
+				System.out.println(memberCardNumber);
 				memberVo.setMemberCardExpyear(memberCardExpyear);
+				System.out.println(memberCardExpyear);
 				memberVo.setMemberCardExpmonth(memberCardExpmonth);
+				System.out.println(memberCardExpmonth);
 				memberVo.setAddTime(addTime);
 				memberVo.setBandId(bandId);
 				
@@ -108,6 +115,17 @@ public class MemberService {
 	}
 	public void memberSetAuth(MemberVo memberVo,Integer auth) {
 		memberDao.updateAuth(memberVo, auth);
+	}
+	public void updateFromBackEnd(String memberId,String memberPhone,String memberGender,String memberName) {
+		MemberVo memberVo = getOne(memberId);
+		memberVo.setMemberName(memberName);
+		memberVo.setMemberPhone(memberPhone);
+		memberVo.setMemberGender(memberGender);
+		memberDao.updateFromBackEnd(memberVo);
+	}
+	public MemberVo findByBandId(String bandId) {
+		return memberDao.findByBandId(bandId);
+		
 	}
 	
 }

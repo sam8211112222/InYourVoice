@@ -1,6 +1,8 @@
 package com.favorites.model;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 public class FavoritesService {
@@ -51,21 +53,65 @@ public class FavoritesService {
 		return dao.getAll();
 	}
 	
-	public static void main(String[] args) {
-		FavoritesService favoritesService = new FavoritesService();
+// Kevin======================================================================================================
+	public List<FavoritesVO> getMemberFav(String memberId) {
 		
-		// �s�W
-//		favoritesService.addFavorites("1007", 3, "XXX==", java.sql.Timestamp.valueOf("2021-12-11 21:37:13"));
-		// �ק�
-//		favoritesService.updateFavorites("FAVORITES00100", "1006", 3, "XXX", java.sql.Timestamp.valueOf("2020-12-11 21:37:13"));
-		// �R��
-//		favoritesService.deleteFavorites("FAVORITES00100");
-		// �d�� (�浧)
-//		favoritesService.getOneFavorites("FAVORITES00050");
-		// �d�� (����)
-//		favoritesService.getAll();
-		
+		List<FavoritesVO> list  = dao.getAll();
+		Predicate<FavoritesVO> member = f -> f.getMember_id().equals(memberId);
+		List<FavoritesVO> fav = list.stream().filter(member).collect(Collectors.toList());
 
+		return fav;
 	}
+	
+	/**
+	 * added by 鈺涵
+	 * @param memberId
+	 * @param productId
+	 * @return
+	 */
+	public boolean deleteByMemberIdAndProductId(String memberId,String productId) {
+		try {
+			dao.deleteByMemberIdAndProductId(memberId, productId);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	/**
+	 * added by  鈺涵
+	 * @param memberId
+	 * @param productId
+	 * @return
+	 */
+	public FavoritesVO findByMemberIdAndProductId(String memberId,String productId) {
+		try {
+			return dao.findByMemberIdAndProductId(memberId, productId);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+// Test=======================================================================================================	
+//	public static void main(String[] args) {
+//		FavoritesService favoritesService = new FavoritesService();
+//		
+//	
+//		
+//		 �s�W
+//		favoritesService.addFavorites("1007", 3, "XXX==", java.sql.Timestamp.valueOf("2021-12-11 21:37:13"));
+//		 �ק�
+//		favoritesService.updateFavorites("FAVORITES00100", "1006", 3, "XXX", java.sql.Timestamp.valueOf("2020-12-11 21:37:13"));
+//		 �R��
+//		favoritesService.deleteFavorites("FAVORITES00100");
+//		 �d�� (�浧)
+//		favoritesService.getOneFavorites("FAVORITES00050");
+//		 �d�� (����)
+//		favoritesService.getAll();
+//		
+//
+//	}
 	
 }

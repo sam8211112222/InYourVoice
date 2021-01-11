@@ -1,6 +1,5 @@
 package com.event.model;
 
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +9,8 @@ public class EventService {
 	private EventDAO dao;
 
 	public EventService() {
-		dao = new EventJNDIDAO();
+//		dao = new EventJNDIDAO(); // 未完成
+		dao = new EventJDBCDAO();
 	}
 
 	public EventVO addEvent(String band_id, Integer event_type, Integer event_sort, String event_title,
@@ -101,11 +101,28 @@ public class EventService {
 		return bandEvent;
 
 	}
-	
-	//===============================
-	
-		public List<EventVO> getEventByName(String event_title) {
-			return dao.findByName(event_title);
-		}
 
+	public List<EventVO> getEventsForBandManage(String band_id) {
+		List<EventVO> bandEvent = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
+				.collect(Collectors.toList());
+
+		return bandEvent;
+	}
+
+	public List<EventVO> getEventsToConfirm() {
+		return dao.getAll().stream().filter(e -> e.getEvent_status() == 2).collect(Collectors.toList());
+	}
+	
+	public void setEventStatus(EventVO eventVO) {
+		dao.update(eventVO);
+	}
+	
+	// Kevin================================================================================================
+	public List<EventVO> getListEventOrderby(){
+		return dao.eventListOrderBy();
+	}
+	public List<EventVO> getResult(String searchKeyWord){
+	String get_result = "select * from event where event_detail like '%"+searchKeyWord+"%' order by event_start_time desc";
+		return dao.eventSelcet(get_result);
+	}
 }
