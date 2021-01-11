@@ -23,8 +23,45 @@
         <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-minimal.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
     </head>
+    
+    <%
+		BandVO bandVO = (BandVO) request.getAttribute("bandVO");
+	
+		byte[] band_banner = bandVO.getBand_banner();
+		String band_banner_base64 = null;
+		if(band_banner.length!=0){
+			band_banner_base64 = new String (Base64.encodeBase64(band_banner));
+		}
 
-    <body onload="connect();" onunload="disconnect();">
+		byte[] band_photo = bandVO.getBand_photo();
+		String band_photo_base64 = null;
+		if(band_photo.length!=0){
+			band_photo_base64 = new String (Base64.encodeBase64(band_photo));
+		}
+		
+	%>
+    
+    <%
+		MemberVo memeberVO = (MemberVo) session.getAttribute("memberVo");
+		
+		String band_id = bandVO.getBand_id();
+		String member_id = "LogedOutUser";
+		FavoritesService favSvc = new FavoritesService();
+		
+		if(memeberVO!= null){
+			member_id = memeberVO.getMemberId();
+			String member_id_effective_final = member_id;
+			List<FavoritesVO> favoriteVOList = favSvc.getAll().stream()
+				.filter(f -> f.getMember_id().equals( member_id_effective_final ))
+				.filter(f -> f.getFavorite_id().equals(band_id))
+				.collect(Collectors.toList());
+		
+			boolean ifExisted = favoriteVOList.size() > 0;
+			pageContext.setAttribute("ifExisted", ifExisted);
+		}
+	%>
+
+    <body ${memberVO != null ? "onload='connect();' onunload='disconnect();'":""}> 
 
         <!-- start of include header -->
 
@@ -40,22 +77,7 @@
                         <!-- <img class="band_banner" src="https://i.imgur.com/7HD0bkf.jpg" alt=""> -->
                         <!-- http://fakeimg.pl/440x300/282828/EAE0D0/?text=PJCHENder -->
 <!-- 	                    <img class="band_banner" src="http://fakeimg.pl/1920x360?text=Band_Banner" alt=""> -->
-						<%
-							BandVO bandVO = (BandVO) request.getAttribute("bandVO");
 						
-							byte[] band_banner = bandVO.getBand_banner();
-							String band_banner_base64 = null;
-							if(band_banner.length!=0){
-								band_banner_base64 = new String (Base64.encodeBase64(band_banner));
-							}
-
-							byte[] band_photo = bandVO.getBand_photo();
-							String band_photo_base64 = null;
-							if(band_photo.length!=0){
-								band_photo_base64 = new String (Base64.encodeBase64(band_photo));
-							}
-							
-						%>
 	                    <!-- <img class="band_banner" src="data:image/gif;base64,<%= band_banner_base64 %>" alt=""> -->
 <!--                         
                     </div>
@@ -178,24 +200,11 @@
                         <li class="nav-item ml-auto col-4" style="color:blue; font-size: 20px;">追蹤數<div class="odometer animated fadeIn" id="odometer"></div></li>
                         <li class="nav-item ml-auto col-md-4 col-lg-3 col-xl-2">
 
-						<%
-							MemberVo memeberVO = (MemberVo) session.getAttribute("memberVo");
-							String member_id = memeberVO.getMemberId();
-							
-							String band_id = bandVO.getBand_id();
-							
-							
-							FavoritesService favSvc = new FavoritesService();
-							List<FavoritesVO> favoriteVOList = favSvc.getAll().stream()
-								.filter(f -> f.getMember_id().equals( member_id ))
-								.filter(f -> f.getFavorite_id().equals(band_id))
-								.collect(Collectors.toList());
 						
-							boolean ifExisted = favoriteVOList.size() > 0;
-							pageContext.setAttribute("ifExisted", ifExisted);
-						%>
 						
 						<c:choose>
+						
+							<c:when test="${memeberVO ==null}"></c:when>
 						
 						    <c:when test="${ifExisted }">
 								<a data-ga-on="click" data-ga-event-category="follow"
@@ -393,10 +402,6 @@
 			      
 			      // TODO: To increase all numbers independently
 			      // TODO: Randomize fadeIn of different digits
-					
-			      
-			      	
-
             })
             
            			var MyPoint = "/FolloWS/<%=member_id%>";

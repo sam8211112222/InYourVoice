@@ -76,7 +76,7 @@ header{
 }
 
 .logo{
-    width: 60px;
+    width: 250px;
     margin-left: 40px;
     position: relative;
     cursor: pointer;
@@ -146,7 +146,7 @@ header{
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="logo">
-				<a class="navbar-brand" href="<%=request.getContextPath()%>/index.jsp"><img src="<%=request.getContextPath()%>/images/logo2.jpg"></a>
+				<a class="navbar-brand" href="#"><img src="<%=request.getContextPath()%>/images/logo.png"></a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -154,38 +154,41 @@ header{
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li> -->
 					<li class="nav-item"><a class="nav-link" href="#">活動資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">樂團資訊</a></li>
+					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/band/band.do?action=listAllBand">樂團資訊</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">周邊商品</a></li>
 
 					<!-- <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li> -->
-					<form action="<%= request.getContextPath() %>/album/album.do" method="get" class="form-inline my-2 my-lg-0">
-						<input class="form-control mr-sm-2" type="search" placeholder="搜尋" aria-label="Search" name="search" id="search" value="${name}">
-						<input type="hidden" name="action" value="searchName">
+					<form action="<%=request.getContextPath()%>/album/album.do" method="get" class="form-inline my-2 my-lg-0">
+						<input class="form-control mr-sm-2" type="search" placeholder="搜尋" aria-label="Search" name="search" id="search"> <input type="hidden" name="action" value="searchName">
 						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋</button>
 					</form>
 				</ul>
 			</div>
-					<!-- 小鈴鐺   -->
-	        <div class="dropdown dropleft">
-	             
-	            <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	                <div class="notice">
-	                    <span class="notice-number">1</span>
-	                <i class="fas fa-bell" style="color: dimgrey;"></i>   
-	                </div>
-	            </div>
-	            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-	                <a class="dropdown-item" href="#">通知</a>
-	                <a class="dropdown-item" href="#">通知</a>
-	                <a class="dropdown-item" href="#">通知</a>
-	                <a class="dropdown-item" href="#">通知</a>
-	                <a class="dropdown-item" href="#">通知</a>
-	            </div>
-	        </div> 
-			
-			<div class="dropdown dropleft">
+
+		</nav>
+		
+		<!-- 小鈴鐺   -->
+        <div class="dropdown dropleft">
+             
+            <div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div class="notice">
+                    <span class="notice-number">1</span>
+                <i class="fas fa-bell" style="color: dimgrey;"></i>   
+                </div>
+            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+                <a class="dropdown-item" href="#">通知</a>
+            </div>
+        </div> 
+		
+		
+		<div class="dropdown dropleft">
 			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<!-- <img src="./images/logo.jpg"> -->
 				<i class="far fa-user"></i>
