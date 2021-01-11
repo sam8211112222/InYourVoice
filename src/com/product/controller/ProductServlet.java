@@ -702,7 +702,8 @@ public class ProductServlet extends HttpServlet {
 				productVO = ProductSvc.launchProduct(product_id);
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("productVO", productVO); // 資料庫update成功後,正確的的productVO物件,存入req
-				String url = "/back-end/product/protect/listAllProductFinal.jsp";
+//				String url = "/back-end/product/protect/listAllProductFinal.jsp";
+				String url = "/back-end/product/protect/listAllProductManagement.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 				
@@ -745,7 +746,8 @@ public class ProductServlet extends HttpServlet {
 				productVO = ProductSvc.dislaunchProduct(product_id);
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("productVO", productVO); // 資料庫update成功後,正確的的productVO物件,存入req
-				String url = "/back-end/product/protect/listAllProductFinal.jsp";
+//				String url = "/back-end/product/protect/listAllProductFinal.jsp";
+				String url = "/back-end/product/protect/listAllProductManagement.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); 
 				successView.forward(req, res);
 				
@@ -788,7 +790,7 @@ public class ProductServlet extends HttpServlet {
 				productVO = ProductSvc.approvalProduct(product_id);
 				/***************************3.修改完成,準備轉交(Send the Success view)*************/
 				req.setAttribute("productVO", productVO); // 資料庫update成功後,正確的的productVO物件,存入req
-				String url = "/back-end/product/protect/listAllProductUnapprovalEnd.jsp";
+				String url = "/back-end/product/protect/listAllProductUnapproval.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); 
 				successView.forward(req, res);
 				

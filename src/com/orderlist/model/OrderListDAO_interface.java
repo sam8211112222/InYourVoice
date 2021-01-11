@@ -24,4 +24,7 @@ public interface OrderListDAO_interface {
 	public void updeteReview(OrderListVO orderListVO);
 	
 	List<ReviewVO> findReviewByProductId(String productId);
+	
+	//Sam added
+		List<OrderListVO> findByOrderIdB(String order_Id);
 }
