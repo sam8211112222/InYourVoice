@@ -179,7 +179,9 @@ public class bandServlet extends HttpServlet {
 			if (searchKeyWord == null || searchKeyWord.length() == 0) {
 				System.out.println("no searchKeyWord");
 				// list all
-				List<BandVO> bandVOList = bandSvc.getAllBand();
+				List<BandVO> bandVOList = bandSvc.getAllBand().stream()
+						.filter(b -> b.getBand_status() == 1)
+						.collect(Collectors.toList());
 				req.setAttribute("bandVOList", bandVOList);
 				String url = "/front-end/band/listAllBand.jsp";
 				RequestDispatcher listAllView = req.getRequestDispatcher(url);
@@ -460,10 +462,20 @@ public class bandServlet extends HttpServlet {
 			failureView.forward(req, res);
 		}
 		
-		
-		
-	}
+		// 冠華
+		//這是新增的搜尋方法	
+				if ("searchName".equals(action)) {
 
+					String name = req.getParameter("search");
+
+					req.getSession().setAttribute("name", name);
+					res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
+				}
+
+		
+		
+		
 	}
+	
 }
 

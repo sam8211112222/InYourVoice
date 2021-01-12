@@ -804,6 +804,16 @@ public class ProductServlet extends HttpServlet {
 			}
 			System.out.println("approval測試成功");
 		}
+		
+		//冠華
+		//這是新增的搜尋方法
+		if ("searchName".equals(action)) {
+
+			String name = req.getParameter("search");
+
+			req.getSession().setAttribute("name", name);
+			res.sendRedirect(req.getContextPath() + "/front-end/query/query_product.jsp");
+		}
 
 	}
 }

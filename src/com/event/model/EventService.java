@@ -134,4 +134,10 @@ public class EventService {
 	String get_result = "select * from event where event_detail like '%"+searchKeyWord+"%' order by event_start_time desc";
 		return dao.eventSelcet(get_result);
 	}
+	
+	//冠華
+	//這是新增的搜尋方法
+		public List<EventVO> getEventByName(String event_title) {
+			return dao.findByName(event_title);
+		}
 }

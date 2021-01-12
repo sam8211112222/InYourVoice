@@ -19,5 +19,10 @@ public interface BandDAO_interface extends ConnectionInfo {
 	public BandVO updateBandIntro(BandVO bandVO, String bandIntro);
 	void insertBand(BandVO bandVO, MemberVo memberVo);
 	
+	// 冠華
+	//這是新增的搜尋方法  與  拿圖片
+    public List<BandVO> findByName(String band_name);
+    public BandVO getBandPhoto(String band_id);
+	
 
 }

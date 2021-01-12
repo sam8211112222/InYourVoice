@@ -59,7 +59,9 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 	private static final String GET_BANDLISTBYTIME = "SELECT * FROM product WHERE band_id =? ORDER BY product_last_edit_time DESC";
 	private static final String GET_TIME = "SELECT * FROM product ORDER BY product_last_edit_time DESC";
 	private static final String GET_ORDER = "SELECT p.band_id, o.orderlist_id, o.order_id, o.product_id, o.orderlist_goods_amount,o.orderlist_remarks,o.review_score, o.review_msg, o.review_time, o.review_hidden, o.price FROM product p,orderlist o WHERE p.product_id=o.product_id AND p.band_id = ?";	
-	
+	//這是新增的搜尋方法
+		private static final String GET_PRODUCT_BYNAME_PSTMT = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME LIKE ?";
+
 	
 	
 	/**
@@ -1148,6 +1150,82 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		}
 		return list;
 	}
+	
+	//冠華
+	//這是新增的搜尋方法
+		@Override
+		public List<ProductVO> findByName(String product_name) {
+			List<ProductVO> list = new ArrayList<>();
+			ProductVO productVO = null;
+
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				Class.forName(driver);
+				conn = DriverManager.getConnection(url, userid, passwd);
+				pstmt = conn.prepareStatement(GET_PRODUCT_BYNAME_PSTMT);
+
+				pstmt.setString(1, "%" + product_name + "%");
+				
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+
+					productVO = new ProductVO();
+					productVO.setProduct_id(rs.getString("product_id"));
+					productVO.setBand_id(rs.getString("band_id"));
+					productVO.setProduct_type(rs.getInt("product_type"));
+					productVO.setProduct_name(rs.getString("product_name"));
+					productVO.setProduct_intro(rs.getString("product_intro"));
+					productVO.setProduct_detail(rs.getString("product_detail"));
+					productVO.setProduct_price(rs.getDouble("product_price"));
+					productVO.setProduct_stock(rs.getInt("product_stock"));
+					productVO.setProduct_check_status(rs.getInt("product_check_status"));
+					productVO.setProduct_status(rs.getInt("product_status"));
+					productVO.setProduct_on_time(rs.getTimestamp("product_on_time"));
+					productVO.setProduct_off_time(rs.getTimestamp("product_off_time"));
+					productVO.setProduct_add_time(rs.getTimestamp("product_add_time"));
+					productVO.setProduct_discount(rs.getDouble("product_discount"));
+					productVO.setProduct_discount_on_time(rs.getTimestamp("product_discount_on_time"));
+					productVO.setProduct_discount_off_time(rs.getTimestamp("product_discount_off_time"));
+					productVO.setProduct_last_edit_time(rs.getTimestamp("product_last_edit_time"));
+					productVO.setProduct_last_editor(rs.getString("product_last_editor"));
+					list.add(productVO);
+				}
+
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace(System.err);
+			} catch (SQLException e) {
+				e.printStackTrace(System.err);
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+
+			}
+
+			return list;
+		}
 
 //	public static void main(String[] args) {
 //
