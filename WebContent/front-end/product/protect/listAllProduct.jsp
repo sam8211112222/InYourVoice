@@ -52,6 +52,7 @@
 
 		<%@ include file="/front-end/header_footer/header.jsp"%>
 	<%@ include file="/css/member/member_center_top.file"%>
+	<%@ include file="page1.file" %>
 	<c:forEach var="productVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 	<tr>
 		<th>°Ó«~½s¸¹</th>

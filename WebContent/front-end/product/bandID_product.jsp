@@ -44,7 +44,7 @@ margin:0px 0px 5px 0px;
 		</div>
 	</div>
 	<a href="<%=request.getContextPath()%>/front-end/cart/cart_page.jsp">購物車</a>
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/*"></script>
-<script src="<%=request.getContextPath()%>/vendors/jquery/*"></script>
+<%-- 	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/*"></script> --%>
+<%-- <script src="<%=request.getContextPath()%>/vendors/jquery/*"></script> --%>
 </body>
 </html>
