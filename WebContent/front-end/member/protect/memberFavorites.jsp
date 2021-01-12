@@ -4,12 +4,26 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.member.model.*"%>
 <%@ page import="com.favorites.model.*"%>
+<%@ page import="com.pieces.model.*"%>
 <%@ page import="java.util.*"%>
+<%@page import="com.google.gson.Gson"%>
 <%
+	Gson gson = new Gson();
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
 	FavoritesService favSvc = new FavoritesService();
+	PiecesService piecesSvc = new PiecesService();
 	List<FavoritesVO> listFav = favSvc.getMemberFav(memberVo.getMemberId());
 	session.setAttribute("list", listFav);
+	List<String> playList = new ArrayList<String>();
+	List<String> nameList = new ArrayList<String>();
+	for(FavoritesVO li :listFav){
+		if(li.getFavorite_type()==3){
+			playList.add(li.getFavorite_id());
+			nameList.add(piecesSvc.getOnePiece(li.getFavorite_id()).getPiece_name());
+		}
+	}
+	pageContext.setAttribute("playList", gson.toJson(playList));
+	pageContext.setAttribute("nameList", gson.toJson(nameList));
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +37,8 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
 	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/aplayer/1.10.1/APlayer.min.css">
 <style>
 .wrap {
 	width: 80%;
@@ -53,17 +69,19 @@ header {
 
 .card {
 	width: 150px;
-	height:200px;
+	height: 200px;
 	overflow: hidden;
 }
 
 .card img {
 	width: 148px;
-	height:148px;
+	height: 148px;
 }
 </style>
 <body>
+	<%@ include file="/front-end/header_footer/header.jsp"%>
 	<%@ include file="/css/member/member_center_top.file"%>
+
 	<h2 class="mt-5 mb-5">我的最愛</h2>
 	<div class="wrap">
 		<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -103,62 +121,75 @@ header {
 			</div>
 			<div class="tab-pane fade" id="profile" role="tabpanel"
 				aria-labelledby="profile-tab">
-				<div class="row row-cols-1 row-cols-md-3">
-					<div class="col mb-4">
-						<div class="card">
-							<img src="./img/活動圖7.jpg" class="card-img-top" alt="...">
-							<div class="card-body">
-								<h5 class="card-title">oxo活動</h5>
-								<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-							</div>
-						</div>
-					</div>
-
-				</div>
+				<div class="aplayer" id="player1"></div>
 			</div>
-			<div class="tab-pane fade" id="contact" role="tabpanel"
-				aria-labelledby="contact-tab">
-				<div class="row row-cols-1 row-cols-md-3">
-					<div class="col mb-4">
-						<div class="card">
-							<img src="./img/活動圖3.jpg" class="card-img-top" alt="...">
-							<div class="card-body">
-								<h5 class="card-title">ooo活動</h5>
-								<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-							</div>
-						</div>
+	<div class="tab-pane fade" id="contact" role="tabpanel"
+		aria-labelledby="contact-tab">
+		<div class="row row-cols-1 row-cols-md-3">
+			<div class="col mb-4">
+				<div class="card">
+					<img src="./img/活動圖3.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">ooo活動</h5>
+						<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="contact1" role="tabpanel"
-				aria-labelledby="contact-tab">
-				<div class="row row-cols-1 row-cols-md-3">
-					<div class="col mb-4">
-						<div class="card">
-							<img src="./img/活動圖3.jpg" class="card-img-top" alt="...">
-							<div class="card-body">
-								<h5 class="card-title">ooo活動</h5>
-								<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-							</div>
-						</div>
+		</div>
+	</div>
+	<div class="tab-pane fade" id="contact1" role="tabpanel"
+		aria-labelledby="contact-tab">
+		<div class="row row-cols-1 row-cols-md-3">
+			<div class="col mb-4">
+				<div class="card">
+					<img src="./img/活動圖3.jpg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">ooo活動</h5>
+						<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+</div>
+</div>
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
 
+		<%@ include file="/css/member/member_center_bottom.file"%>
+		<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+		<script>
+			ap1 = new APlayer({
+				element: document.getElementById("player1"),
+				narrow: false,
+				autoplay: true,
+				showlrc: false,
+				fixed: false,
+				// volume: 0,
+				mutex: true,
+				listFolded: false,
+				listMaxHeight: 90,
 
-
-			<!-- Optional JavaScript -->
-			<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-			<script
-				src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-				integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-				crossorigin="anonymous"></script>
-			<script
-				src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
-
-
-			<%@ include file="/css/member/member_center_bottom.file"%>
+			});
+			
+			let playList=${playList};
+			let nameList=${nameList};
+			console.log(nameList);
+			
+			$(function(){	        		 
+				for(let i =0;i<playList.length;i++){
+					console.log(playList[i]);
+			        	ap1.list.add([{
+		     			name: nameList[i],
+		      			artist: " ",
+		                url: "<%=request.getContextPath()%>/pieces/pieces.do?action=getPiece&piece_id="+playList[i],
+		                cover: "<%=request.getContextPath()%>/album/album.do?action=getPhotoByPieces&piecesId="+ playList[i],
+							} ]);
+				}
+			});
+			
+		</script>
+		
 </body>
 </html>

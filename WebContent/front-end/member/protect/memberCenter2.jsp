@@ -4,12 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.member.model.*"%>
 <%@ page import="java.util.*"%>
-<%
-	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
-%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,8 +18,8 @@
 	crossorigin="anonymous">
 
 <body>
-
-	<%@ include file="/css/member/member_center_top.file" %>
+	<%@ include file="/front-end/header_footer/header.jsp"%>
+	<%@ include file="/css/member/member_center_top.file"%>
 
 				<div class="container content clear-fix">
 
@@ -130,13 +125,8 @@
 	
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script src="<%=request.getContextPath() %>/js/jquery/jquery-3.5.1.min.js"></script>
-
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 	<script>
 		$("#pic2").on("click", function() {
 			$("#pic").click();
@@ -193,6 +183,7 @@
 				memberCardExpyear : memberCardExpyear,
 				memberCardExpmonth : memberCardExpmonth,
 			}
+			if(){
 			$.ajax({
 				type : "POST",
 				url : "/TEA102G6/Login",
@@ -204,8 +195,8 @@
 					alert("系統錯誤");
 				}
 			});
+			}
 		});
 	</script>
-	    <%@ include file="/css/member/member_center_bottom.file" %>
 </body>
 </html>

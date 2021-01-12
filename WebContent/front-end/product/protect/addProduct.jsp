@@ -24,7 +24,7 @@
 	href="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.css" />
 </head>
 <body bgcolor='white'>
-	
+		<%@ include file="/front-end/header_footer/header.jsp"%>
 	<%@ include file="/css/member/member_center_top.file"%>
 	<div id="table-1">商品資料新增</div>
 
@@ -224,6 +224,8 @@
 			product_last_edit_time = new java.sql.Timestamp(System.currentTimeMillis());
 		}
 	%>
+		<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 	<script
 		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.js"></script>
 	<script
@@ -341,6 +343,6 @@
 		//              return [true, ""];
 		//      }});
 	</script>
-	<%@ include file="/css/member/member_center_bottom.file"%>
+
 </body>
 </html>

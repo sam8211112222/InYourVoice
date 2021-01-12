@@ -50,7 +50,8 @@
 <div class="table">
 <table>
 
-	<%@ include file="page1.file" %> 
+		<%@ include file="/front-end/header_footer/header.jsp"%>
+	<%@ include file="/css/member/member_center_top.file"%>
 	<c:forEach var="productVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 	<tr>
 		<th>°Ó«~½s¸¹</th>
@@ -135,6 +136,7 @@
 </table>
 <%@ include file="page2.file" %>
 </div>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

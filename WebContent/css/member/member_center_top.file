@@ -55,11 +55,11 @@
                                 <i class="fas fa-heart"></i>
                                 <span class="ml-2 text-sm font-medium">我的最愛</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/orders/protect/myOrders.jsp">
                                 <i class="far fa-file-alt"></i>
                                 <span class="ml-2 text-sm font-medium">我的訂單</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">
                                 <i class="fas fa-shopping-cart"></i>
                                 <span class="ml-2 text-sm font-medium">購物車</span>
                             </a>
@@ -71,19 +71,19 @@
                         <c:if test="${memberVo.bandId!=null}">
                         <div class="flex flex-col items-center w-full mt-2 border-t border-gray-300">
                      
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/protect/member/band.jsp">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/member/protect/band.jsp">
                                 <i class="fas fa-drum"></i>
                                 <span class="ml-2 text-sm font-medium">樂團資訊</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/product/protect/select_page.jsp">
                                 <i class="fas fa-store"></i>
                                 <span class="ml-2 text-sm font-medium">賣場管理</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/band/protect/album_management.jsp">
                                 <i class="fas fa-music"></i>
                                 <span class="ml-2 text-sm font-medium">作品管理</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="#">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/event/protect/bandmanage.jsp">
                                 <i class="fas fa-calendar-alt"></i>
                                 <span class="ml-2 text-sm font-medium">活動管理</span>
                             </a>
@@ -92,12 +92,7 @@
                        </c:if>
                     </div>
                     
-                    <a class="flex items-center justify-center w-full h-16 mt-auto bg-gray-200 hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/member/memberCenter2.jsp">
-                        <svg class="w-6 h-6 stroke-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span class="ml-2 text-sm font-medium">Account</span>
-                    </a>
+                    
                 </div>
         
                 <!-- Component End  -->
