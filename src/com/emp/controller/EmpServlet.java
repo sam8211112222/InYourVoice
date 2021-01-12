@@ -51,7 +51,7 @@ public class EmpServlet extends HttpServlet {
 				session.setAttribute("empVO", empVO);
 				
 				String path = req.getContextPath();
-				res.sendRedirect(path+"/back-end/backEndHome.jsp");
+				res.sendRedirect(path+"/back-end/member/memberList.jsp");
 			}
 		
 		}
