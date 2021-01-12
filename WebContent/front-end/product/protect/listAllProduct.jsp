@@ -18,29 +18,29 @@
 
 <html>
 <head>
-<title>�Ҧ��ӫ~��� </title>
+<title>所有商品資料 </title>
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
 <%@ include file="/front-end/header_footer/header.jsp"%>
 <%@ include file="/css/member/member_center_top.file"%>
 <div id="table-1">
-	�Ҧ��ӫ~��� 
+	所有商品資料 
 </div>
 
 <div id="select" align="center">
-<a href='<%=request.getContextPath()%>/front-end/product/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/select_page.jsp')">�^�ӫ~����</button></a>
-<a href='<%=request.getContextPath()%>/front-end/product/protect/addProduct.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/addProduct.jsp')">�s�W�ӫ~</button></a>
-<a href='<%=request.getContextPath()%>/front-end/product/protect/listAllOrdersBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/listAllOrdersBandView.jsp')">�C�X�ӫ~�q��</button></a>
+<a href='<%=request.getContextPath()%>/front-end/product/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/select_page.jsp')">回商品首頁</button></a>
+<a href='<%=request.getContextPath()%>/front-end/product/protect/addProduct.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/addProduct.jsp')">新增商品</button></a>
+<a href='<%=request.getContextPath()%>/front-end/product/protect/listAllOrdersBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/listAllOrdersBandView.jsp')">列出商品訂單</button></a>
 </div>
 <div id="select" align="center">
-<a href='<%=request.getContextPath()%>/front-end/product/protect/listAllTicketBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/listAllTicketBandView.jsp')">�C�X�����q��</button></a>
-<a href='<%=request.getContextPath()%>/front-end/productphoto/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/productphoto/protect/select_page.jsp')">�ӫ~�Ӥ�����</button></a>
+<a href='<%=request.getContextPath()%>/front-end/product/protect/listAllTicketBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/listAllTicketBandView.jsp')">列出票卷訂單</button></a>
+<a href='<%=request.getContextPath()%>/front-end/productphoto/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/productphoto/protect/select_page.jsp')">商品照片首頁</button></a>
 </div>
 
-<%-- ���~���C --%>
+<%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
-	<font style="color:red">�Эץ��H�U���~:</font>
+	<font style="color:red">請修正以下錯誤:</font>
 	<ul>
 		<c:forEach var="message" items="${errorMsgs}">
 			<li style="color:red">${message}</li>
@@ -51,24 +51,22 @@
 <div class="table">
 <table>
 
-		
-	
 	<%@ include file="page1.file" %>
 	<c:forEach var="productVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 	
 	<tr>
-		<th>�ӫ~�s��</th>
-		<th>�ֹνs��</th>
-		<th>�ӫ~����</th>
-		<th>�ӫ~�W��</th>
-		<th>�ӫ~²��</th>
-		<th>�ӫ~�Բӻ���</th>
-		<th>�ӫ~���</th>
-		<th>�ӫ~�w�s�q</th>
-		<th>�f�֪��A</th>
-		<th>�W�U�[���A</th>
-		<th>�w�p�W�[�ɶ�</th>
-		<th>�w�p�U�[�ɶ�</th>
+		<th>商品編號</th>
+		<th>樂團編號</th>
+		<th>商品分類</th>
+		<th>商品名稱</th>
+		<th>商品簡介</th>
+		<th>商品詳細說明</th>
+		<th>商品單價</th>
+		<th>商品庫存量</th>
+		<th>審核狀態</th>
+		<th>上下架狀態</th>
+		<th>預計上架時間</th>
+		<th>預計下架時間</th>
 	</tr>
 		<tr>
 			<td>${productVO.product_id}</td>
@@ -76,13 +74,13 @@
 			<td>
 			<c:choose>
 			<c:when test="${productVO.product_type == 1}">
-			  �W��
+			  上衣
 			</c:when>
 			<c:when test="${productVO.product_type == 2}">
-			  �Ǥl
+			  褲子
 			</c:when>
 			<c:otherwise>
-			�t��
+			配件
 			</c:otherwise>
 			</c:choose>
 			</td>
@@ -94,20 +92,20 @@
 			<td>
 			<c:choose>
 			<c:when test="${productVO.product_check_status == 1}">
-			  �w�f��
+			  已審核
 			</c:when>
 			<c:otherwise>
-			�ݼf��
+			待審核
 			</c:otherwise>
 			</c:choose>
 			</td>
 			<td>
 			<c:choose>
 			<c:when test="${productVO.product_status == 1}">
-			  �W�[
+			  上架
 			</c:when>
 			<c:otherwise>
-			�U�[
+			下架
 			</c:otherwise>
 			</c:choose>
 			</td>
@@ -115,12 +113,12 @@
 			<td><fmt:formatDate value="${productVO.product_off_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 		</tr>
 		<tr>
-		<th>�馩</th>
-		<th>�馩�}�l�ɶ�</th>
-		<th>�馩�����ɶ�</th>
-		<th>�̫�ק�ɶ�</th>
-		<th>�̫�ק��</th>
-		<th>�ק�</th>	
+		<th>折扣</th>
+		<th>折扣開始時間</th>
+		<th>折扣結束時間</th>
+		<th>最後修改時間</th>
+		<th>最後修改者</th>
+		<th>修改</th>	
 		</tr>
 		<tr>
 			<td>${productVO.product_discount}</td>
@@ -130,7 +128,7 @@
 			<td>${productVO.product_last_editor}</td>
 			<td>
 			  <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/product/product.do" style="margin-bottom: 0px;">
-			     <input type="submit" value="�ק�" id="submit">
+			     <input type="submit" value="修改" id="submit">
 			     <input type="hidden" name="product_id"  value="${productVO.product_id}">
 			     <input type="hidden" name="action"	value="getOne_For_Update"></FORM>
 			</td>
