@@ -50,6 +50,7 @@
 <!-- Custom styles for this template -->
 </head>
 <body class="text-center">
+		<%@ include file="/front-end/header_footer/header.jsp"%>
 	<%@ include file="/css/member/member_center_top.file"%>
 	<form class="form1">
 		<div class="form-group row">
@@ -80,15 +81,9 @@
 		</div>
 		<button type="button" class="btn btn-outline-success" id="confrim">確認</button>
 	</form>
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
-	<script
-		src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-		crossorigin="anonymous"></script>
+	<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+	
 	<script>
 	
 	
@@ -152,6 +147,5 @@
 							}
 						});
 	</script>
-	<%@ include file="/css/member/member_center_bottom.file"%>
 </body>
 </html>

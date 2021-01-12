@@ -59,6 +59,9 @@ public class Login extends HttpServlet {
 		}
 		
 		if(errors!=null && !errors.isEmpty()) {
+			MemberVo memberVo = new MemberVo();
+			memberVo.setMemberAccount(memberAccount);
+			request.setAttribute("memberVo", memberVo);
 			request.getRequestDispatcher(
 					"/front-end/member/Login.jsp").forward(request, response);
 			return;
@@ -74,7 +77,7 @@ public class Login extends HttpServlet {
 			session.setAttribute("memberVo", memberVo);
 			
 			String path = request.getContextPath();
-			response.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
+			response.sendRedirect(path+"/index.jsp");
 		}
 		}
 		//ajax 驗證註冊帳號
@@ -205,7 +208,7 @@ public class Login extends HttpServlet {
 //			if(memberBirth==null) {
 //				errors.put("birth", "請選擇生日");
 //			}
-			Integer memberMsgAuth = 1; //預設1
+			Integer memberMsgAuth = 0; //預設1
 			String memberCardNumber = "0"; //預設
 			Integer memberCardExpyear = 0;
 			Integer memberCardExpmonth = 0;
@@ -264,7 +267,7 @@ public class Login extends HttpServlet {
 //			successView.forward(request, response);
 			
 			}
-		//更換帳號
+		//更換帳號資訊
 		
 		if("updateac".equals(str)) {
 		
@@ -330,6 +333,7 @@ public class Login extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.invalidate();
 		}
+		//照片顯示
 		if("picDisplay".equals(memberpic)) {
 			String id = (String)request.getParameter("memberId");
 			MemberService memberSvc = new MemberService();
@@ -352,6 +356,7 @@ public class Login extends HttpServlet {
 			jedis.close();
 			response.sendRedirect("http://localhost:8081/TEA102G6/front-end/member/Login.jsp");
 		}
+		//忘記密碼
 		if("forgetPassword".equals(str)) {
 			String password = (String)request.getParameter("memberPassword");
 			HttpSession session = request.getSession();
@@ -408,6 +413,7 @@ public class Login extends HttpServlet {
 			byte[] memberPhoto = new byte[in.available()];
 			in.read(memberPhoto);
 			memberSvc.addMember(memberAccount, memberPassword, memberGender, memberPhone, memberAddress, memberName, memberNickname, memberBirth, memberMsgAuth, memberCardNumber, memberCardExpyear, memberCardExpmonth, addTime, bandId, memberPhoto);
+			in.close();
 		}
 }
 	

@@ -1,6 +1,9 @@
 package com.member.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import com.emp.model.EmpService;
 import com.emp.model.EmpVO;
+import com.google.gson.Gson;
 import com.member.model.MemberService;
 import com.member.model.MemberVo;
 
@@ -64,65 +68,129 @@ public class BackendController extends HttpServlet {
 		}
 		if ("addMember".equals(str)) {
 			String memberAccount = request.getParameter("memberAccount");
-			Map<String, String> errors = new HashMap<String, String>();
-			request.setAttribute("errors", errors);
+			Gson gson = new Gson();
+			Map<String,String> msg = new HashMap<String,String>();
+			PrintWriter pw = response.getWriter();
 			MemberService memberSvc = new MemberService();
-			String accountReg = "^[a-z0-9A-Z]+@{1}";
-			if (memberSvc.findByAccount(memberAccount) != null) {
-				errors.put("account", "帳號重複囉");
-			}
-			if (memberAccount == null || memberAccount.trim().isEmpty()) {
-				errors.put("account2", "請輸入帳號");
-			}
-			if (memberAccount.matches(accountReg)) {
-				errors.put("account2", "帳號格式有誤");
-			}
 			String memberPassword = request.getParameter("memberPassword");
-			if (memberPassword == null || memberPassword.trim().isEmpty()) {
-				errors.put("password", "請輸入密碼");
-			}
+
 			String memberGender = request.getParameter("memberGender");
-			if (memberGender == null || memberGender.trim().isEmpty()) {
-				errors.put("gender", "請勾選性別");
-			}
 			String memberPhone = request.getParameter("memberPhone");
-			String phoneReg = "^0(9)[0-9]{8}$";
-			if (!(memberPhone.matches(phoneReg)) && !(memberPhone.length() == 10)) {
-				errors.put("phone", "手機格式有誤");
-			}
 			String memberAddress = request.getParameter("memberAddress");
-			if (memberAddress == null || memberAddress.trim().isEmpty()) {
-				memberAddress = null;
-			}
 			String memberName = request.getParameter("memberName");
-			if (memberName == null || memberName.trim().isEmpty()) {
-				errors.put("name", "請輸入名字");
-			}
+			
 			String memberNickname = request.getParameter("memberNickname");
-			if (memberName == null || memberName.trim().isEmpty()) {
-				memberNickname = null;
+			if(memberName==null||memberName.trim().isEmpty()) {
+				memberNickname = "";
 			}
-			String memberBirth = request.getParameter("memberBirth");
-			if (memberBirth == null) {
-				errors.put("memberBirth", "請選擇生日");
-			}
-			Integer memberMsgAuth = 1; // 預設1
-			String memberCardNumber = null;
+			
+			java.sql.Date memberBirth = java.sql.Date.valueOf(request.getParameter("memberBirth").trim());
+
+			Integer memberMsgAuth = 1; //預設1
+			String memberCardNumber = "0"; //預設
 			Integer memberCardExpyear = 0;
 			Integer memberCardExpmonth = 0;
 			java.util.Date date = new java.util.Date();
 			Timestamp addTime = new Timestamp(date.getTime());
 			String bandId = null;
+			InputStream in = new FileInputStream(getServletContext().getRealPath("/images/無圖片.png"));
+			byte[] memberPhoto = new byte[in.available()];
+			in.read(memberPhoto);
 
-			if (errors != null && !errors.isEmpty()) {
-				request.getRequestDispatcher("/back-end/addMember.jsp").forward(request, response);
-				return;
-			}
+			memberSvc.addMember(memberAccount, memberPassword, memberGender, memberPhone, memberAddress, memberName, memberNickname, memberBirth, memberMsgAuth, memberCardNumber, memberCardExpyear, memberCardExpmonth, addTime, bandId, memberPhoto);
 
-			System.out.println("註冊成功");
-			RequestDispatcher successView = request.getRequestDispatcher("/back-end/AllMember.jsp"); // 新增成功後轉交listAllEmp.jsp
-			successView.forward(request, response);
+			msg.put("msg", "true");
+			msg.put("status","新增成功");								
+			pw.write(gson.toJson(msg));				
+			pw.close();
 		}
+		//ajax 驗證註冊帳號
+				if("accountMatche".equals(str)) {
+					String memberAccount = request.getParameter("memberAccount");
+					MemberService memberSvc = new MemberService();
+					Map<String,String> msg = new HashMap<String,String>();
+					PrintWriter pw = response.getWriter();
+					Gson gson = new Gson();
+					String reg = "^\\w{0,30}@{1}\\w{1,15}\\.\\w{1,10}$";
+					if(memberAccount==null || memberAccount.trim().isEmpty()) {
+						msg.put("error", "null");
+						msg.put("msg", "帳號不能為空");
+						pw.write(gson.toJson(msg));
+						pw.close();
+					}
+					if(memberSvc.findByAccount(memberAccount)!=null) {
+						msg.put("error", "repeat");
+						msg.put("msg", "帳號重複囉 請換一個");
+						pw.write(gson.toJson(msg));
+						pw.close();
+					}
+					if(!memberAccount.matches(reg)) {
+						msg.put("error", "noMatche");
+						msg.put("msg", "帳號格式不對");
+						pw.write(gson.toJson(msg));
+						pw.close();
+					}
+					msg.put("error", "true");
+					msg.put("msg", "帳號可以使用");
+					pw.write(gson.toJson(msg));
+					pw.close();
+				}//ajax 驗證註冊帳號的手機號碼
+				if("phoneMatche".equals(str)) {
+					String memberPhone = (String)request.getParameter("memberPhone");
+					String phoneReg = "^0(9)[0-9]{8}$";
+					Gson gson = new Gson();
+					Map<String,String> msg = new HashMap<String,String>();
+					PrintWriter pw = response.getWriter();
+					if(!(memberPhone.matches(phoneReg))&&!(memberPhone.length()==10)) {						
+						msg.put("msg", "false");
+						msg.put("errorPhone","格式錯誤");								
+						pw.write(gson.toJson(msg));				
+						pw.close();
+					}else {
+						msg.put("msg", "true");
+						msg.put("errorPhone","手機格式正確 可以使用");								
+						pw.write(gson.toJson(msg));				
+						pw.close();
+					}
+				}//ajax 檢查密碼
+				if("passwordCheck".equals(str)) {
+					String password = (String)request.getParameter("memberPassword");
+					Gson gson = new Gson();
+					Map<String,String> msg = new HashMap<String,String>();
+					PrintWriter pw = response.getWriter();
+					if((password.length()<4)) {						
+						msg.put("msg", "length");
+						msg.put("errorPassword","長度至少4碼");								
+						pw.write(gson.toJson(msg));				
+						pw.close();
+					}else if(password.trim().isEmpty()){
+						msg.put("msg", "isEmpty");
+						msg.put("errorPassword","密碼不能為空");								
+						pw.write(gson.toJson(msg));				
+						pw.close();
+					}
+					msg.put("msg", "true");
+					msg.put("errorPassword","密碼符合要求");								
+					pw.write(gson.toJson(msg));				
+					pw.close();
+				}
+				if("nameCheck".equals(str)) {
+					String name = (String)request.getParameter("memberName");
+					Gson gson = new Gson();
+					Map<String,String> msg = new HashMap<String,String>();
+					PrintWriter pw = response.getWriter();
+					if((name.trim().isEmpty())) {						
+						msg.put("msg", "length");
+						msg.put("errorName","請輸入姓名");								
+						pw.write(gson.toJson(msg));				
+						pw.close();
+					}else {
+						msg.put("msg", "true");
+						msg.put("errorName","OK");								
+						pw.write(gson.toJson(msg));				
+						pw.close();
+					}
+				}
 		if ("getone".equals(str)) {
 			String memberId = (String) (request.getParameter("memberId"));
 			MemberService memberSvc = new MemberService();

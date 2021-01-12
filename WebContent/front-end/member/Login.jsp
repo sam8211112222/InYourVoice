@@ -36,10 +36,17 @@ height:120px;
 				<div class="input_field">
 					<label>email address</label> <input type="text" class="input"
 						name="memberAccount">
+						<c:if test="${not empty errors}">
+						<p><font style="color: red">${errors.username}</font></p>
+					</c:if>
 				</div>
 				<div class="input_field">
 					<label>Password</label> <input type="password" class="input"
-						name="memberPassword"> <a href="<%=request.getContextPath()%>/front-end/member/forgetPasswordEmail.jsp" class="forgot">忘記密碼?</a>
+						name="memberPassword">
+						<c:if test="${not empty errors}">
+						<p><font style="color: red">${errors.password}</font></p>
+					</c:if>
+						 <a href="<%=request.getContextPath()%>/front-end/member/forgetPasswordEmail.jsp" class="forgot">忘記密碼?</a>
 				</div>
 				<div class="btn">
 					<input type="submit" value="登入" class="sign_btn" name="log">

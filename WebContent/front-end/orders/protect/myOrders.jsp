@@ -158,8 +158,6 @@ li.nav-item {
 
 
 
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/ordrs/myOrders.js"></script>
 
 	<%@ include file="/css/member/member_center_bottom.file"%>
