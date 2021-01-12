@@ -57,13 +57,13 @@ height:80px;
 				<p>Sign up to VarYours</p>
 			</div>
 		<form id="form" method="post">
-			<label for="memberAccount">帳號<label>
+			<label for="memberAccount">帳號</label>
 			<input id="memberAccount" class="form-control" name="memberAccount" type="text" placeholder="your@email.com" />
 			<span class="error">${errors.account}</span><span id="errorAccount"></span> 
-			<label for="memberPassword">密碼<label>
+			<label for="memberPassword">密碼</label>
 			<input id="memberPassword" class="form-control" name="memberPassword" type="password"/>
 			<span id="errorPassword"></span>
-			 <label for="memberBirth">生日<label>
+			 <label for="memberBirth">生日</label>
 			<input id="memberBirth" class="form-control" name="memberBirth" type="text" />
 			<label for="memberPhone">手機</label>
 			<input id="memberPhone" class="form-control" name="memberPhone" type="text" placeholder="0912345678"/>

@@ -20,7 +20,7 @@ public class BandService {
 //		dao = new BandDAOJDBC();
 	}
 
-	public BandVO insertBand(String band_name, String band_intro, byte[] band_photo, byte[] band_banner, byte[] band_piece_check, java.sql.Timestamp band_add_time, Integer band_status, java.sql.Timestamp band_last_edit_time, String band_last_editor) {
+	public BandVO insertBand(String band_name, String band_intro, byte[] band_photo, byte[] band_banner, byte[] band_piece_check, java.sql.Timestamp band_add_time, Integer band_status, java.sql.Timestamp band_last_edit_time, String band_last_editor,String memberId) {
 
 		BandVO bandVO = new BandVO();
 		bandVO.setBand_name(band_name);
@@ -32,7 +32,10 @@ public class BandService {
 		bandVO.setBand_status(band_status);
 		bandVO.setBand_last_edit_time(band_last_edit_time);
 		bandVO.setBand_last_editor(band_last_editor);
-		dao.insert(bandVO);
+		MemberService memberSvc = new MemberService();
+		MemberVo memberVo = memberSvc.getOne(memberId);
+		
+		dao.insertBand(bandVO,memberVo);
 
 		return bandVO;
 	}

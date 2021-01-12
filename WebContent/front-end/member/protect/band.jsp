@@ -38,8 +38,8 @@
 }
 </style>
 <body>
+	<%@ include file="/front-end/header_footer/header.jsp"%>
 	<%@ include file="/css/member/member_center_top.file"%>
-
 	<div class="container content clear-fix">
 
 		<h2 class="mt-5 mb-5">樂團檔案</h2>
@@ -106,13 +106,8 @@
 
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-	<script
-		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-		crossorigin="anonymous"></script>
-	<script
-		src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 
 	<script>
 		$("#pic2").on("click", function() {
@@ -171,6 +166,6 @@
 			});
 		});
 	</script>
-	<%@ include file="/css/member/member_center_bottom.file"%>
+
 </body>
 </html>

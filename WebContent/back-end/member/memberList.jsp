@@ -46,6 +46,9 @@
 .update{
 width:120px;
 }
+.addMember{
+float:right;
+}
 </style>
 </head>
 
@@ -62,6 +65,7 @@ width:120px;
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
 				<h6 class="m-0 font-weight-bold text-primary">會員資料表</h6>
+				<input type="button" value="新增會員" class="addMember">
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
@@ -118,6 +122,9 @@ width:120px;
 	<script
 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<%@ include file="/back-end/sb/page2.file"%>
+	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
+	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
+	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 	
 	<script>
 		$(".updatebtn")
