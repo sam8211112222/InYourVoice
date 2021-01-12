@@ -214,7 +214,7 @@ audio {
 				type : "audit",
 			};
 			webSocket.send(JSON.stringify(jsonObj));
-			window.close();
+			window.location.replace("<%=request.getContextPath()%>/back-end/band/protect/bandList.jsp");
 		}
 		function sendMessage2() {
 
@@ -228,7 +228,7 @@ audio {
 				type : "audit",
 			};
 			webSocket.send(JSON.stringify(jsonObj));
-			window.close();
+			window.location.replace("<%=request.getContextPath()%>/back-end/band/protect/bandList.jsp");
 		}
 	</script>
 </body>

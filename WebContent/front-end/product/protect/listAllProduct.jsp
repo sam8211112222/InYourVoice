@@ -22,7 +22,8 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
+<%@ include file="/front-end/header_footer/header.jsp"%>
+<%@ include file="/css/member/member_center_top.file"%>
 <div id="table-1">
 	所有商品資料 
 </div>
@@ -50,9 +51,11 @@
 <div class="table">
 <table>
 
-		<%@ include file="/front-end/header_footer/header.jsp"%>
-	<%@ include file="/css/member/member_center_top.file"%>
+		
+	
+	<%@ include file="page1.file" %>
 	<c:forEach var="productVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+	
 	<tr>
 		<th>商品編號</th>
 		<th>樂團編號</th>

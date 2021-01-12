@@ -22,10 +22,9 @@
 #wrapper {
 	margin: auto;
 	width: 600px;
-	}
+}
 
 form input {
-	display: block;
 	margin: 5px 0;
 	padding: 10px 5px;
 }
@@ -41,55 +40,78 @@ form label {
 .xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
 	height: 151px; /* height:  151px; */
 }
-#logo{
-width:80px;
-height:80px;
+
+#cities {
+	height: 35px;
+}
+
+#areas {
+	height: 35px;
+	margin-left: 10px;
+}
+
+#addresss {
+	height: 35px;
+	width: 430px;
+	margin-left: 10px;
+}
+
+#logo {
+	width: 80px;
+	height: 80px;
 }
 </style>
 </head>
 
 <body>
 	<div id="wrapper">
-	<div class="logo">
-				<img src="<%=request.getContextPath()%>/images/inYourVoice.jpg" id="logo"alt="InYourVoice">
-			</div>
-			<div class="title">
-				<p>Sign up to VarYours</p>
-			</div>
+		<div class="logo">
+			<img src="<%=request.getContextPath()%>/images/inYourVoice.jpg"
+				id="logo" alt="InYourVoice">
+		</div>
+		<div class="title">
+			<p>Sign up to VarYours</p>
+		</div>
 		<form id="form" method="post">
-			<label for="memberAccount">帳號</label>
-			<input id="memberAccount" class="form-control" name="memberAccount" type="text" placeholder="your@email.com" />
-			<span class="error">${errors.account}</span><span id="errorAccount"></span> 
-			<label for="memberPassword">密碼</label>
-			<input id="memberPassword" class="form-control" name="memberPassword" type="password"/>
-			<span id="errorPassword"></span>
-			 <label for="memberBirth">生日</label>
-			<input id="memberBirth" class="form-control" name="memberBirth" type="text" />
-			<label for="memberPhone">手機</label>
-			<input id="memberPhone" class="form-control" name="memberPhone" type="text" placeholder="0912345678"/>
-			<span id="errorPhone"></span>
-			<br>
+			<label for="memberAccount">帳號</label> <input id="memberAccount"
+				class="form-control" name="memberAccount" type="text"
+				placeholder="your@email.com" /> <span class="error">${errors.account}</span><span
+				id="errorAccount"></span> <label for="memberPassword">密碼</label> <input
+				id="memberPassword" class="form-control" name="memberPassword"
+				type="password" /> <span id="errorPassword"></span> <label
+				for="memberBirth">生日</label> <input id="memberBirth"
+				class="form-control" name="memberBirth" type="text" /> <label
+				for="memberPhone">手機</label> <input id="memberPhone"
+				class="form-control" name="memberPhone" type="text"
+				placeholder="0912345678" /> <span id="errorPhone"></span> <br>
 			<div class="form-check form-check-inline">
-			<input class="form-check-input" type="radio" name="memberGender" id="memberGender" value="M" <%=((memberVo == null) || (memberVo.getMemberGender().equals("M"))) ? "checked" : ""%>>
-			<label class="form-check-label" for="inlineRadio1">男</label>
-	        </div>
-			<div class="form-check form-check-inline">
-			<input class="form-check-input" type="radio" name="memberGender" id="memberGender" value="F" <%=((((memberVo != null) && (memberVo.getMemberGender().equals("F"))))) ? "checked" : ""%>>
-			<label class="form-check-label" for="inlineRadio2">女</label>
+				<input class="form-check-input" type="radio" name="memberGender"
+					id="memberGender" value="M"
+					<%=((memberVo == null) || (memberVo.getMemberGender().equals("M"))) ? "checked" : ""%>>
+				<label class="form-check-label" for="inlineRadio1">男</label>
 			</div>
-			 <label for="memberName">名字</label>
-			<input id="memberName" class="form-control" name="memberName" type="text"/>
-			<span id="errorName"></span>
-			<label for="memberNickname">會員暱稱</label>
-			<input id="memberNickname" class="form-control" name="memberNickname" type="text"/>
-			<label for="memberAddress">地址</label>
-			<input id="memberAddress" class="form-control" name="memberAddress" type="text"/>
-			<input class="btn btn-primary form-control" type="button" name="registered" id="registered" value="註冊" />
-			<input id="reset" class="btn btn-danger form-control" type="reset" />
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="radio" name="memberGender"
+					id="memberGender" value="F"
+					<%=((((memberVo != null) && (memberVo.getMemberGender().equals("F"))))) ? "checked" : ""%>>
+				<label class="form-check-label" for="inlineRadio2">女</label>
+			</div>
+			<label for="memberName">名字</label> <input id="memberName"
+				class="form-control" name="memberName" type="text" /> <span
+				id="errorName"></span> <label for="memberNickname">會員暱稱</label> <input
+				id="memberNickname" class="form-control" name="memberNickname"
+				type="text" /> <label for="memberAddress">地址</label> <input
+				id="address" class="twaddress" name="memberAddress" value="" /> <input
+				class="btn btn-primary form-control" type="button" name="registered"
+				id="registered" value="註冊" /> <input id="reset"
+				class="btn btn-danger form-control" type="reset" />
 		</form>
 	</div>
 	<!--wrapper-->
-	<script src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.js"></script>
+
+	<script
+		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.js"></script>
+	<script src="<%=request.getContextPath()%>/js/member/address.js"></script>
 	<script
 		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
 	<%
@@ -236,11 +258,11 @@ height:80px;
         	let memberAccount = $("#memberAccount").val();
         	let memberPassword = $("#memberPassword").val();
         	let memberPhone = $("#memberPhone").val();
-        	let memberGender = $("#memberGender").val();
+        	let memberGender = $("#memberGenderM").val();
         	let memberName = $("#memberName").val();
         	let memberNickname = $("#memberNickname").val();
         	let memberBirth = $("#memberBirth").val();
-        	let memberAddress = $("#memberAddress").val();
+        	let memberAddress = $("#address").val();
         	
         	let data = {
         			action : "registered",
@@ -263,18 +285,18 @@ height:80px;
                          if(data.msg==="true"){
                              alert(data.status);
                              window.location.replace("<%=request.getContextPath()%>/front-end/member/Login.jsp");
-                         }else{
-                        	 alert("notgood");
-                         }
-                     },
-                     error: function (err) {
-                         alert("系統錯誤");
-                     }
-                 });
-        	}else{
-      			alert("資料欄位有誤請確認");
-        	}
-        });
+												} else {
+													alert("notgood");
+												}
+											},
+											error : function(err) {
+												alert("系統錯誤");
+											}
+										});
+							} else {
+								alert("資料欄位有誤請確認");
+							}
+						});
 	</script>
 </body>
 

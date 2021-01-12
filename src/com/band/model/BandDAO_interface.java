@@ -18,5 +18,6 @@ public interface BandDAO_interface extends ConnectionInfo {
     public List<BandVO> getAll(Map<String, String[]> map);
 	public BandVO updateBandIntro(BandVO bandVO, String bandIntro);
 	void insertBand(BandVO bandVO, MemberVo memberVo);
+	
 
 }

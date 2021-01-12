@@ -65,10 +65,15 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
 
 <FORM METHOD="post" ACTION="<%=request.getContextPath()%>/productphoto/productphoto.do" name="form1" enctype="multipart/form-data">
 <table align="center" >
+	
+	<jsp:useBean id="productSvc" scope="page" class="com.product.model.ProductService" />
 	<tr>
-		<td>商品編號:</td>
-		<td><input type="text" name="product_id" size="15" 
-			 value="<%= (productPhotoVO==null)? "" : productPhotoVO.getProduct_id()%>" /></td>
+		<td>商品編號:<font color=red><b>*</b></font></td>
+		<td><select size="1" name="product_id">
+			<c:forEach var="productVO" items="${productSvc.all}">
+				<option value="${productVO.product_id}" ${(productPhotoVO.product_id==productVO.product_id)? 'selected':'' } >${productVO.product_id}
+			</c:forEach>
+		</select></td>
 	</tr>
 	<tr>
 		<td>照片檔案:</td>

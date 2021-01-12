@@ -402,11 +402,11 @@ public class EventJDBCDAO implements EventDAO {
 //		EventVO eventVO3 = eventJDBCDAO.findByPrimaryKey("EVENT00000");
 //		System.out.println(eventVO3.toString());
 ////		測試查詢全部
-		List<EventVO> rs = eventJDBCDAO.getAll();
-
-		for (EventVO i : rs) {
-			System.out.println(i.toString());
-		}
+//		List<EventVO> rs = eventJDBCDAO.getAll();
+//
+//		for (EventVO i : rs) {
+//			System.out.println(i.toString());
+//		}
 
 //		測試查詢樂團活動		
 //		List<EventVO> rs = eventJDBCDAO.findByBandId("BAND00000");

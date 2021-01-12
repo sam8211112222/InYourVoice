@@ -31,7 +31,8 @@
 </head>
 
 <body>
-
+	<%@ include file="/front-end/header_footer/header.jsp"%>
+	
 	<div class="container">
 
 		<div class="row justify-content-center">
@@ -48,7 +49,7 @@
 					<button type="submit" class="btn btn-search" id="searchBtn">
 						<i class="fa fa-search"></i>
 					</button>
-					<span><a href="<%=request.getContextPath()%>/front-end/events/googleMap.jsp"><i class="fas fa-map-marker-alt"></i></a></span>
+					<span><a href="<%=request.getContextPath()%>/front-end/event/googleMap.jsp"><i class="fas fa-map-marker-alt"></i></a></span>
 				</div>
 			</form>
 		</div>
@@ -57,9 +58,9 @@
 		<div class="row justify-content-around">
 			<c:forEach var="eventVO" items="${list}">
 				<div class="flip" data-event_id="${eventVO.event_id}" style="cursor: pointer;"
-					onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?';">
+					onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 					<div class="front"
-						style="background-image: url(<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top)">
+						style="background-image: url(<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${eventVO.event_id}" class="card-img-top)">
 						<h4 class="text-shadow"><fmt:formatDate value="${eventVO.event_start_time}" pattern="MM-dd"/></h4>
 					</div>
 					<div class="back">
@@ -74,7 +75,7 @@
 		</div>
 	</div>
 
-
+<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -55,16 +55,16 @@
 <body id="page-top">
 
 
-	<%@ include file="/back-end/sb/page1.file"%>
+		<%@ include file="/back-end/sb/page1.file"%>
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 
 		<!-- Page Heading -->
-		<h1 class="h3 mb-2 text-gray-800">會員資料</h1>
+		<h1 class="h3 mb-2 text-gray-800">樂團資料</h1>
 		<!-- DataTales Example -->
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
-				<h6 class="m-0 font-weight-bold text-primary">會員資料表</h6>
+				<h6 class="m-0 font-weight-bold text-primary">樂團資料表</h6>
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
@@ -99,7 +99,7 @@
 
 									<c:choose>
 										<c:when test="${bandVO.band_status==0}">
-											<td><a href="<%=request.getContextPath()%>/band/band.do?action=getAuditPage&bandId=${bandVO.band_id}" target="_blank"><input type="button" class="auditbtn" value="審核"></a></td>
+											<td><a href="<%=request.getContextPath()%>/band/band.do?action=getAuditPage&bandId=${bandVO.band_id}"><input type="button" class="auditbtn" value="審核"></a></td>
 										</c:when>
 										<c:when test="${bandVO.band_status!=0}">
 											<td>通過審核</td>
@@ -116,17 +116,10 @@
 	</div>
 	<!-- /.container-fluid -->
 
-	</div>
 	<!-- End of Main Content -->
-
 	<%@ include file="/back-end/sb/page2.file"%>
 	<script
-		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-	<script
-		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
+		src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
 	<script>
 		$(".updatebtn")
 				.click(
@@ -160,10 +153,7 @@
 												dataType : "JSON",
 												data : obj,
 												success : function(result) {
-													console
-															.log(result.bandLastEditor);
-													console
-															.log(result.bandLastEditTime);
+												
 													that.closest("td").closest(
 															"tr")[0].children[5].innerText = result.bandLastEditor;
 													that.closest("td").closest(
