@@ -25,6 +25,7 @@ public class JedisMessage {
 		msg.put("title", title);
 		msg.put("content", content);	
 		msg.put("sendTime",time);
+		msg.put("receiver",receiver);
 		Jedis jedis = pool.getResource();
 		jedis.auth("123456");
 		jedis.rpush(receiver, gson.toJson(msg));

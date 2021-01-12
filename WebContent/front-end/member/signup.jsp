@@ -57,8 +57,8 @@ form label {
 }
 
 #logo {
-	width: 80px;
-	height: 80px;
+	width: 200px;
+	height: 60px;
 }
 </style>
 </head>
@@ -66,11 +66,11 @@ form label {
 <body>
 	<div id="wrapper">
 		<div class="logo">
-			<img src="<%=request.getContextPath()%>/images/inYourVoice.jpg"
-				id="logo" alt="InYourVoice">
+			<a href="<%=request.getContextPath()%>/index.jsp"><img src="<%=request.getContextPath()%>/images/logo.png"
+				id="logo" alt="InYourVoice"></a>
 		</div>
 		<div class="title">
-			<p>Sign up to VarYours</p>
+			<p>Sign up to InYourVoice</p>
 		</div>
 		<form id="form" method="post">
 			<label for="memberAccount">帳號</label> <input id="memberAccount"

@@ -65,6 +65,7 @@ public class NotificationWebsocket {
 					Map<String, String> msg = new HashMap<String, String>();
 					msg.put("title", title);
 					msg.put("content", content);
+					msg.put("receiver", receiver);
 					msg.put("sendTime",formatTime);
 					JedisMessage.isRead(receiver);
 					receiverSession.getAsyncRemote().sendText(gson.toJson(msg));

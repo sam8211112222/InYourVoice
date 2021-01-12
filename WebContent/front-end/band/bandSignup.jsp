@@ -33,13 +33,16 @@
 
     audio {
         position: fixed;
-        right: 0;
-        bottom: 10px;
-        width: 500px;
+
+     	margin-top:65px;
+        width: 350px;
     }
 
     #bannerpic {
         margin: 0 auto;
+    }
+    #info{
+    margin-top:90px;
     }
 </style>
 
@@ -54,9 +57,8 @@
                 <form>
                     <div class="form-group">
                         <label for="bandName">樂團名稱</label>
-                        <input type="text" class="form-control" id="bandName" name="bandName">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                            else.</small>
+                        <input type="text" class="form-control" id="bandName" name="bandName" required>
+                        <small id="emailHelp" class="form-text text-muted">請輸入完整名稱</small>
                     </div>
                     <div class="input-group" id="piececheck">
                         <div class="custom-file">
@@ -75,7 +77,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="bandIntro" id="info">自我介紹</label>
-                        <textarea class="form-control" id="bandIntro" name="bandIntro"placeholder="Required example textarea"
+                        <textarea class="form-control" id="bandIntro" name="bandIntro"placeholder="請輸入樂團介紹"
                             required></textarea>
                         <div class="invalid-feedback">
                             此欄位不能空白
@@ -118,6 +120,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js">
     </script>
     <script>
+  
         $("#bandBannerBtn").click(function (e) {
             e.stopPropagation();
             var fileInput = $('#bandBanner').val();
