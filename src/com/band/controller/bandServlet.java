@@ -340,116 +340,127 @@ public class bandServlet extends HttpServlet {
 			jsonStr = gson.toJson(jsonStr);
 			out.write(jsonStr);
 		}
+		
+		
+		// Kevin===========================================================================
 		//註冊樂團
-				if("bandSignup".equals(action)) {
-					String bandName=(String)req.getParameter("bandName");
-					String bandIntro=req.getParameter("bandIntro");
-					String memberId=(String)req.getParameter("memberId"); //取得會員ID
-					Integer bnadStatus = new Integer(0);//預設申請狀態為0
-					Part part1 = req.getPart("bandPieceCheck");
-					InputStream in1 = part1.getInputStream();
-					byte[] bandPieceCheck = new byte[in1.available()];
-					in1.read(bandPieceCheck);
-					Part part2 = req.getPart("bandBanner");
-					InputStream in2 = part2.getInputStream();
-					byte[] bandBanner = new byte[in2.available()];
-					in2.read(bandBanner);
-					in1.close();
-					in2.close();
-					//取得會員頭相
-					MemberService memberSvc = new MemberService();
-					MemberVo memberVo = memberSvc.getOne(memberId);
-					byte[] bandPhoto = memberVo.getMemberPhoto();
-					Timestamp bandAddTime = new Timestamp(System.currentTimeMillis());
-					Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
-					BandService bandSvc = new BandService();
-					String band_last_editor = null;
-					bandSvc.insertBand(bandName, bandIntro, bandPhoto, bandBanner, bandPieceCheck, bandAddTime, bnadStatus, bandLastEditTime, band_last_editor, memberId);
-					MemberVo newmemberVo = memberSvc.getOne(memberId);
-					HttpSession session = req.getSession();
-					session.setAttribute("memberVo", newmemberVo);
-					String path = req.getContextPath();
-					res.sendRedirect(path+"/front-end/member/memberCenter2.jsp");
-				}
-				//取得試聽作品
-				if("getSong".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					BandService bandSvc = new BandService();
-					byte[] song = bandSvc.getBandSong(bandId);
-					ServletOutputStream out = res.getOutputStream();
-					res.setContentLength(song.length);
-					out.write(song);
-					out.close();
-				}
-//			取得樂團橫幅
-				if("getBanner".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					BandService bandSvc = new BandService();
-					byte[] banner = bandSvc.getBanner(bandId);
-					ServletOutputStream out = res.getOutputStream();
-					res.setContentLength(banner.length);
-					out.write(banner);
-					out.close();
-				}
-				//更新樂團STATUS
-				if("updateStatus".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					String bandLastEditor = req.getParameter("bandLastEditor");
+		if("bandSignup".equals(action)) {
+			String bandName=(String)req.getParameter("bandName");
+			String bandIntro=req.getParameter("bandIntro");
+			String memberId=(String)req.getParameter("memberId"); //取得會員ID
+			Integer bnadStatus = new Integer(0);//預設申請狀態為0
+			Part part1 = req.getPart("bandPieceCheck");
+			InputStream in1 = part1.getInputStream();
+			byte[] bandPieceCheck = new byte[in1.available()];
+			in1.read(bandPieceCheck);
+			Part part2 = req.getPart("bandBanner");
+			InputStream in2 = part2.getInputStream();
+			byte[] bandBanner = new byte[in2.available()];
+			in2.read(bandBanner);
+			in1.close();
+			in2.close();
+			//取得會員頭相
+			MemberService memberSvc = new MemberService();
+			MemberVo memberVo = memberSvc.getOne(memberId);
+			byte[] bandPhoto = memberVo.getMemberPhoto();
+			Timestamp bandAddTime = new Timestamp(System.currentTimeMillis());
+			Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
+			BandService bandSvc = new BandService();
+			String band_last_editor = null;
+			bandSvc.insertBand(bandName, bandIntro, bandPhoto, bandBanner, bandPieceCheck, bandAddTime, bnadStatus, bandLastEditTime, band_last_editor, memberId);
+			MemberVo newmemberVo = memberSvc.getOne(memberId);
+			HttpSession session = req.getSession();
+			session.setAttribute("memberVo", newmemberVo);
+			String path = req.getContextPath();
+			res.sendRedirect(path+"/front-end/member/memberCenter2.jsp");
+		}
+		//取得試聽作品
+		if("getSong".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			BandService bandSvc = new BandService();
+			byte[] song = bandSvc.getBandSong(bandId);
+			ServletOutputStream out = res.getOutputStream();
+			res.setContentLength(song.length);
+			out.write(song);
+			out.close();
+		}
+//	取得樂團橫幅
+		if("getBanner".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			BandService bandSvc = new BandService();
+			byte[] banner = bandSvc.getBanner(bandId);
+			ServletOutputStream out = res.getOutputStream();
+			res.setContentLength(banner.length);
+			out.write(banner);
+			out.close();
+		}
+		//更新樂團STATUS
+		if("updateStatus".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			String bandLastEditor = req.getParameter("bandLastEditor");
 
-					BandService bandSvc = new BandService();
-					Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
-					bandSvc.updateBandStatusBackEnd(bandId, "1", bandLastEditTime, bandLastEditor);
-				}
-				if("picDisplay".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					BandService bandSvc = new BandService();
-					byte[] pic = bandSvc.getBandpic(bandId);
-					byte[] pic2 = ImageUtil.shrink(pic, 150);
-					OutputStream sout = res.getOutputStream();
-					res.setContentLength(pic2.length);
-					sout.write(pic2);
-					sout.close();
-				}
-				if("getband".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					BandService bandSvc = new BandService();
-					BandVO bandVO = bandSvc.getOneBand(bandId);
-					req.setAttribute("bandVO", bandVO);
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/bandSignupRelpy.jsp");
-					failureView.forward(req, res);
-				}
-				if("updateBackEnd".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					String bandStatus = req.getParameter("bandStatus");
-					String bandLastEditor = req.getParameter("bandLastEditor");
-					System.out.println(bandId);
-					System.out.println(bandStatus);
-					System.out.println(bandLastEditor);
-					Map<String,String> msg = new HashMap<String,String>();
-					Gson gson = new Gson();
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-					java.util.Date date = new java.util.Date();
-					long time = date.getTime();
-					Timestamp ts = new Timestamp(time);
-					String d = sdf.format(time);
-					System.out.println(d);
-					msg.put("bandLastEditor", bandLastEditor);
-					msg.put("bandLastEditTime",d);
-					PrintWriter pw = res.getWriter();
-					pw.write(gson.toJson(msg));
-					pw.close();
-					BandService bandSvc = new BandService();
-					bandSvc.updateBandStatusBackEnd(bandId, bandStatus, ts, bandLastEditor);
-				}
-				if("getAuditPage".equals(action)) {
-					String bandId = req.getParameter("bandId");
-					BandService bandSvc = new BandService();
-					BandVO bandVO = bandSvc.getOneBand(bandId);
-					req.setAttribute("bandVO", bandVO);
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/bandSignupRelpy.jsp");
-					failureView.forward(req, res);
-				}
-			}
+			BandService bandSvc = new BandService();
+			Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
+			bandSvc.updateBandStatusBackEnd(bandId, "1", bandLastEditTime, bandLastEditor);
+		}
+		//退回樂團申請
+		if("return".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			String bandLastEditor = req.getParameter("bandLastEditor");
+			BandService bandSvc = new BandService();
+			
+		}
+		if("picDisplay".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			BandService bandSvc = new BandService();
+			byte[] pic = bandSvc.getBandpic(bandId);
+			byte[] pic2 = ImageUtil.shrink(pic, 150);
+			OutputStream sout = res.getOutputStream();
+			res.setContentLength(pic2.length);
+			sout.write(pic2);
+			sout.close();
+		}
+		if("getband".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			BandService bandSvc = new BandService();
+			BandVO bandVO = bandSvc.getOneBand(bandId);
+			req.setAttribute("bandVO", bandVO);
+			RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/bandSignupRelpy.jsp");
+			failureView.forward(req, res);
+		}
+		if("updateBackEnd".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			String bandStatus = req.getParameter("bandStatus");
+			String bandLastEditor = req.getParameter("bandLastEditor");
+			System.out.println(bandId);
+			System.out.println(bandStatus);
+			System.out.println(bandLastEditor);
+			Map<String,String> msg = new HashMap<String,String>();
+			Gson gson = new Gson();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			java.util.Date date = new java.util.Date();
+			long time = date.getTime();
+			Timestamp ts = new Timestamp(time);
+			String d = sdf.format(time);
+			System.out.println(d);
+			msg.put("bandLastEditor", bandLastEditor);
+			msg.put("bandLastEditTime",d);
+			PrintWriter pw = res.getWriter();
+			pw.write(gson.toJson(msg));
+			pw.close();
+			BandService bandSvc = new BandService();
+			bandSvc.updateBandStatusBackEnd(bandId, bandStatus, ts, bandLastEditor);
+		}
+		if("getAuditPage".equals(action)) {
+			String bandId = req.getParameter("bandId");
+			BandService bandSvc = new BandService();
+			BandVO bandVO = bandSvc.getOneBand(bandId);
+			req.setAttribute("bandVO", bandVO);
+			RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/protect/bandSignupRelpy.jsp");
+			failureView.forward(req, res);
+		}
+		
+		
 		
 		
 

@@ -22,7 +22,7 @@
         </head>
 
         <body>
-
+			<jsp:include page="/front-end/header_footer/header.jsp"></jsp:include>
             <div class="container">
 
                 <div class="row justify-content-center">
@@ -75,33 +75,33 @@
 
                 </div>
             </div>
-
+			<jsp:include page="/front-end/header_footer/footer.jsp"></jsp:include>
 
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
             <script src="<%= request.getContextPath() %>/js/band/listAllBand.js"></script>
             <script>
- 	            var heyvoice = document.getElementById('heyvoice');
- 	            var recognition = new webkitSpeechRecognition();
+//  	            var heyvoice = document.getElementById('heyvoice');
+//  	            var recognition = new webkitSpeechRecognition();
 	
- 	            recognition.continuous=true;
- 	            recognition.interimResults=true;
- 	            recognition.lang="cmn-Hant-TW";
+//  	            recognition.continuous=true;
+//  	            recognition.interimResults=true;
+//  	            recognition.lang="cmn-Hant-TW";
 	
- 	            recognition.onstart=function(){
- 	              console.log('開始辨識...');
- 	            };
- 	            recognition.onend=function(){
- 	              console.log('停止辨識!');
- 	            };
+//  	            recognition.onstart=function(){
+//  	              console.log('開始辨識...');
+//  	            };
+//  	            recognition.onend=function(){
+//  	              console.log('停止辨識!');
+//  	            };
 	
- 	            recognition.onresult=function(event){
- 	              var i = event.resultIndex;
- 	              var j = event.results[i].length-1;
- 	              heyvoice.innerHTML = event.results[i][j].transcript;
- 	            };
+//  	            recognition.onresult=function(event){
+//  	              var i = event.resultIndex;
+//  	              var j = event.results[i].length-1;
+//  	              heyvoice.innerHTML = event.results[i][j].transcript;
+//  	            };
 	
- 	            recognition.start();  
+//  	            recognition.start();  
             </script>
 
         </body>

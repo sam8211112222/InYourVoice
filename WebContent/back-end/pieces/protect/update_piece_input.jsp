@@ -11,6 +11,19 @@
 <head>
 <meta charset="UTF-8">
 <title>作品資料修改 - update_piece_input.jsp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom fonts for this template -->
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/pieces/update_piece_input.css">
 <style>
   table#table-1 {
@@ -130,6 +143,11 @@
 		<input type="hidden" name="member_id" value="${memberVo.memberId}"> 
 		<input type="hidden" name="piece_id" value="${piecesVO.piece_id}"> <input id="submit_btn" type="submit" value="送出修改">
 	</FORM>
+	 <!-- Bootstrap core JavaScript-->
+    <script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	
 <%@ include file="/back-end/sb/page2.file" %>
 
 </body>

@@ -34,7 +34,7 @@
 <body onload="connect();" onunload="disconnect();">
 
 
-	<%@ include file="/front-end/header_footer/header.jsp"%>
+	<jsp:include page="/front-end/header_footer/header.jsp"></jsp:include>
 
 	<%
 		//step 1 拿到所有活動資料
@@ -690,21 +690,8 @@
 
 
 	<hr>
-	<!-- footer -->
-	<div class="wrap">
-		<footer class="footer">
-			<nav class="navfoot">
-				<div>
-					<h1 style="color: white">關於</h1>
-					<a href="#"><li style="color: white">關於我們</li></a> 
-				</div>
-				<div>
-					<h1 style="color: white">其他</h1>
-					<a href="#"><li style="color: white">聯絡我們</li></a>
-				</div>
-			</nav>
-		</footer>
-	</div>
+	
+	<jsp:include page="/front-end/header_footer/footer.jsp"></jsp:include>
 
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>

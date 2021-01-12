@@ -116,7 +116,7 @@ public class PiecesServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/index_pieces.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/protect/index_pieces.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
@@ -131,19 +131,19 @@ public class PiecesServlet extends HttpServlet {
 				}
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/index_pieces.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/protect/index_pieces.jsp");
 					failureView.forward(req, res);
 					return;// 程式中斷
 				}
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("piecesVO", piecesVO);
-				String url = "/back-end/pieces/listOnePiece.jsp";
-				RequestDispatcher successView = req.getRequestDispatcher("/back-end/pieces/listOnePiece.jsp");
+				String url = "/back-end/pieces/protect/listOnePiece.jsp";
+				RequestDispatcher successView = req.getRequestDispatcher("/back-end/pieces/protect/listOnePiece.jsp");
 				successView.forward(req, res);
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("無法取得資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/index_pieces.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/protect/index_pieces.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -165,14 +165,14 @@ public class PiecesServlet extends HttpServlet {
 
 				/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 				req.setAttribute("piecesVO", piecesVO); // 資料庫取出的empVO物件,存入req
-				String url = "/back-end/pieces/update_piece_input.jsp";
+				String url = "/back-end/pieces/protect/update_piece_input.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_emp_input.jsp
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 **********************************/
 			} catch (Exception e) {
 				errorMsgs.add("無法取得要修改的資料:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/index_pieces.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/protect/index_pieces.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -226,7 +226,7 @@ public class PiecesServlet extends HttpServlet {
 				// Send the use back to the form, if there were errors
 				if (!errorMsgs.isEmpty()) {
 					req.setAttribute("piecesVO", piecesVO); // 含有輸入格式錯誤的empVO物件,也存入req
-					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/update_piece_input.jsp");
+					RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/protect/update_piece_input.jsp");
 					failureView.forward(req, res);
 					return; // 程式中斷
 				}
@@ -237,14 +237,14 @@ public class PiecesServlet extends HttpServlet {
 
 				/*************************** 3.修改完成,準備轉交(Send the Success view) *************/
 				req.setAttribute("piecesVO", piecesVO); // 資料庫update成功後,正確的的empVO物件,存入req
-				String url = "/back-end/pieces/piece_manage.jsp";
+				String url = "/back-end/pieces/protect/piece_manage.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 修改成功後,轉交listOneEmp.jsp
 				successView.forward(req, res);
 
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
 				errorMsgs.add("修改資料失敗:" + e.getMessage());
-				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/update_piece_input.jsp");
+				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/pieces/protect/update_piece_input.jsp");
 				failureView.forward(req, res);
 			}
 		}
@@ -289,6 +289,7 @@ public class PiecesServlet extends HttpServlet {
 
 		if ("getPieceList".equals(action)) {
 
+			res.setCharacterEncoding("UTF-8");
 			String album_id = req.getParameter("album_id");
 //			AlbumService albumSvc = new AlbumService();
 //			AlbumVO albumVO = albumSvc.getOneAlbum(album_id);
@@ -299,7 +300,6 @@ public class PiecesServlet extends HttpServlet {
 					.filter(p -> p.getPiece_status() == 1)
 //					.filter(p -> albumReleaseTimeInLong > System.currentTimeMillis())
 					.collect(Collectors.toList());
-
 			PrintWriter out = res.getWriter();
 			Gson gson = new Gson();
 			String jsonStr = gson.toJson(piecesVOs);
@@ -400,7 +400,7 @@ public class PiecesServlet extends HttpServlet {
 			PiecesService piecesSvc = new PiecesService();
 			piecesSvc.deletePiece(piece_id);
 
-			String url = "/back-end/pieces/piece_manage.jsp";
+			String url = "/back-end/pieces/protect/piece_manage.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);// 成功轉交 update_emp_input.jsp
 			successView.forward(req, res);
 		}

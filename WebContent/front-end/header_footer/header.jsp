@@ -164,7 +164,7 @@ header {
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li> -->
 					<li class="nav-item"><a class="nav-link" href="#">活動資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">樂團資訊</a></li>
+					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/band/band.do?action=listAllBand">樂團資訊</a></li>
 					<li class="nav-item"><a class="nav-link" href="#">周邊商品</a></li>
 
 					<!-- <li class="nav-item">
