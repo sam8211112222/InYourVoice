@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.event.model.EventService;
 import com.event.model.EventVO;
 import com.google.gson.Gson;
+import com.utils.ImageUtil;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -27,6 +28,18 @@ public class EventPicController extends HttpServlet {
 		ServletOutputStream sos = res.getOutputStream();
 		EventService eventSvc = new EventService();
 
+		if ("getEventPic".equals(action)) {
+			String event_id = req.getParameter("event_id");
+			EventVO eventVO = eventSvc.getOneEvent(event_id);
+			System.out.println(event_id);
+			System.out.println(eventVO);
+			byte[] pic = eventVO.getEvent_poster();
+			byte[] pic2 = ImageUtil.shrink(pic, 250);
+			res.setContentLength(pic2.length);
+			sos.write(pic2);	
+			sos.close();
+			return;
+		}
 		if (req.getParameter("event_id") != null && req.getParameter("event_id").trim().length() != 0) {
 
 			String event_id = req.getParameter("event_id");

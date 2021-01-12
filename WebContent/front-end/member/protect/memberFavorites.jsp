@@ -106,9 +106,8 @@ header {
 						<c:if test="${favVO.favorite_type==1}">
 							<div class="col mb-2">
 								<div class="card">
-									<img
-										src="<%=request.getContextPath()%>/band/band.do?action=picDisplay&bandId=${favVO.favorite_id}"
-										class="card-img-top" alt="...">
+									<a href="<%=request.getContextPath()%>/band/band.do?action=getBandMain&band_id=${favVO.favorite_id}"><img src="<%=request.getContextPath()%>/band/band.do?action=picDisplay&bandId=${favVO.favorite_id}"
+										class="card-img-top" alt="..."></a>
 									<div class="card-body">
 										<button>檢視歌手</button>
 										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->

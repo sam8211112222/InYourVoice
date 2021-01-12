@@ -116,6 +116,15 @@ public class EventService {
 	public void setEventStatus(EventVO eventVO) {
 		dao.update(eventVO);
 	}
+	public void eventOffShelf(String event_id,String emp_id) {
+		EventVO eventVO = dao.findByPrimaryKey(event_id);
+		Integer event_status = new Integer(0);
+		eventVO.setEvent_last_editor(emp_id);
+		eventVO.setEvent_status(event_status);
+		
+		dao.update(eventVO);
+		
+	}
 	
 	// Kevin================================================================================================
 	public List<EventVO> getListEventOrderby(){

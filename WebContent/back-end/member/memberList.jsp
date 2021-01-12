@@ -65,7 +65,7 @@ float:right;
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
 				<h6 class="m-0 font-weight-bold text-primary">會員資料表</h6>
-				<input type="button" value="新增會員" class="addMember">
+				<a href="<%=request.getContextPath()%>/back-end/member/addMemberBackEnd.jsp"><input type="button" value="新增會員" class="addMember"></a>
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
