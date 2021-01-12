@@ -229,6 +229,8 @@ header {
 					</c:if>
 				</div>
 			</div>
+		</div>
+		</nav>
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>

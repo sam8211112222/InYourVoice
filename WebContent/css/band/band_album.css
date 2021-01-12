@@ -90,7 +90,7 @@ img.album_photo{
    height: auto;
 }
 
-/* 嚙踝蕭嚙� */
+/* �����蕭 */
 .outer:before { 
     content: "";
     height: 100%;
@@ -124,7 +124,7 @@ body {
     /* background: rgb(199 188 147 / 38%); */
     text-align: center;
     font-family: 'Roboto Mono';
-    padding: 1em;
+/*     padding: 1em; */
 }
 
 h1 {
