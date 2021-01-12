@@ -9,8 +9,8 @@ public class EventService {
 	private EventDAO dao;
 
 	public EventService() {
-//		dao = new EventJNDIDAO(); // 未完成
-		dao = new EventJDBCDAO();
+		dao = new EventJNDIDAO(); 
+//		dao = new EventJDBCDAO();
 	}
 
 	public EventVO addEvent(String band_id, Integer event_type, Integer event_sort, String event_title,
