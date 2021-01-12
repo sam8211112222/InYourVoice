@@ -229,8 +229,6 @@ header {
 					</c:if>
 				</div>
 			</div>
-		</div>
-		</nav>
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
@@ -302,6 +300,7 @@ header {
 			var noti = document.getElementById("noti");
 			$("#nomsg").remove();
 			let notifi = document.createElement("a");
+			notifi.setAttribute("href","<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp")
 			let content = notifi.setAttribute("class", "dropdown-item");
 			notifi.text = data;
 

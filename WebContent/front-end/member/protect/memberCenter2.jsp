@@ -183,7 +183,7 @@
 				memberCardExpyear : memberCardExpyear,
 				memberCardExpmonth : memberCardExpmonth,
 			}
-			if(){
+	
 			$.ajax({
 				type : "POST",
 				url : "/TEA102G6/Login",
@@ -195,7 +195,7 @@
 					alert("系統錯誤");
 				}
 			});
-			}
+
 		});
 	</script>
 </body>

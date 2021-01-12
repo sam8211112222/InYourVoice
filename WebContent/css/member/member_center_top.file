@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="com.member.model.*"%>
+<%@ page import="com.band.model.*"%>
+<%@ page import="java.util.*"%>
 
 <!DOCTYPE html>
 <html>
@@ -69,6 +72,17 @@
                             </a>
                         </div>
                         <c:if test="${memberVo.bandId!=null}">
+                        <c:if test="${bandVO.band_status==0}">
+                         <div class="flex flex-col items-center w-full mt-2 border-t border-gray-300">
+                     
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/member/protect/band.jsp">
+                                <i class="fas fa-drum"></i>
+                                <span class="ml-2 text-sm font-medium">樂團申請表單</span>
+                            </a>
+                              
+                        </div>
+                       </c:if>
+                        <c:if test="${bandVO.band_status==1}">
                         <div class="flex flex-col items-center w-full mt-2 border-t border-gray-300">
                      
                             <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/member/protect/band.jsp">
@@ -90,6 +104,7 @@
                           
                         </div>
                        </c:if>
+                        </c:if>
                     </div>
                     
                     
