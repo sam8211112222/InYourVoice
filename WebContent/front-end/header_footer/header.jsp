@@ -146,7 +146,7 @@ header{
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="logo">
-				<a class="navbar-brand" href="#"><img src="<%=request.getContextPath()%>/images/logo.png"></a>
+				<a class="navbar-brand" href="<%=request.getContextPath()%>"><img src="<%=request.getContextPath()%>/images/logo.png"></a>
 			</div>
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
@@ -167,7 +167,7 @@ header{
 				</ul>
 			</div>
 
-		</nav>
+<!-- 		</nav> -->
 		
 		<!-- 小鈴鐺   -->
         <div class="dropdown dropleft">
@@ -215,6 +215,7 @@ header{
 				</c:if>
 			</div>
 		</div>
+		</nav>
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>

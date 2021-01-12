@@ -19,9 +19,15 @@
         <title>樂團資訊 – 樂團詳情 - 音樂作品 band_album.jsp</title>
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css">
         <link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="<%=request.getContextPath()%>/css/band/index_band.css">
         <link rel="stylesheet" href="https://github.hubspot.com/odometer/themes/odometer-theme-minimal.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.3/animate.min.css">
+        <link rel="stylesheet" href="<%=request.getContextPath()%>/css/band/index_band.css">
+        
+        <style>
+        	.dropdown, .dropleft{
+        		display:flex !important;
+        	}
+        </style>
     </head>
     
     <%
@@ -49,6 +55,7 @@
 		FavoritesService favSvc = new FavoritesService();
 		
 		if(memeberVO!= null){
+			pageContext.setAttribute("memeberVO", memeberVO);
 			member_id = memeberVO.getMemberId();
 			String member_id_effective_final = member_id;
 			List<FavoritesVO> favoriteVOList = favSvc.getAll().stream()
@@ -61,8 +68,9 @@
 		}
 	%>
 
-    <body ${memberVO != null ? "onload='connect();' onunload='disconnect();'":""}> 
-
+<%--     <body ${memberVO != null ? "onload='connect();' onunload='disconnect();'":""}>  --%>
+    <body onload='connect();' onunload='disconnect();'> 
+		<%@ include file="/front-end/header_footer/header.jsp" %>
         <!-- start of include header -->
 
         <!-- end of include header -->
@@ -204,9 +212,8 @@
 						
 						<c:choose>
 						
-							<c:when test="${memeberVO ==null}"></c:when>
 						
-						    <c:when test="${ifExisted }">
+						    <c:when test="${memeberVO !=null && ifExisted }">
 								<a data-ga-on="click" data-ga-event-category="follow"
 	                                data-ga-event-action="珂拉琪 Collage (2429455)" data-ga-dimension-value="User profile"
 	                                data-id="2429455" class="btn btn-primary btn-lg btn-block js-follow delfavorite" >
@@ -214,13 +221,14 @@
 	                            </a>
 						    </c:when>
 						    
-						    <c:when test="${not ifExisted }">
+						    <c:when test="${memeberVO !=null && not ifExisted }">
 							   	<a data-ga-on="click" data-ga-event-category="follow"
 	                                data-ga-event-action="珂拉琪 Collage (2429455)" data-ga-dimension-value="User profile"
 	                                data-id="2429455" class="btn btn-primary btn-lg btn-block js-follow addfavorite" >
 	                                <span class="follow_text"><i class="fas fa-plus"></i>追蹤</span>
 	                            </a>
 						    </c:when>
+							<c:when test="${memeberVO ==null}"></c:when>
 						    
 						    <c:otherwise>
 						    </c:otherwise>
@@ -269,54 +277,7 @@
         <!-- end of content -->
 
 
-        <!-- start of include footer -->
-        <footer class="footer bg-dark text-white">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-4 col-md-4 text-center">
-                        <h3>關於</h3>
-                        <ul class="list-unstyled">
-                            <li><a href="">關於In Your Voice</a></li>
-                            <li><a href="">會員服務條款</a></li>
-                            <li><a href="">著作權保護措施</a></li>
-                            <li><a href="">隱私權保護政策</a></li>
-                        </ul>
-                    </div>
-<!--                     <div class="col-4 col-md"> -->
-<!--                         <h3>商務</h3> -->
-<!--                         <ul class="list-unstyled"> -->
-<!--                             <li><a href="/service/marketing/">行銷業務合作</a></li> -->
-<!--                             <li><a href="/service/on_air/">合作媒體</a></li> -->
-<!--                         </ul> -->
-<!--                     </div> -->
-                    <div class="col-4 col-md-4 text-center">
-                        <h3>其他</h3>
-                        <ul class="list-unstyled">
-                            <li><a href="">聯絡我們</a></li>
-                            <li><a href="">常見問題</a></li>
-                        </ul>
-                    </div>
-<!--                     <div class="col-12 col-md-5 text-center text-md-left mt-3 mt-md-0"> -->
-<!--                         <ul class="list-inline"> -->
-<!--                             <li class="list-inline-item"><a href="https://www.facebook.com/StreetVoiceTaiwan/" -->
-<!--                                     target="_blank" class="btn btn-outline-white btn-circle"><span -->
-<!--                                         class="icon-fb"></span></a></li> -->
-<!--                             <li class="list-inline-item"><a href="https://www.instagram.com/streetvoice_tw/" -->
-<!--                                     target="_blank" class="btn btn-outline-white btn-circle"><span -->
-<!--                                         class="icon-instagram"></span></a></li> -->
-<!--                             <li class="list-inline-item"><a href="https://www.youtube.com/user/StreetVoiceTV" -->
-<!--                                     target="_blank" class="btn btn-outline-white btn-circle"><span -->
-<!--                                         class="icon-youtube"></span></a></li> -->
-<!--                         </ul> -->
-<!--                         <p> -->
-<!--                             <a href="/svapp/open_in_web/0/">開啟手機版</a> -->
-<!--                         </p> -->
-<!--                         <p class="text-muted"><small>Copyright © 2006-2020 StreetVoice 街聲.</small></p> -->
-<!--                     </div> -->
-                </div>
-            </div>
-        </footer>
-        <!-- end of include footer -->
+        <%@ include file="/front-end/header_footer/footer.jsp" %>
 
         <!-- script from vendors -->
         <script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
@@ -404,7 +365,7 @@
 			      // TODO: Randomize fadeIn of different digits
             })
             
-           			var MyPoint = "/FolloWS/<%=member_id%>";
+           			var MyPoint = "/FolloWS/<%=member_id != null ? member_id:"LogedOutMember"%>";
            			console.log(MyPoint);
 					var host = window.location.host;
 					var path = window.location.pathname;
