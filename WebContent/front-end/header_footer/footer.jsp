@@ -47,6 +47,6 @@ footer.footer {
 			</nav>
 		</footer>
 	</div>
-
+<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
 </body>
 </html>

@@ -41,6 +41,9 @@ public class BandDAOJDBC implements BandDAO_interface {
 	private static final String UPDATE_BAND_INTRO ="UPDATE BAND SET BAND_INTRO=? WHERE BAND_ID=?";
 	private static final String UPDATE_BAND_STATUS_BACKEND ="UPDATE BAND SET BAND_STATUS=? WHERE BAND_ID=?";
 //==============================================================================================================
+	// 冠華
+	//這是新增的搜尋方法
+		private static final String GET_BAND_BYNAME_PSTMT = "SELECT * FROM BAND WHERE BAND_NAME LIKE ?";
 
 	@Override
 	public void insert(BandVO bandVO) {
@@ -440,6 +443,130 @@ public class BandDAOJDBC implements BandDAO_interface {
 			}
 		}
 	}
+	
+	// 冠華
+	//這是新增的搜尋方法	與  拿圖片
+		@Override
+		public List<BandVO> findByName(String band_name) {
+			List<BandVO> list = new ArrayList<>();
+			BandVO bandVO = null;
+
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				Class.forName(DRIVER);
+				conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				pstmt = conn.prepareStatement(GET_BAND_BYNAME_PSTMT);
+
+				pstmt.setString(1, "%" + band_name + "%");
+				
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+
+					bandVO = new BandVO();
+					bandVO.setBand_id(rs.getString("BAND_ID"));
+					bandVO.setBand_name(rs.getString("BAND_NAME"));
+					bandVO.setBand_intro(rs.getString("BAND_INTRO"));
+					bandVO.setBand_photo(rs.getBytes("BAND_PHOTO"));
+					bandVO.setBand_banner(rs.getBytes("BAND_BANNER"));
+					bandVO.setBand_piece_check(rs.getBytes("BAND_PIECE_CHECK"));
+					bandVO.setBand_add_time(rs.getTimestamp("BAND_ADD_TIME"));
+					bandVO.setBand_status(rs.getInt("BAND_STATUS"));
+					bandVO.setBand_last_edit_time(rs.getTimestamp("BAND_LAST_EDIT_TIME"));
+					bandVO.setBand_last_editor(rs.getString("BAND_LAST_EDITOR"));
+					list.add(bandVO);
+
+				}
+
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace(System.err);
+			} catch (SQLException e) {
+				e.printStackTrace(System.err);
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+
+			}
+
+			return list;
+		}
+		@Override
+		public BandVO getBandPhoto(String band_id) {
+			
+			BandVO bandVO = null;
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				Class.forName(DRIVER);
+				conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				pstmt = conn.prepareStatement(GET_ONE_PSTMT);
+
+				pstmt.setString(1, band_id);
+
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+
+					bandVO = new BandVO();
+					bandVO.setBand_photo(rs.getBytes("Band_PHOTO"));
+
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace(System.err);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+
+			}
+
+			return bandVO;
+		}
 	
 
 }

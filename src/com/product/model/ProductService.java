@@ -184,4 +184,10 @@ public class ProductService {
 		}
 		return null;
 	}
+	
+	//冠華
+	//這是新增的搜尋方法
+		public List<ProductVO> getProductByName(String product_name) {
+			return dao.findByName(product_name);
+		}
 }

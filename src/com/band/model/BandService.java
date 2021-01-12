@@ -20,25 +20,25 @@ public class BandService {
 //		dao = new BandDAOJDBC();
 	}
 
-//	public BandVO insertBand(String band_name, String band_intro, byte[] band_photo, byte[] band_banner, byte[] band_piece_check, java.sql.Timestamp band_add_time, Integer band_status, java.sql.Timestamp band_last_edit_time, String band_last_editor,String memberId) {
-//
-//		BandVO bandVO = new BandVO();
-//		bandVO.setBand_name(band_name);
-//		bandVO.setBand_intro(band_intro);
-//		bandVO.setBand_photo(band_photo);
-//		bandVO.setBand_banner(band_banner);
-//		bandVO.setBand_piece_check(band_piece_check);
-//		bandVO.setBand_add_time(band_add_time);
-//		bandVO.setBand_status(band_status);
-//		bandVO.setBand_last_edit_time(band_last_edit_time);
-//		bandVO.setBand_last_editor(band_last_editor);
-//		MemberService memberSvc = new MemberService();
-//		MemberVo memberVo = memberSvc.getOne(memberId);
-//		
-//		dao.insertBand(bandVO,memberVo);
-//
-//		return bandVO;
-//	}
+	public BandVO insertBand(String band_name, String band_intro, byte[] band_photo, byte[] band_banner, byte[] band_piece_check, java.sql.Timestamp band_add_time, Integer band_status, java.sql.Timestamp band_last_edit_time, String band_last_editor,String memberId) {
+
+		BandVO bandVO = new BandVO();
+		bandVO.setBand_name(band_name);
+		bandVO.setBand_intro(band_intro);
+		bandVO.setBand_photo(band_photo);
+		bandVO.setBand_banner(band_banner);
+		bandVO.setBand_piece_check(band_piece_check);
+		bandVO.setBand_add_time(band_add_time);
+		bandVO.setBand_status(band_status);
+		bandVO.setBand_last_edit_time(band_last_edit_time);
+		bandVO.setBand_last_editor(band_last_editor);
+		MemberService memberSvc = new MemberService();
+		MemberVo memberVo = memberSvc.getOne(memberId);
+		
+		dao.insertBand(bandVO,memberVo);
+
+		return bandVO;
+	}
 
 	public BandVO updateBand(String band_id, String band_name, String band_intro, byte[] band_photo, byte[] band_banner, byte[] band_piece_check, java.sql.Timestamp band_add_time, Integer band_status, java.sql.Timestamp band_last_edit_time, String band_last_editor) {
 
@@ -79,7 +79,7 @@ public class BandService {
 	public List<BandVO> getBySearchKeyWord(String searchKeyWord){
 		List<BandVO> listOfSearch = dao.getAll().stream()
 				.filter(b -> b.getBand_name().contains(searchKeyWord) || b.getBand_intro().contains(searchKeyWord))
-//				.filter(b -> b.getBand_intro().contains(searchKeyWord))
+				.filter(b -> b.getBand_status() == 1)
 				.collect(Collectors.toList());
 			System.out.println(listOfSearch.size());
 		return listOfSearch;		
@@ -123,6 +123,16 @@ public class BandService {
 		dao.update(bandVO);
 		return bandVO;		
 	}
+	
+	
+	//冠華
+	//這是新增的搜尋方法	與  拿圖片
+		public List<BandVO> getBandByName(String band_name) {
+			return dao.findByName(band_name);
+		}
+		public BandVO getBandPhoto(String band_id) {
+			return dao.getBandPhoto(band_id);
+		}
 	
 
 

@@ -52,4 +52,8 @@ public interface ProductDAO_interface {
      * //這是鈺涵的方法
      */
 	List<ProductVO> findByProductType(String productType);
+	
+	//冠華
+	//這是新增的搜尋方法
+    public List<ProductVO> findByName(String product_name);
 }
