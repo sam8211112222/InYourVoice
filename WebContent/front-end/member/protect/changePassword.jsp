@@ -107,7 +107,7 @@
                       if(data.msg==="correct"){
                           $(".errorPassword").text(data.errorPassword).css("color", "green");
                       }else if(data.msg==="error"){
-                     	 $(".errorPassword").html("&times;").css("color", "red");
+                     	 $(".errorPassword").html("密碼錯誤").css("color", "red");
                       }
                   },
                   error: function (err) {

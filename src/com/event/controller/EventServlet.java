@@ -23,10 +23,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.band.model.BandService;
 import com.band.model.BandVO;
+import com.emp.model.EmpVO;
 import com.event.model.EventService;
 import com.event.model.EventVO;
 import com.eventorderlist.model.EventOrderListService;
@@ -127,8 +129,7 @@ public class EventServlet extends HttpServlet {
 
 				String event_id = "EVENT" + strEnd;
 				/*************************** 2.開始查詢資料 *****************************************/
-				ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) getServletContext()
-						.getAttribute("ticketRestAmount");
+				ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) getServletContext().getAttribute("ticketRestAmount");
 				EventService eventSvc = new EventService();
 				EventVO eventVO = eventSvc.getOneEvent(event_id);
 				BandVO bandVO = new BandService().getOneBand(eventVO.getBand_id());
@@ -883,7 +884,7 @@ public class EventServlet extends HttpServlet {
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
-		//審核通過
+		// 審核通過
 		if ("pass".equals(action)) {
 			String event_id = req.getParameter("event_id");
 			EventService eventSvc = new EventService();
@@ -891,11 +892,11 @@ public class EventServlet extends HttpServlet {
 			Integer event_status = new Integer(1);
 			eventVO.setEvent_status(event_status);
 			eventSvc.setEventStatus(eventVO);
-			
-			//更新成功 開始轉交
-			res.sendRedirect(req.getContextPath()+"/event/EventServlet?action=confirmList-display");
+
+			// 更新成功 開始轉交
+			res.sendRedirect(req.getContextPath() + "/event/EventServlet?action=confirmList-display");
 		}
-		//審核未通過
+		// 審核未通過
 		if ("pass-fail".equals(action)) {
 			String event_id = req.getParameter("event_id");
 			EventService eventSvc = new EventService();
@@ -903,9 +904,32 @@ public class EventServlet extends HttpServlet {
 			Integer event_status = new Integer(4);
 			eventVO.setEvent_status(event_status);
 			eventSvc.setEventStatus(eventVO);
-			
-			//更新成功 開始轉交
-			res.sendRedirect(req.getContextPath()+"/event/EventServlet?action=confirmList-display");
+
+			// 更新成功 開始轉交
+			res.sendRedirect(req.getContextPath() + "/event/EventServlet?action=confirmList-display");
+		}
+		if ("off-shelf".equals(action)) {
+			String event_id = req.getParameter("event_id");
+			EventService eventSvc = new EventService();
+			HttpSession session = req.getSession();
+			EmpVO empVO = (EmpVO) session.getAttribute("empVO");
+
+			String emp_id = empVO.getEmp_id();
+
+			eventSvc.eventOffShelf(event_id, emp_id);
+
+			String url = "/back-end/events/index.jsp";
+			RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
+			successView.forward(req, res);
+		}
+		// 來自搜尋的請求
+		if ("getEvent".equals(action)) {
+			String searchKeyWord = req.getParameter("searchKeyWord");
+			EventService eventSvc = new EventService();
+			List<EventVO> list = eventSvc.getResult(searchKeyWord);
+			req.setAttribute("list", list);
+			RequestDispatcher failureView = req.getRequestDispatcher("/front-end/event/allevent.jsp");
+			failureView.forward(req, res);
 		}
 	}
 

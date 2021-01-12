@@ -163,9 +163,9 @@ header {
 					<!-- <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li> -->
-					<li class="nav-item"><a class="nav-link" href="#">活動資訊</a></li>
+					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/front-end/event/allevent.jsp">活動資訊</a></li>
 					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/band/band.do?action=listAllBand">樂團資訊</a></li>
-					<li class="nav-item"><a class="nav-link" href="#">周邊商品</a></li>
+					<li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/product/YUproductServlet">周邊商品</a></li>
 
 					<!-- <li class="nav-item">
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -188,7 +188,7 @@ header {
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="noti">
 						<c:choose>
 							<c:when test="${new5.size()==0}">
-								<a href="#" class="dropdown-item">沒有任何通知</a>
+								<a href="#" class="dropdown-item" id="nomsg">沒有任何通知</a>
 							</c:when>
 
 							<c:when test="${new5.size()!=0}">
@@ -300,6 +300,7 @@ header {
 		}
 		function noti(data) {
 			var noti = document.getElementById("noti");
+			$("#nomsg").remove();
 			let notifi = document.createElement("a");
 			let content = notifi.setAttribute("class", "dropdown-item");
 			notifi.text = data;

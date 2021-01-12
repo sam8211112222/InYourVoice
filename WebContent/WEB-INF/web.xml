@@ -9,5 +9,24 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
+  <filter>
+    <filter-name>loginFilter</filter-name>
+    <filter-class>com.member.controller.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginFilter</filter-name>
+    <url-pattern>/front-end/band/protect/*</url-pattern>
+    <url-pattern>/front-end/event/protect/*</url-pattern>
+    <url-pattern>/front-end/cart/protect/*</url-pattern>
+    <url-pattern>/front-end/eventorder/protect/*</url-pattern>
+    <url-pattern>/front-end/member/protect/*</url-pattern>
+    <url-pattern>/front-end/orders/protect/*</url-pattern>
+    <url-pattern>/front-end/product/protect/*</url-pattern>
+    <url-pattern>/front-end/productphoto/protect/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>ASYNC</dispatcher>
+  </filter-mapping>
 </web-app>
