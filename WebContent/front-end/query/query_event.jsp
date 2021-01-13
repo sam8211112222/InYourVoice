@@ -28,7 +28,9 @@
     background-color: #f1c29d;
     margin-left: 19px;
 }
-
+div.lea-img{
+	width: 200px;
+}
 </style>
 
 <body>
@@ -55,9 +57,9 @@
 						
 			<c:forEach var="eventVO" items="${eventSvc.getEventByName(name)}"> 
 
-				<div class="song-line">
+				<div class="song-line" style="cursor:pointer;" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 					<div class="num"></div>
-					<div class="lea-img">
+					<div class="lea-img" >
 						<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" alt="">
 
 						<div class="in-play" style="display: none;">
@@ -72,14 +74,12 @@
 					</div>
 				</div>
 				<hr class="songlist-hr">
-
 			</c:forEach>
-			
 		</div>
 	</div>
 	
 	
 	<%@include file="/front-end/header_footer/footer.jsp" %>
-	
+
 </body>
 </html>

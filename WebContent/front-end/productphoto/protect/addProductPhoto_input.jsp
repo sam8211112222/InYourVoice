@@ -39,8 +39,8 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
 <link rel="stylesheet" href="<%=request.getContextPath() %>/css/productphoto/productphotoDisplay.css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
-
+	<%@ include file="/front-end/header_footer/header.jsp"%>
+	<%@ include file="/css/member/member_center_top.file"%>
 <div align="center" style="position:relative" id="table-1">
 	新增照片資料 
 </div>
@@ -204,6 +204,7 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
         //      }});
         
 </script>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

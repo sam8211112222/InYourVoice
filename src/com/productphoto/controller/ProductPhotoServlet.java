@@ -347,7 +347,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				ProductPhotoSvc.deleteProductPhoto(productphoto_id);
 				
 				/***************************3.刪除完成,準備轉交(Send the Success view)***********/								
-				String url = "/front-end/productphoto/protect/listAllProductPhoto.jsp";
+				String url = "/back-end/productphoto/listAllProductPhoto.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);// 刪除成功後,轉交回送出刪除的來源網頁
 				successView.forward(req, res);
 				
@@ -355,7 +355,7 @@ public class ProductPhotoServlet extends HttpServlet {
 			} catch (Exception e) {
 				errorMsgs.add("刪除資料失敗:"+e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/productphoto/protect/listAllProductPhoto.jsp");
+						.getRequestDispatcher("/back-end/productphoto/listAllProductPhoto.jsp");
 				failureView.forward(req, res);
 			}
 		}

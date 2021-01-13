@@ -22,6 +22,15 @@
 	rel="stylesheet" type="text/css">
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.css" />
+<style>
+.xdsoft_datetimepicker .xdsoft_datepicker {
+	width: 300px; /* width:  300px; */
+}
+
+.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
+	height: 151px; /* height:  151px; */
+}
+</style>
 </head>
 <body bgcolor='white'>
 		<%@ include file="/front-end/header_footer/header.jsp"%>
@@ -224,23 +233,14 @@
 			product_last_edit_time = new java.sql.Timestamp(System.currentTimeMillis());
 		}
 	%>
+		
 		<%@ include file="/css/member/member_center_bottom.file"%>
 	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+
 	<script
 		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.js"></script>
 	<script
 		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
-
-	<style>
-.xdsoft_datetimepicker .xdsoft_datepicker {
-	width: 300px; /* width:  300px; */
-}
-
-.xdsoft_datetimepicker .xdsoft_timepicker .xdsoft_time_box {
-	height: 151px; /* height:  151px; */
-}
-</style>
-
 	<script>
         $.datetimepicker.setLocale('zh');
         $('#f_date1').datetimepicker({
@@ -293,9 +293,7 @@
 	       timepicker:false,       
 	       step: 1,               
 	       format:'Y-m-d H:i:s',         
-		   value: '<%=product_add_time%>
-		',
-		});
+		   value: '<%=product_add_time%>',});
 
 		// ----------------------------------------------------------以下用來排定無法選擇的日期-----------------------------------------------------------
 

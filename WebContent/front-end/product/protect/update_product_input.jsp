@@ -20,7 +20,8 @@ if (memberVo == null) {
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
+<%@ include file="/front-end/header_footer/header.jsp"%>
+<%@ include file="/css/member/member_center_top.file"%>
 <div align="center" style="position:relative" id="table-1">
    商品資料修改
 </div>
@@ -319,6 +320,7 @@ if (memberVo == null) {
         //      }});
         
 </script>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>
