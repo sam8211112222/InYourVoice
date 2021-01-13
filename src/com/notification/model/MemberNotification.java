@@ -1,6 +1,7 @@
 package com.notification.model;
 
-import java.util.List;
+
+
 
 public class MemberNotification{
 	private String title;
@@ -10,6 +11,7 @@ public class MemberNotification{
 	private java.util.Date sendTime;
 	private String type;
 	private String link;
+
 	public String getLink() {
 		return link;
 	}

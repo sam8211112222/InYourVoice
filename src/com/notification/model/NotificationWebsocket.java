@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -57,9 +57,11 @@ public class NotificationWebsocket {
 		java.util.Date sendTime = mnt.getSendTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String formatTime = sdf.format(sendTime);
+		
 		if("audit".equals(mnt.getType())) {
 			String receiver = mnt.getReceiver();
 			String link = mnt.getLink();
+			
 				Session receiverSession = sessionsMap.get(receiver);
 				if (receiverSession != null && receiverSession.isOpen()) {
 					Gson gson = new Gson();
