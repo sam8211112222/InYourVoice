@@ -149,8 +149,7 @@
 										bandLastEditor : bandLastEditor,
 										bandStatus : bandStatus,
 									}
-									$
-											.ajax({
+									$.ajax({
 												type : "POST",
 												url : "/TEA102G6/band/band.do",
 												dataType : "JSON",

@@ -77,6 +77,12 @@ header {
 	width: 148px;
 	height: 148px;
 }
+
+.btn {
+	width: 80px;
+	margin: 0 auto;
+	margin-top: 5px;
+}
 </style>
 <body>
 	<%@ include file="/front-end/header_footer/header.jsp"%>
@@ -104,16 +110,17 @@ header {
 				<div class="row row-cols-1 row-cols-md-4">
 					<c:forEach var="favVO" items="${list}">
 						<c:if test="${favVO.favorite_type==1}">
-							<div class="col mb-2">
+							<div class="col mb-4">
 								<div class="card">
-									<a href="<%=request.getContextPath()%>/band/band.do?action=getBandMain&band_id=${favVO.favorite_id}"><img src="<%=request.getContextPath()%>/band/band.do?action=picDisplay&bandId=${favVO.favorite_id}"
+									<a
+										href="<%=request.getContextPath()%>/band/band.do?action=getBandMain&band_id=${favVO.favorite_id}"><img
+										src="<%=request.getContextPath()%>/band/band.do?action=picDisplay&bandId=${favVO.favorite_id}"
 										class="card-img-top" alt="..."></a>
-									<div class="card-body">
-										<button>檢視歌手</button>
-										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-									</div>
+									<button type="button" class="btn btn-danger">移除</button>
+									<input type="hidden" value="${favVO.favorite_id}">
 								</div>
 							</div>
+
 						</c:if>
 					</c:forEach>
 				</div>
@@ -122,43 +129,53 @@ header {
 				aria-labelledby="profile-tab">
 				<div class="aplayer" id="player1"></div>
 			</div>
-	<div class="tab-pane fade" id="contact" role="tabpanel"
-		aria-labelledby="contact-tab">
-		<div class="row row-cols-1 row-cols-md-3">
-			<div class="col mb-4">
-				<div class="card">
-					<img src="./img/活動圖3.jpg" class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">ooo活動</h5>
-						<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					</div>
+			<div class="tab-pane fade" id="contact" role="tabpanel"
+				aria-labelledby="contact-tab">
+				<div class="row row-cols-1 row-cols-md-3">
+					<c:forEach var="favVO" items="${list}">
+						<c:if test="${favVO.favorite_type==2}">
+							<div class="col mb-4">
+								<div class="card">
+									<a
+										href="<%=request.getContextPath()%>/product/YUproductServlet?action=show_me_one&id=${favVO.favorite_id}"><img
+										src="<%=request.getContextPath()%>/productphoto/productphoto.do?action=findFirst&productId=${favVO.favorite_id}"
+										class="card-img-top" alt="..."></a>
+									<button type="button" class="btn btn-danger">移除</button>
+									<input type="hidden" value="${favVO.favorite_id}">
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="contact1" role="tabpanel"
+				aria-labelledby="contact-tab">
+				<div class="row row-cols-1 row-cols-md-3">
+					<c:forEach var="favVO" items="${list}">
+						<c:if test="${favVO.favorite_type==0}">
+							<div class="col mb-4">
+								<div class="card">
+									<a
+										href="<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${favVO.favorite_id}"><img
+										src="<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${favVO.favorite_id}"
+										class="card-img-top" alt="..."></a>
+									<button type="button" class="btn btn-danger">移除</button>
+									<input type="hidden" value="${favVO.favorite_id}">
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="tab-pane fade" id="contact1" role="tabpanel"
-		aria-labelledby="contact-tab">
-		<div class="row row-cols-1 row-cols-md-3">
-			<div class="col mb-4">
-				<div class="card">
-					<img src="./img/活動圖3.jpg" class="card-img-top" alt="...">
-					<div class="card-body">
-						<h5 class="card-title">ooo活動</h5>
-						<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</div>
-		<!-- Optional JavaScript -->
-		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
 
-		<%@ include file="/css/member/member_center_bottom.file"%>
-		<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
-		<script>
+	<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+	<script>
 			ap1 = new APlayer({
 				element: document.getElementById("player1"),
 				narrow: false,
@@ -183,12 +200,30 @@ header {
 		     			name: nameList[i],
 		      			artist: " ",
 		                url: "<%=request.getContextPath()%>/pieces/pieces.do?action=getPiece&piece_id="+playList[i],
-		                cover: "<%=request.getContextPath()%>/album/album.do?action=getPhotoByPieces&piecesId="+ playList[i],
-							} ]);
+		                cover: "<%=request.getContextPath()%>/album/album.do?action=getPhotoByPieces&piecesId="
+									+ playList[i],
+						} ]);
+			}
+		});
+		$(".btn").click(function() {
+			$(this).closest("div.col").remove()
+			let target = $(this).closest("div").children("input")[0].value;
+			let obj = {
+				action : "deleteFav",
+				favId : target,
+			}
+			$.ajax({
+				type : "POST",
+				url : "/TEA102G6/FavoritesServlet",
+				data : obj,
+				success : function(result) {
+				},
+				error : function(err) {
+
 				}
 			});
-			
-		</script>
-		
+		});
+	</script>
+
 </body>
 </html>

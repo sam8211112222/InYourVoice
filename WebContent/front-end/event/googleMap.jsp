@@ -82,7 +82,7 @@
 	<c:forEach var="eventVO" items="${list}">
     `<h2>`+"${eventVO.event_place}"+'</h2>'+
     '<span>'+"${eventVO.event_title}"+'</span><br/>'+
-    '<img class="infoImg" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"><br/>'
+    '<a href="<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${eventVO.event_id}"><img class="infoImg" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></a><br/>'
     ,
     </c:forEach>
     ];
