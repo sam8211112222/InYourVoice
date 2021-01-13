@@ -53,8 +53,8 @@
 		<div class="lea-song-list">
 						
 			<c:forEach var="productVO" items="${productSvc.getProductByName(name)}"> 
-
-				<div class="song-line">
+																							
+				<div class="song-line" onclick="location.href='<%= request.getContextPath() %>/product/YUproductServlet?action=show_me_one&id=${productVO.product_id}';">
 					<div class="num"></div>
 					<div class="lea-img">
 						<img src="<%= request.getContextPath() %>/productphoto/YUproductPhotoServlet?id=${productVO.product_id}" alt="">
@@ -78,6 +78,5 @@
 	
 	
 	<%@include file="/front-end/header_footer/footer.jsp" %>
-
 </body>
 </html>
