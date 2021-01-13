@@ -211,13 +211,14 @@ audio {
 				isRead : false,
 				sendTime : new Date().getTime(),
 				receiver : "${memberVo.memberId}",
+				link:"<%=request.getContextPath()%>/front-end/protect/bandSignup.jsp",
 				type : "audit",
 			};
 			webSocket.send(JSON.stringify(jsonObj));
 			window.location.replace("<%=request.getContextPath()%>/back-end/band/protect/bandList.jsp");
 		}
 		function sendMessage2() {
-
+				console.log("<%=request.getContextPath()%>/front-end/protect/bandSignup.jsp");
 			var jsonObj = {
 				title : "審核退回",
 				content : $("#replyArea").val(),
@@ -225,6 +226,7 @@ audio {
 				isRead : false,
 				sendTime : new Date().getTime(),
 				receiver : "${memberVo.memberId}",
+				link:"<%=request.getContextPath()%>/front-end/protect/bandSignup.jsp",
 				type : "audit",
 			};
 			webSocket.send(JSON.stringify(jsonObj));

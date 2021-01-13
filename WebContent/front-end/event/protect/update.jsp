@@ -82,7 +82,7 @@ input.ticket_endsale_time {
 	src="<%=request.getContextPath()%>/back-end/events/ckeditor/ckeditor.js"></script>
 </head>
 <body>
-<%@ include file="/front-end/header_footer/header.jsp"%>
+<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
 
 	<%@ include file="/css/member/member_center_top.file"%>
 

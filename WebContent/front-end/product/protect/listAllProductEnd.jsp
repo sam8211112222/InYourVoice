@@ -8,9 +8,7 @@
 
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
+	
 	ProductService ProductSvc = new ProductService();
     List<ProductVO> list = ProductSvc.getBandListByTime(memberVo.getBandId());
     pageContext.setAttribute("list",list);
@@ -22,6 +20,7 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
+<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
 <%@ include file="/css/member/member_center_top.file" %>
 <script type="text/javascript">
 alert('¤w°e¥X¼f®Ö');

@@ -29,4 +29,17 @@
     <dispatcher>ERROR</dispatcher>
     <dispatcher>ASYNC</dispatcher>
   </filter-mapping>
+  <filter>
+    <filter-name>loginFilterBackend</filter-name>
+    <filter-class>com.member.controller.LoginFliterBackEnd</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>loginFilterBackend</filter-name>
+    <url-pattern>/back-end/*</url-pattern> 
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>ASYNC</dispatcher>
+  </filter-mapping>
 </web-app>
