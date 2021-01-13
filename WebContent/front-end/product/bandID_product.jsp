@@ -2,13 +2,33 @@
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="com.orderlist.model.ReviewVO,com.product.model.*"%>
+
+<%@ page import="java.util.*"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%
+List<ProductVO> productList = (List<ProductVO>) request.getAttribute("productList");
+pageContext.setAttribute("productList", productList);
+
+	List<ReviewVO> reviewList = (List<ReviewVO>)request.getAttribute("reviewList");
+	int review_score = 0;
+	int total = 0;
+	if(reviewList!=null){
+		for(ReviewVO tmp:reviewList){
+			total+=tmp.getReview_score();
+		}
+		review_score = total/reviewList.size();
+	}
+
+	pageContext.setAttribute("review_score", review_score);
+%>
 <!doctype html>
 <html lang="zh">
 <head>
 <meta charset="utf-8">
 <title>樂團ID周邊商品(鈺涵)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/vendors/bootstrap/css/*">
+
 
 <style>
 
@@ -251,6 +271,8 @@ a.btn-color-primary-search {
 
 </head>
 <body>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<div class="col-sm-12" id="productList">
 						<div class="row justify-content-around">
 							<c:forEach var="vo" items="${bandProduct}" >
@@ -258,15 +280,15 @@ a.btn-color-primary-search {
 								<div class="YUflip" data-band_id="${vo.product_id}" style="cursor: pointer;"
 									onclick="location.href='<%= request.getContextPath() %>/product/YUproductServlet?action=show_me_one&id=${vo.product_id}';">
 									<div class="front" style="background-image: url(<%= request.getContextPath() %>/productphoto/YUproductPhotoServlet?id=${vo.product_id})"></div>
-									<div class="reviews-counter">
-									<div class="rate2">
-										<input type="hidden" id="star1" name="rate" value="1" /> <span class="<c:if test='${reviewTotal.get(vo.product_id)>0}'>shine</c:if>">1 star</span> <input type="hidden" id="star2" name="rate" value="2" /> <span
-											class="<c:if test='${reviewTotal.get(vo.product_id)>1}'>shine</c:if>">2 stars</span> <input type="hidden" id="star3" name="rate" value="3" /> <span class="<c:if test='${reviewTotal.get(vo.product_id)>2}'>shine</c:if>">3
-											stars</span> <input type="hidden" id="star4" name="rate" value="4" /> <span class="<c:if test='${reviewTotal.get(vo.product_id)>3}'>shine</c:if>">4 stars</span> <input type="hidden" id="star5" name="rate"
-											value="5" /> <span class="<c:if test='${reviewTotal.get(vo.product_id)>4}'>shine</c:if>">5 stars</span>
-									</div>
-									<span style="font-size: 12px;">${os_service.getReviewListByProductId(vo.product_id).size()} Review<c:if test="${os_service.getReviewListByProductId(vo.product_id).size()>1}">s</c:if></span>
-								</div>
+<!--  									<div class="reviews-counter">  -->
+<!--  									<div class="rate2"> -->
+<%--  										<input type="hidden" id="star1" name="rate" value="1" /> <span class="<c:if test='${vo.review_score>0}'>shine</c:if>">1 star</span> <input type="hidden" id="star2" name="rate" value="2" /> <span  --%>
+<%-- 											class="<c:if test='${vo.review_score>1}'>shine</c:if>">2 stars</span> <input type="hidden" id="star3" name="rate" value="3" /> <span class="<c:if test='${vo.review_score>2}'>shine</c:if>">3  --%>
+<%--  											stars</span> <input type="hidden" id="star4" name="rate" value="4" /> <span class="<c:if test='${vo.review_score>3}'>shine</c:if>">4 stars</span> <input type="hidden" id="star5" name="rate"  --%>
+<%--  											value="5" /> <span class="<c:if test='${vo.review_score>4}'>shine</c:if>">5 stars</span>  --%>
+<!--  									</div>  -->
+<%--  									<span style="font-size: 14px;">${vo.review_count} Review<c:if test="${vo.review_count>1}">s</c:if></span>  --%>
+<!-- 								</div>  -->
 									<div class="info" style="margin:10px;">
 									<h4  style="text-align: left !important;color:#444;">${vo.product_name}</h4>
 									<h6 style="text-align: left !important;color:#888;">NT$<fmt:formatNumber value="${vo.product_price}" pattern="#,###" />
@@ -280,31 +302,10 @@ a.btn-color-primary-search {
 						</div>
 					</div>
 
-<!-- 	<div class="container"> -->
 
-<!-- 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"> -->
-<%-- 			<c:forEach items="${bandProduct}" var="vo"> --%>
-<!-- 				<div class="col"> -->
-<!-- 					<div class="card shadow-sm"> -->
-<!-- 						<img -->
-<%-- 							src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${vo.product_id}" --%>
-<!-- 							class="card-img-top" alt="..."> -->
-<!-- 						<div class="card-body"> -->
-<%-- 							<p class="card-text">${vo.product_name}</p> --%>
-<!-- 							<div class="d-flex justify-content-between align-items-center"> -->
 
-<%-- 								<small class="text-muted">NT:${vo.product_price}</small> --%>
-<%-- 								<a href="${pageContext.request.contextPath}/product/YUproductServlet?action=show_me_one&id=${vo.product_id}"  --%>
-<!-- 							style="margin-bottom: 0px;">點我查看</a>  -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-<%-- 			</c:forEach> --%>
-<!-- 		</div> -->
-<!-- 	</div> -->
-	<a href="<%=request.getContextPath()%>/front-end/cart/cart_page.jsp">購物車</a>
-<%-- 	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/*"></script> --%>
-<%-- <script src="<%=request.getContextPath()%>/vendors/jquery/*"></script> --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="	sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

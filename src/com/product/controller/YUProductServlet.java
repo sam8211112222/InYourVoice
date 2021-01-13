@@ -138,10 +138,13 @@ public class YUProductServlet extends HttpServlet {
 
 		if ("show_me_band".equals(action)) {
 			String band_id = req.getParameter("band_id");
+			
 
 			List<ProductVO> bandProduct = proService.getAllByBand(band_id);
+			
 			req.setAttribute("bandProduct", bandProduct);
 			req.setAttribute("os_service", os_service);
+			
 
 			String url = "/front-end/product/bandID_product.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);

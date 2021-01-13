@@ -79,7 +79,6 @@ hr.new3 {
 .rate2>.shine {
 	color: #ffc700;
 }
-
 span.free {
 	color: red;
 }
@@ -194,8 +193,7 @@ border-radius: 4px;
 
 
 <body>
-<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+ <jsp:include page="/front-end/header_footer/header.jsp" flush="true" /> 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/product/band_productDetail.js"></script>
@@ -293,6 +291,7 @@ function updateFavorite(action){
 
 	</div>
 	
+	
 	<div class="form1">
 		<div class="container">
 			<div class="heading-section"></div>
@@ -354,7 +353,8 @@ function updateFavorite(action){
 								<p>${productVO.product_intro}</p>
 							</div>
 
-							<div class="product-count">
+
+										<div class="product-count">
 								<label for="size">數量</label>
 								<div class="display-flex">
 									<div class="qtyminus" id="qtyminus">-</div>
@@ -397,7 +397,7 @@ function updateFavorite(action){
 				</div>
 
 			</form>
-		<div class="product-info-tabs">
+			<div class="product-info-tabs">
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
 					<li class="nav-item"><a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">商品詳情</a></li>
 					<li class="nav-item"><a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">評價</a></li>
@@ -405,8 +405,8 @@ function updateFavorite(action){
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade active show" id="description" role="tabpanel" aria-labelledby="description-tab">${productVO.product_intro}</div>
 					<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-						<!-- 						<div class="review-heading">REVIEWS</div> -->
-						<div class="comment-list">
+						<div class="review-heading">REVIEWS</div>
+				<div class="comment-list">
 							<ul class="comments">
 								<c:if test="${not empty reviewList}">
 									<c:forEach items="${reviewList}" var="reviewVo">
@@ -446,6 +446,7 @@ function updateFavorite(action){
 							</ul>
 						</div>
 
+
 					</div>
 				</div>
 			</div>
@@ -458,6 +459,6 @@ function updateFavorite(action){
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="	sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
-<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+<%--  <jsp:include page="/front-end/header_footer/footer.jsp" flush="true" /> --%>
 </body>
 </html>
