@@ -296,9 +296,18 @@ function addToCart(){
 					type="radio" id="star1" name="rate" value="1" /> <label
 					for="star1">1 star</label>
 			</div>
-
-			<textarea id="review_msg" name="review_msg" rows="10" cols="40" placeholder="請輸入評價"></textarea>
+			<script >
+			$('#review_msg').on("input", function(){
+				  var ct= $(this).val();
+				  ct=ct.replace(/^(\r\n|\n|\r|\t| )+/gm, "");
+				  $('#review_msg').val(ct);
+				});
+			
+			</script>
+			<textarea id="review_msg" name="review_msg" rows="10" cols="40" placeholder="請輸入評價" ></textarea>
+			
 			<br />
+			
 			<a id="back_page" class="btn btn-custom btn-color-primary"
 				style="margin-bottom: 5px; width:30%;" onclick="reviewItem();">送出評價</a>
 			<a id="back_page" class="btn btn-custom btn-color-primary"
