@@ -7,9 +7,6 @@
 
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
 	ProductVO productVO = (ProductVO) request.getAttribute("productVO");
 %>
 
@@ -84,7 +81,7 @@
 			<tr>
 				<td>樂團編號:</td>
 				<td><input type="text" name="band_id" size="15"
-					value="${memberVO.band_id }" /></td>
+					value="${memberVo.bandId}" /></td>
 			</tr>
 			<tr>
 				<td>商品分類:</td>
@@ -171,7 +168,7 @@
 			<tr>
 				<td>最後修改者:</td>
 				<td><input type="text" name="product_last_editor" size="15"
-					value="${memberVO.band_id }" /></td>
+					value="${memberVo.bandId }" /></td>
 			</tr>
 
 		</table>
