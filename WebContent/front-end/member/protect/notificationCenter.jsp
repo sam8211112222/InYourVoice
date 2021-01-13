@@ -8,13 +8,9 @@
 <%@ page import="com.notification.model.*"%>
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
 	
 	pageContext.setAttribute("mesg", JedisMessage.getMessage(memberVo.getMemberId()));
-	pageContext.setAttribute("isRead", JedisMessage.count(memberVo.getMemberId()));
-	pageContext.setAttribute("new5", JedisMessage.getMessageNew5(memberVo.getMemberId()));
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +25,7 @@
 	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
 	crossorigin="anonymous">
 <body>
-<%@ include file="/front-end/header_footer/header.jsp"%>
+	<%@ include file="/front-end/header_footer/header.jsp"%>
 	<%@ include file="/css/member/member_center_top.file"%>
 
 	<div class="container content clear-fix">
@@ -41,31 +37,48 @@
 				<table class="table">
 					<thead>
 						<tr>
-							
 							<th scope="col">標題</th>
 							<th scope="col">接收人</th>
 							<th scope="col">時間</th>
 						</tr>
 					</thead>
 					<tbody>
-					<c:forEach var="memNoti" items="${mesg}">
-						<tr>
-						
-							<td>${memNoti.title}</td>
-							<td>${memNoti.receiver}</td>
-							<td><fmt:formatDate value="${memNoti.sendTime}" pattern="yyyy-MM-dd"/></td>
-						</tr>
+						<% int i = 0; %>
+						<c:forEach var="memNoti" items="${mesg}">
+							<tr data-toggle="modal" data-target="#no<%=i%>">
+								<td>${memNoti.title}</td>
+								<td>${memNoti.receiver}</td>
+								<td><fmt:formatDate value="${memNoti.sendTime}"
+										pattern="yyyy-MM-dd" /></td>
+							</tr>
+							<div class="modal fade" id="no<%=i++ %>" tabindex="-1"
+								aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalLabel">${memNoti.title}</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">${memNoti.content}</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">關閉</button>
+										</div>
+									</div>
+								</div>
+							</div>
 						</c:forEach>
 					</tbody>
 				</table>
 
-
-
 			</div>
-
 		</div>
-
 	</div>
+
+
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<%@ include file="/css/member/member_center_bottom.file"%>
