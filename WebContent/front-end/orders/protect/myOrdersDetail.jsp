@@ -3,9 +3,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page import="java.util.* , com.cart.model.CartVO"%>
-<%@ page
-	import="static com.cart.controller.CartServlet.SESSION_CART_KEY"%>
+<%@ page import="java.util.* , com.cart.model.CartVO,com.orders.model.OrdersVO"%>
+<%@ page import="static com.cart.controller.CartServlet.SESSION_CART_KEY"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -117,6 +117,14 @@ div.outer_ring {
 hr.new3 {
 	border: 1px solid #f9595f;
 }
+td.detailimg{
+    text-align: center; /** 设置水平方向居中 */
+	vertical-align: middle;
+}
+img{
+width: 80px;
+    height: 80px;
+}
 </style>
 
 </head>
@@ -221,7 +229,7 @@ function addToCart(){
 			<table class="table table-hover">
 				<thead>
 					<tr>
-
+						<th scope="col" class="form2">商品照片</th>
 						<th scope="col" class="form2">商品名稱</th>
 						<th scope="col" class="form2">單價</th>
 						<th scope="col" class="form2">數量</th>
@@ -235,15 +243,16 @@ function addToCart(){
 					<c:forEach items="${list}" var="orderListVO">
 						<tr>
 
-							<td class="form2">${productSvc.getOneProduct(orderListVO.product_id).product_name}</th>
-							<td class="form2"><fmt:formatNumber value="${orderListVO.price}"
+							<td class="dsetailimg"><img src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${orderListVO.product_id}" /></td>
+							<td class="form2">${productSvc.getOneProduct(orderListVO.product_id).product_name}</td>
+							<td class="form2">NT<fmt:formatNumber value="${orderListVO.price}"
 									pattern="$#,###" /></td>
 							<td class="form2">${orderListVO.orderlist_goods_amount}</td>
-							<td class="form2"><fmt:formatNumber
+							<td class="form2">NT<fmt:formatNumber
 									value="${orderListVO.price*orderListVO.orderlist_goods_amount}"
 									pattern="$#,###" /></td>
-							<td class="form2" align="center" valign="center"><c:if
-									test="${orderListVO.review_time==null}">
+							<td class="form2" align="center" valign="center">
+							<c:if test="${orderListVO.review_time==null}">
 									<a class="btn btn-custom btn-color-primary"
 										onclick="showReviewDialog('${orderListVO.orderlist_id}');">評價商品</a>
 								</c:if> <c:if test="${orderListVO.review_time!=null}">
@@ -259,7 +268,9 @@ function addToCart(){
 		</div>
 
 		<div class="total">
-			<h3>總金額:NT</h3>
+			<h3>總金額:NT<fmt:formatNumber
+									value="${realTotalPrice}"
+									pattern="$#,###" /> </h3>
 		</div>
 		<br>
 <!-- 		<div class="btn_back"> -->
@@ -274,6 +285,7 @@ function addToCart(){
 		</script>
 
 		<div id="reviewDiv" style="display: none">
+		<h3>商品評價</h3>
 			<div class="rate">
 				<input type="radio" id="star5" name="rate" value="5" /> <label
 					for="star5">5 stars</label> <input type="radio" id="star4"

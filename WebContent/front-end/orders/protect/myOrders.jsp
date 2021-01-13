@@ -2,8 +2,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@page import="com.member.model.MemberVo"%>
+<%@page import="com.member.model.MemberVo,com.orders.model.*"%>
+<%@ page import="java.util.*"%>
 <jsp:useBean id="memberSvc" scope="page" class="com.member.model.MemberService"></jsp:useBean>
+<% List<OrdersVO> orderList  = (List<OrdersVO>) request.getAttribute("orderList");
+	pageContext.setAttribute("orderList", orderList); 
+	
+	
+	%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,6 +76,18 @@ h2 {
 li.nav-item {
 	font-size: 20px;
 }
+div.pagination{
+
+text-align:center;
+margin:20px auto;
+  width: 350px;
+}
+div.pagination2{
+
+text-align:center;
+margin:20px auto;
+  width: 400px;
+}
 </style>
 
 </head>
@@ -87,6 +106,9 @@ li.nav-item {
 				<div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
 					<table class="table table-hover">
 						<thead>
+						<tr><div class="pagination">
+	<%@ include file="/front-end/orders/myOrders_page1.file"%>
+	</div></tr>
 							<tr>
 								<th scope="col" class="font">訂單編號</th>
 								<th scope="col" class="font">訂單時間</th>
@@ -114,13 +136,17 @@ li.nav-item {
 											</c:otherwise>
 										</c:choose></td>
 
-									<td class="font"><a class="btn btn-custom btn-color-primary" href="${pageContext.request.contextPath}/orderList/orderListServlet?id=${vo.order_id}"
+									<td class="font"><a class="btn btn-custom btn-color-primary" href="${pageContext.request.contextPath}/orderList/orderListServlet?id=${vo.order_id}&totalPrice=${vo.total_price}"
 										style="margin-bottom: 0px; width: 50%;">查閱</a></td>
+										<td></td>
 								</tr>
 
 							</c:forEach>
 						</tbody>
 					</table>
+						<div class="pagination2">
+	<%@ include file="/front-end/orders/myOrders_page2.file"%>
+</div>
 				</div>
 				<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
 					<table class="table table-hover">
