@@ -81,8 +81,7 @@ input.ticket_endsale_time {
 </style>
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.css" />
-<script
-	src="<%=request.getContextPath()%>/back-end/events/ckeditor/ckeditor.js"></script>
+
 </head>
 <body>
 <jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
@@ -296,7 +295,8 @@ input.ticket_endsale_time {
 	height: 151px; /* height:  151px; */
 }
 </style>
-
+<script
+	src="<%=request.getContextPath()%>/back-end/events/ckeditor/ckeditor.js"></script>
 <script>
         $.datetimepicker.setLocale('zh');
         $('#f_date1').datetimepicker({

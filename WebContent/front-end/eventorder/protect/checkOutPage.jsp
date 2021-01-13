@@ -33,7 +33,7 @@
 	integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
 	crossorigin="anonymous">
 <link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/cart/cart_page.css">
+	href="<%=request.getContextPath()%>/css/cart/confirm_order.css">
 
 <style>
 body {
@@ -525,10 +525,15 @@ img.td{
 </style>
 
 </head>
-<h1 class="cart_title">確認訂單</h1>
+
 
 <body>
+<h1 class="cart_title">確認訂單</h1>
 <%@ include file="/front-end/header_footer/header.jsp"%>
+<script src="<%=request.getContextPath()%>/js/jquery/jquery.validate.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
+	<script src="<%=request.getContextPath()%>/js/cart/confirm_order.js"></script>
+
 	<div class="container">
 	</div>
 	<div class="productList">
@@ -552,12 +557,12 @@ img.td{
 							<td class="image"><img class="td"
 								src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${event_id}" /></td>
 							<td class="name">${ticketSvc.getOneTicket(order.key).ticket_name}</td>
-							<td class="price">NT: <fmt:formatNumber
+							<td class="price">NT<fmt:formatNumber
 									value="${ticketSvc.getOneTicket(order.key).ticket_price}"
 									pattern="$#,###" />
 							</td>
 							<td class="amount">${order.value}</td>
-							<td class="pricesubtotal">NT: <fmt:formatNumber
+							<td class="pricesubtotal">NT<fmt:formatNumber
 									value="${ticketSvc.getOneTicket(order.key).ticket_price * order.value}"
 									pattern="$#,###" />
 							</td>
@@ -572,7 +577,7 @@ img.td{
 						<td></td>
 						<td></td>
 						<td>總價:</td>
-						<td class="totalpricesubtotal">NT:${amount}</td>
+						<td class="totalpricesubtotal">NT$${amount}</td>
 						<td></td>
 					</tr>
 
@@ -596,6 +601,8 @@ img.td{
 						<hr class="new3" size="12px" align="center" width="100%"
 							color="#f9595f">
 						<h3 class="title">顧客資料</h3>
+						<label> <input id="defalutMemberDataCb" type="checkbox" onclick="defaultMemberData(this);" /> <span>同會員資料</span>
+						</label>
 					</div>
 					<div class="section-body">
 						<div class="form-group">
@@ -664,12 +671,12 @@ img.td{
 				<a style="text-align: center; margin: 15px;"
 					class="btn btn-link pull-left"
 					href="<%=request.getContextPath()%>/EventOrderController?action=cancel&event_id=${event_id}"><button
-							type="button" class="card-form__button" id="cancelbutton" style="width: 200px;">取消</button></a>
+							type="button" class="card-form__button" id="cancelbutton" style="width: 200px; background:#2cbcf4;">取消</button></a>
 			</div>
 			<div class="col-sm-6">
 
 				<div id="checkout">
-					<a class="btn btn-custom  btn-link pull-right"	href="#" style="margin-bottom: 0px; width: 100%;"><button type="button" class="card-form__button" id="cancelbutton btn-color-primary" style="width: 200px;" onclick="checkOut();">結帳</button></a>
+					<a class="btn btn-custom  btn-link pull-right"	href="#" style="margin-bottom: 0px; width: 100%;"><button type="button" class="card-form__button" id="cancelbutton btn-color-primary" style="width: 200px; background:#f9595f;" onclick="checkOut();">結帳</button></a>
 				</div>
 				<!-- 				<a -->
 				<%-- 					href='${pageContext.request.contextPath}/front-end/cart/confirm_order.jsp'> --%>
@@ -692,7 +699,6 @@ img.td{
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
 		integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
 		crossorigin="anonymous"></script>
-	<script src="<%=request.getContextPath()%>/js/cart/cart_page.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
 	<script>
@@ -718,20 +724,6 @@ img.td{
 			checkUserEntryMail();
 		});
 
-		//判斷電話
-		function checkUserEntryPhone() {
-
-			let userEntry = $("#order-customer-phone").val();
-			let errMsg = $("#order-customer-phone-span");
-			if (userEntry.length === 0) {
-				errMsg.text('*連絡電話請勿空白');
-			} else if (!(/^1[34578]\d{9}$/.test(userEntry))) {
-				errMsg.text('*連絡電話格式不對');
-			}
-		}
-		$("#order-customer-phone").on("blur", function() {
-			checkUserEntryPhone();
-		});
 
 		//判斷名字
 		function checkUserEntryName() {
@@ -775,7 +767,15 @@ img.td{
 			webSocket.onclose = function(event) {
 			}
 		}
-
+		
+		function defaultMemberData(){
+			if($("#defalutMemberDataCb").is(':checked')){
+				$("#order-customer-name").val("${memberVo.memberName}");
+				$("#order-customer-mail").val("${memberVo.memberAccount}");
+				$("#order-customer-phone").val("${memberVo.memberPhone}");
+				$("#order-customer-address").val("${memberVo.memberAddress}");
+			}
+		}
 
 
 
@@ -783,6 +783,127 @@ img.td{
 		function disconnect() {
 			webSocket.close();
 		}
+
+// 		function validateForm(){
+// 			return $("#customerForm").validate({
+// 				  rules: {
+// 					  orderName: {
+// 						  required: true
+// 					  },
+// 					  orderMail: {
+// 						  required: true
+// 					  },
+// 					  orderPhone: {
+// 						  required: true
+// 					  },
+// 					  cardNumber: {
+// 						  required: true
+// 					  },
+// 					  cardName: {
+// 						  required: true
+// 					  },
+// 					  cardMonth: {
+// 						  required: true
+// 					  },
+// 					  cardYear: {
+// 						  required: true
+// 					  },
+// 					  cardCvv: {
+// 						  required: true
+// 					  }
+				    
+// 				  },
+// 				  messages:{
+// 					  orderName: {
+// 					      required: "<span style='color:red'>請輸入顧客名稱</span>"
+// 					  },
+// 					  orderMail: {
+// 						  required: "<span style='color:red'>請輸入電子信箱</span>"
+// 					  },
+// 					  orderPhone: {
+// 						  required: "<span style='color:red'>請輸入連絡電話</span>"
+// 					  },
+					 
+					  
+// 					  cardNumber: {
+// 						  required: "<span style='color:red'>請輸入卡號</span>"
+// 					  },
+// 					  cardName: {
+// 						  required: "<span style='color:red'>請輸入持卡者姓名</span>"
+// 					  },
+// 					  cardMonth: {
+// 						  required: "<span style='color:red'>請輸入有效月份</span>"
+// 					  },
+// 					  cardYear: {
+// 						  required: "<span style='color:red'>請輸入有效年份</span>"
+// 					  },
+// 					  cardCvv: {
+// 						  required: "<span style='color:red'>請輸入安全碼</span>"
+// 					  }
+					  
+// 				  }
+// 				}).form();
+// 		}
+
+// 		function checkOut() {
+// 			if(validateForm()){
+// 				document.getElementById("customerForm").submit();
+// 			}
+			
+// 		}
+// 		// 判斷email
+// 		function checkUserEntryMail() {
+
+// 			let userEntry = $("#order-customer-mail").val();
+			
+// 			let errMsg = $("#order-customer-mail-span");
+// 			if (userEntry.length === 0) {
+// 				errMsg.text('*請輸入字串');
+// 			} else if (userEntry.indexOf('@') === -1) {
+// 				errMsg.text('*請提供合法的Email帳號');
+				
+// 			} else if (userEntry.length >= 1 && userEntry.indexOf('@') != -1) {
+// 				errMsg.text('');
+// 			}
+// 		}
+
+// 		$("#order-customer-mail").on("blur", function() {
+// 			checkUserEntryMail();
+// 		});
+
+// 		// 判斷電話
+// 		function checkUserEntryPhone() {
+
+// 			let userEntry = $("#order-customer-phone").val();
+// 			let errMsg = $("#order-customer-phone-span");
+// 			if (userEntry.length === 0) {
+// 				errMsg.text('*連絡電話請勿空白');
+// 			} else if (!(/^1[34578]\d{9}$/.test(userEntry))) {
+// 				errMsg.text('*連絡電話格式不對');
+// 			} else if (userEntry.length > 11) {
+// 				errMsg.text('');
+// 			}
+// 		}
+// 		$("#order-customer-phone").on("blur", function() {
+// 			checkUserEntryPhone();
+// 		});
+
+// 		// 判斷名字
+// 		function checkUserEntryName() {
+
+// 			let userEntry = $("#order-customer-name").val();
+// 			let errMsg = $("#order-customer-name-span");
+// 			if (userEntry.length === 0) {
+// 				errMsg.text('*名字請勿空白');
+// 			} else if (userEntry.length >= 1) {
+// 				errMsg.text('');
+// 			}
+// 		}
+// 		$("#order-customer-name").on("blur", function() {
+// 			checkUserEntryName();
+// 		});
+
+
 
 
 	</script>

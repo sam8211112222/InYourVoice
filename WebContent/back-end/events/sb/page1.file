@@ -37,6 +37,7 @@
 						<a class="collapse-item" href="<%=request.getContextPath()%>/back-end/events/index.jsp">活動列表</a> <a
 							class="collapse-item"
 							href="<%=request.getContextPath()%>/back-end/events/addEvent.jsp">活動新增</a>
+							<a class="collapse-item" href="<%=request.getContextPath()%>/event/EventServlet?action=confirmList-display">活動審核</a>
 					</div>
 				</div></li>
 
