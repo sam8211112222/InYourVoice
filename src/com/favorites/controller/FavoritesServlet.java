@@ -279,6 +279,13 @@ public class FavoritesServlet extends HttpServlet {
 				failureView.forward(req, res);
 			}
 		}
+		if ("deleteFav".equals(action)) { 
+				String favId = new String(req.getParameter("favId"));
+		
+				FavoritesService favSvc = new FavoritesService();
+				favSvc.deleteFav(favId);
+				
+		}
 	}
   
 }

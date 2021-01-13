@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -358,6 +359,15 @@ public class ProductPhotoServlet extends HttpServlet {
 						.getRequestDispatcher("/back-end/productphoto/listAllProductPhoto.jsp");
 				failureView.forward(req, res);
 			}
+		}
+		if("findFirst".equals(action)) {
+			String productId = req.getParameter("productId");
+			ProductPhotoService ppSvc = new ProductPhotoService();
+			byte[] photo = ppSvc.findFirst(productId);
+			res.setContentType("image/gif");
+			ServletOutputStream sos =  res.getOutputStream();
+			sos.write(photo);
+			sos.close();
 		}
 	}
 	
