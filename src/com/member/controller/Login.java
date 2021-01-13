@@ -253,7 +253,7 @@ public class Login extends HttpServlet {
 			Jedis jedis = new Jedis("localhost", 6379);
 			jedis.auth("123456");
 			jedis.set("authCode", authcode);
-			jedis.set("memberAccount", memberAccount);
+			jedis.set("memberAccountAuth", memberAccount);
 			jedis.close();
 		}
 
@@ -335,10 +335,20 @@ public class Login extends HttpServlet {
 			
 			
 		}
-		//登出
+		//登出前面
 		if("logout".equals(str)) {
 			HttpSession session = request.getSession();
 			session.invalidate();
+			String LogoutBackend = request.getParameter("LogoutBackend");
+			if("LogoutBackend".equals(LogoutBackend)) {
+			response.sendRedirect(request.getContextPath()+"/LoginBackEnd.jsp");
+			}
+		}
+		//登出後面
+		if("logoutBackend".equals(str)) {
+			HttpSession session = request.getSession();
+			session.invalidate();		
+			response.sendRedirect(request.getContextPath()+"/LoginBackEnd.jsp");
 		}
 		//照片顯示
 		if("picDisplay".equals(memberpic)) {
@@ -357,7 +367,7 @@ public class Login extends HttpServlet {
 			jedis.auth("123456");
 			if(jedis.get("authCode").equals(authCode)) {
 				MemberService memberSvc = new MemberService();
-				MemberVo memberVo = memberSvc.findByAccount(jedis.get("memberAccount"));
+				MemberVo memberVo = memberSvc.findByAccount(jedis.get("memberAccountAuth"));
 				memberSvc.memberSetAuth(memberVo, 2);
 			}
 			jedis.close();

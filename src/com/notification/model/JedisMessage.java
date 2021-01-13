@@ -19,13 +19,14 @@ import redis.clients.jedis.JedisPool;
 public class JedisMessage {
 	private static JedisPool pool = JedisPoolUtil.getJedisPool();
 	
-	public static void saveMessage(String receiver, String title, String content,String time) {
+	public static void saveMessage(String receiver, String title, String content,String time,String link) {
 		Gson gson = new Gson();
 		Map<String,String> msg = new HashMap<String,String>();
 		msg.put("title", title);
 		msg.put("content", content);	
 		msg.put("sendTime",time);
 		msg.put("receiver",receiver);
+		msg.put("link",link);
 		Jedis jedis = pool.getResource();
 		jedis.auth("123456");
 		jedis.rpush(receiver, gson.toJson(msg));
