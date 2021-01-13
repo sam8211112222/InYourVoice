@@ -75,15 +75,15 @@ form label {
 		<form id="form" method="post">
 			<label for="memberAccount">帳號</label> <input id="memberAccount"
 				class="form-control" name="memberAccount" type="text"
-				placeholder="your@email.com" /> <span class="error">${errors.account}</span><span
+				placeholder="your@email.com" value=""/> <span class="error">${errors.account}</span><span
 				id="errorAccount"></span> <label for="memberPassword">密碼</label> <input
 				id="memberPassword" class="form-control" name="memberPassword"
-				type="password" /> <span id="errorPassword"></span> <label
+				type="password" value=""/> <span id="errorPassword"></span> <label
 				for="memberBirth">生日</label> <input id="memberBirth"
 				class="form-control" name="memberBirth" type="text" /> <label
 				for="memberPhone">手機</label> <input id="memberPhone"
 				class="form-control" name="memberPhone" type="text"
-				placeholder="0912345678" /> <span id="errorPhone"></span> <br>
+				placeholder="0912345678" value=""/> <span id="errorPhone"></span> <br>
 			<div class="form-check form-check-inline">
 				<input class="form-check-input" type="radio" name="memberGender"
 					id="memberGender" value="M"
@@ -107,6 +107,7 @@ form label {
 				class="btn btn-danger form-control" type="reset" />
 		</form>
 	</div>
+	<button class="btn" id="val">神奇小按鈕</button>
 	<!--wrapper-->
 
 	<script
@@ -297,6 +298,14 @@ form label {
 								alert("資料欄位有誤請確認");
 							}
 						});
+        $("#val").click(function(){
+        	$("#memberAccount")[0].value = "kevinwei326@gmail.com";
+        	$("#memberPassword")[0].value = "1234";
+        	$("#memberPhone")[0].value = "0921199234";
+        	$("#memberName")[0].value = "王曉明";
+        	$("#memberNickname")[0].value = "曉明";
+        	$("#addresss")[0].value = "南京西路";
+        })
 	</script>
 </body>
 
