@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.orderlist.model.OrderListVO;
+import com.ticket.model.TicketVO;
 
 public class ProductService {
 
@@ -189,5 +190,11 @@ public class ProductService {
 	//這是新增的搜尋方法
 		public List<ProductVO> getProductByName(String product_name) {
 			return dao.findByName(product_name);
+		}
+		
+	//Sam
+		//new
+		public List<TicketVO> getEOrder(String band_id) {
+			return dao.getEOrder(band_id);
 		}
 }
