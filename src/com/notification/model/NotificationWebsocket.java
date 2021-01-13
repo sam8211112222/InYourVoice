@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -57,8 +57,11 @@ public class NotificationWebsocket {
 		java.util.Date sendTime = mnt.getSendTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String formatTime = sdf.format(sendTime);
+		
 		if("audit".equals(mnt.getType())) {
 			String receiver = mnt.getReceiver();
+			String link = mnt.getLink();
+			
 				Session receiverSession = sessionsMap.get(receiver);
 				if (receiverSession != null && receiverSession.isOpen()) {
 					Gson gson = new Gson();
@@ -67,10 +70,11 @@ public class NotificationWebsocket {
 					msg.put("content", content);
 					msg.put("receiver", receiver);
 					msg.put("sendTime",formatTime);
+					msg.put("link",link);
 					JedisMessage.isRead(receiver);
 					receiverSession.getAsyncRemote().sendText(gson.toJson(msg));
 				}
-				JedisMessage.saveMessage(receiver, title, content,formatTime);
+				JedisMessage.saveMessage(receiver, title, content, formatTime, link);
 				return;
 		}
 		if("isRead".equals(mnt.getType())) {
@@ -78,36 +82,36 @@ public class NotificationWebsocket {
 
 			return;		
 		}
-		List<String> receiver = new ArrayList<String>();
-
-		FavoritesService favoSvc = new FavoritesService();
-
-		List<FavoritesVO> favo = favoSvc.getAll();
-
-		Predicate<FavoritesVO> list = i -> i.getFavorite_id().equals(senderId);
-
-		List<FavoritesVO> memberList = favo.stream().filter(list).collect(Collectors.toList());
-
-		for (FavoritesVO f : memberList) {
-			receiver.add(f.getMember_id());
-			System.out.println(f.getMember_id());
-		}
-
-		for (String member : receiver) {
-			Session receiverSession = sessionsMap.get(member);
-
-			if (receiverSession != null && receiverSession.isOpen()) {
-				Gson gson = new Gson();
-				Map<String, String> msg = new HashMap<String, String>();
-				msg.put("title", title);
-				msg.put("content", content);
-				msg.put("sendTime",formatTime);
-				receiverSession.getAsyncRemote().sendText(gson.toJson(msg));
-			}
-
-			JedisMessage.saveMessage(member, title, content,formatTime);
-
-		}
+//		List<String> receiver = new ArrayList<String>();
+//
+//		FavoritesService favoSvc = new FavoritesService();
+//
+//		List<FavoritesVO> favo = favoSvc.getAll();
+//
+//		Predicate<FavoritesVO> list = i -> i.getFavorite_id().equals(senderId);
+//
+//		List<FavoritesVO> memberList = favo.stream().filter(list).collect(Collectors.toList());
+//
+//		for (FavoritesVO f : memberList) {
+//			receiver.add(f.getMember_id());
+//			System.out.println(f.getMember_id());
+//		}
+//
+//		for (String member : receiver) {
+//			Session receiverSession = sessionsMap.get(member);
+//
+//			if (receiverSession != null && receiverSession.isOpen()) {
+//				Gson gson = new Gson();
+//				Map<String, String> msg = new HashMap<String, String>();
+//				msg.put("title", title);
+//				msg.put("content", content);
+//				msg.put("sendTime",formatTime);
+//				receiverSession.getAsyncRemote().sendText(gson.toJson(msg));
+//			}
+//
+//			JedisMessage.saveMessage(receiver, title, content, formatTime, "1");
+//
+//		}
 	}
 
 	@OnClose

@@ -17,7 +17,7 @@ footer.footer {
 	width: 100%;
 	box-sizing: border-box;
 	text-align: left;
-	margin: 50px 0px;
+	padding: 50px 0px;
 }
 
 .navfoot {
@@ -33,15 +33,15 @@ footer.footer {
 <body>
 
 	<!-- footer -->
-	<div class="wrap">
+	<div>
 		<footer class="footer">
 			<nav class="navfoot">
 				<div>
-					<h1 style="color: white">關於</h1>
+					<h1 style="color: white ; background-color: unset;">關於</h1>
 					<a href="#"><li style="color: white">關於我們</li></a>
 				</div>
 				<div>
-					<h1 style="color: white">其他</h1>
+					<h1 style="color: white ; background-color: unset;">其他</h1>
 					<a href="#"><li style="color: white">聯絡我們</li></a>
 				</div>
 			</nav>

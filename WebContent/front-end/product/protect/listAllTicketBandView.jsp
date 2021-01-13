@@ -3,16 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.event.model.*"%>  
+<%@ page import="com.ticket.model.*"%>  
+<%@ page import="com.product.model.*"%> 
 <%@ page import="com.member.model.*"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
-	EventService EventSvc = new EventService();
-    List<EventVO> list = EventSvc.getEventsByBandId("memberVo.getBandId()");
+	ProductService ProductSvc = new ProductService();
+    List<TicketVO> list = ProductSvc.getEOrder(memberVo.getBandId());
     pageContext.setAttribute("list",list);
 %>
 <html>
@@ -21,7 +20,8 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<%@ include file="/css/member/member_center_top.file" %>
+<%@ include file="/front-end/header_footer/header.jsp"%>
+<%@ include file="/css/member/member_center_top.file"%>
 <div align="center" style="position:relative" id="table-1">
 	票卷訂單資料 
 </div>
@@ -46,59 +46,32 @@
 	</ul>
 </c:if>
 
-<div class="table">
+<div class="table" align="center">
 <table>
 	<%@ include file="page1.file" %> 
-	<c:forEach var="eventVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
+	<c:forEach var="ticketVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 		
 	<tr>
+		<th>活動票券編號</th>
 		<th>活動編號</th>
-		<th>樂團編號</th>
-		<th>活動類型</th>
-		<th>活動排序</th>
-		<th>活動標題</th>
-		<th>活動詳情</th>
-		<th>活動海報</th>
-		<th>活動區域</th>
-		<th>活動場地</th>
-		<th>活動縣市</th>
-		<th>活動縣市分區</th>
-		<th>活動地址</th>
+		<th>活動票種名稱</th>
+		<th>票種張數</th>
+		<th>單張金額</th>
+		<th>總金額</th>
 	</tr>
 		<tr>
-			<td>${eventVO.event_id}</td>
-			<td>${eventVO.band_id}</td>
-			<td>${eventVO.event_type}</td>
-			<td>${eventVO.event_sort}</td>
-			<td>${eventVO.event_title}</td>
-			<td>${eventVO.event_detail}</td>
-			<td><img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></td>
-			<td>${eventVO.event_area}</td>
-			<td>${eventVO.event_place}</td>
-			<td>${eventVO.event_city}</td>
-			<td>${eventVO.event_cityarea}</td>
-			<td>${eventVO.event_address}</td>
-		</tr>
-		<tr>
-		<th>活動開始時間</th>
-		<th>活動上架時間</th>
-		<th>最後修改時間</th>
-		<th>最後修改者</th>
-		<th>活動狀態</th>
-		<th>座位圖</th>
-		</tr>
-		<tr>
-		<td>${eventVO.event_start_time}</td>
-			<td>${eventVO.event_on_time}</td>
-			<td>${eventVO.event_last_edit_time}</td>
-			<td>${eventVO.event_last_editor}</td>
-			<td>${eventVO.event_status}</td>
-			<td><img src="<%=request.getContextPath()%>/EventPicController?action=getEventSeat&event_id=${eventVO.event_id}"></td>	
+			<td>${ticketVO.ticket_id}</td>
+			<td>${ticketVO.event_id}</td>
+			<td>${ticketVO.ticket_name}</td>
+			<td>${ticketVO.ticket_amount}</td>		
+			<td>${ticketVO.ticket_price}</td>
+			<td>${ticketVO.ticket_amount*ticketVO.ticket_price }</td>
 		</tr>
 	</c:forEach>
 </table>
 <%@ include file="page2.file" %>
 </div>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

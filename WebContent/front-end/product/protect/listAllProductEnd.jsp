@@ -8,9 +8,7 @@
 
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
+
 	ProductService ProductSvc = new ProductService();
     List<ProductVO> list = ProductSvc.getBandListByTime(memberVo.getBandId());
     pageContext.setAttribute("list",list);
@@ -22,7 +20,8 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
+<%@ include file="/front-end/header_footer/header.jsp"%>
+<%@ include file="/css/member/member_center_top.file"%>
 <script type="text/javascript">
 alert('已送出審核');
 </script>
@@ -71,6 +70,12 @@ alert('已送出審核');
 		<th>上下架狀態</th>
 		<th>預計上架時間</th>
 		<th>預計下架時間</th>
+		<th>折扣</th>
+		<th>折扣開始時間</th>
+		<th>折扣結束時間</th>
+		<th>最後修改時間</th>
+		<th>最後修改者</th>
+		<th>修改</th>	
 	</tr>
 		<tr>
 			<td>${productVO.product_id}</td>
@@ -115,16 +120,6 @@ alert('已送出審核');
 			</td>
 			<td><fmt:formatDate value="${productVO.product_on_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			<td><fmt:formatDate value="${productVO.product_off_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-		</tr>
-		<tr>
-		<th>折扣</th>
-		<th>折扣開始時間</th>
-		<th>折扣結束時間</th>
-		<th>最後修改時間</th>
-		<th>最後修改者</th>
-		<th>修改</th>	
-		</tr>
-		<tr>
 			<td>${productVO.product_discount}</td>
 			<td><fmt:formatDate value="${productVO.product_discount_on_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			<td><fmt:formatDate value="${productVO.product_discount_off_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -141,6 +136,7 @@ alert('已送出審核');
 </table>
 <%@ include file="page2.file" %>
 </div>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

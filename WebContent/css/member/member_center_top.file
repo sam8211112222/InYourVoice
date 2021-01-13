@@ -4,7 +4,12 @@
 <%@ page import="com.member.model.*"%>
 <%@ page import="com.band.model.*"%>
 <%@ page import="java.util.*"%>
-
+<%
+	
+	BandService bandSv = new BandService();
+	BandVO bandSide = bandSv.getOneBand(((MemberVo)session.getAttribute("memberVo")).getBandId());
+	session.setAttribute("bandSide",bandSide);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -58,7 +63,7 @@
                                 <i class="fas fa-heart"></i>
                                 <span class="ml-2 text-sm font-medium">我的最愛</span>
                             </a>
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/orders/protect/myOrders.jsp">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/orders/myOrderServlet">
                                 <i class="far fa-file-alt"></i>
                                 <span class="ml-2 text-sm font-medium">我的訂單</span>
                             </a>
@@ -71,18 +76,18 @@
                                 <span class="ml-2 text-sm font-medium">通知中心</span>
                             </a>
                         </div>
-                        <c:if test="${memberVo.bandId!=null}">
-                        <c:if test="${bandVO.band_status==0}">
+                      
+              			<c:if test="${bandSide.band_status==0}">
                          <div class="flex flex-col items-center w-full mt-2 border-t border-gray-300">
                      
-                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/member/protect/band.jsp">
+                            <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/band/protect/bandSignup.jsp">
                                 <i class="fas fa-drum"></i>
                                 <span class="ml-2 text-sm font-medium">樂團申請表單</span>
                             </a>
                               
                         </div>
                        </c:if>
-                        <c:if test="${bandVO.band_status==1}">
+                        <c:if test="${bandSide.band_status==1}">
                         <div class="flex flex-col items-center w-full mt-2 border-t border-gray-300">
                      
                             <a class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-300" href="<%=request.getContextPath()%>/front-end/member/protect/band.jsp">
@@ -104,7 +109,7 @@
                           
                         </div>
                        </c:if>
-                        </c:if>
+                
                     </div>
                     
                     

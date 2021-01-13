@@ -131,6 +131,7 @@ width: 80px;
 
 <body>
 <jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
+	
 	<%@ include file="/css/member/member_center_top.file" %>
 <script>
 

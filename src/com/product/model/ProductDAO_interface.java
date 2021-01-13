@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.orderlist.model.OrderListVO;
 import com.productphoto.model.ProductPhotoVO;
+import com.ticket.model.TicketVO;
 
 public interface ProductDAO_interface {
 	public void insert(ProductVO productVO);
@@ -63,4 +64,7 @@ public interface ProductDAO_interface {
 	//冠華
 	//這是新增的搜尋方法
     public List<ProductVO> findByName(String product_name);
+    
+    //Sam
+    public List<TicketVO> getEOrder(String band_id);
 }

@@ -7,10 +7,10 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.notification.model.*"%>
 <%
- 	 	MemberVo member = (MemberVo) session.getAttribute("memberVo"); 
- 		if (member != null) { 
- 	 		request.setAttribute("isRead", JedisMessage.count(member.getMemberId())); 
- 			request.setAttribute("new5", JedisMessage.getMessageNew5(member.getMemberId())); 
+ 	 	
+ 		if ((MemberVo)session.getAttribute("memberVo") != null) { 
+ 	 		request.setAttribute("isRead", JedisMessage.count(((MemberVo)session.getAttribute("memberVo")).getMemberId())); 
+ 			request.setAttribute("new5", JedisMessage.getMessageNew5(((MemberVo)session.getAttribute("memberVo")).getMemberId())); 
  		}
  %> 
 <!DOCTYPE html>
@@ -82,7 +82,7 @@ header {
 	display: block;
 	text-align: center;
 	top: 49px !important;
-	left: -79px !important;
+	left: 49px !important;
 }
 
 .logo {
@@ -176,6 +176,7 @@ header {
 					</form>
 				</ul>
 			</div>
+			</nav>
 			<c:if test="${memberVo.memberId!=null}">
 				<!-- 小鈴鐺   -->
 				<div class="dropdown dropleft">
@@ -193,7 +194,7 @@ header {
 
 							<c:when test="${new5.size()!=0}">
 								<c:forEach var="noti" items="${new5}">
-									<a href="#" class="dropdown-item"><div>${noti.title}</div></a>
+									<a href="${noti.link}" class="dropdown-item">${noti.title}</a>
 
 								</c:forEach>
 							</c:when>
@@ -300,7 +301,6 @@ header {
 			var noti = document.getElementById("noti");
 			$("#nomsg").remove();
 			let notifi = document.createElement("a");
-			notifi.setAttribute("href","<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp")
 			let content = notifi.setAttribute("class", "dropdown-item");
 			notifi.text = data;
 

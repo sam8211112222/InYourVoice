@@ -1,7 +1,11 @@
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="java.util.stream.Collector"%>
 <%@page import="com.event.model.EventVO"%>
 <%@page import="java.util.List"%>
 <%@page import="com.event.model.EventService"%>
 <%@ page import="com.member.model.*"%>
+<%@ page import="com.band.model.*"%>
+<%@ page import="com.album.model.*"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -39,56 +43,44 @@
 	<%
 		//step 1 拿到所有活動資料
 		EventService eventSvc = new EventService();
-		List<EventVO> eventVOList = eventSvc.getAll();
+		List<EventVO> eventVOList = eventSvc.getAll().stream()
+				.filter(a -> a.getEvent_status() == 1)
+				.collect(Collectors.toList());
 		pageContext.setAttribute("eventVOList", eventVOList);//EL
 
 		//step 2 跑迴圈，並判斷是否為主打活動
 		//step 3 若確定是主打活動 此次迴圈才加上輪播的圖片
 		//step 4加上輪播圖片所需的html程式碼時 記得替換src的內容
+		List<BandVO> BandVOList = bandSvc.getAllBand().stream()
+				.filter(a -> a.getBand_status() == 1)
+				.collect(Collectors.toList());
+		pageContext.setAttribute("bandVOList", BandVOList);
+		
+		List<AlbumVO> AlbumVOList = albumSvc.getAllAlbums().stream()
+				.filter(a -> a.getAlbum_status() == 1)
+				.collect(Collectors.toList());
+		pageContext.setAttribute("albumVOList", AlbumVOList);
+		
+		
 	%>
 
 	<!-- 輪播 -->
 	<div class="banner">
 
 		<c:forEach var="eventVO" items="${eventVOList}">
-			<c:if test="${eventVO.event_type==3}">
-				<div class="ls-slide">
+			<c:if test="${eventVO.event_type==3&&eventVO.event_status==1}">
+				<div class="ls-slide" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 					<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}">
 				</div>
 			</c:if>
 		</c:forEach>
-
-		<!--最小輪播圖片單位 -->
-
-		<!-- 		<div class="ls-slide"> -->
-		<!-- 			<img src="./images/輪播1.jpg"> -->
-		<!-- 		</div> -->
-
-		<!--最小輪播圖片單位 -->
-
-
-		<!-- 		<div class="ls-slide"> -->
-		<!-- 			<img src="./images/輪播2.jpg"> -->
-		<!-- 		</div> -->
-
-		<!-- 		<div class="ls-slide"> -->
-		<!-- 			<img src="./images/輪播3.jpg"> -->
-		<!-- 		</div> -->
-
-		<!-- 		<div class="ls-slide"> -->
-		<!-- 			<img src="./images/輪播4.jpg"> -->
-		<!-- 		</div> -->
-
-		<!-- 		<div class="ls-slide"> -->
-		<!-- 			<img src="./images/輪播5.jpg"> -->
-		<!-- 		</div> -->
 	</div>
 	<!-- 輪播 -->
 
 	<!-- 最新消息 -->
 	<div class="wrap">
 		<h2 class="wrap-title">最新消息</h2>
-		<table class="table table-dark table-hover">
+		<table class="table table table-hover">
 			<thead>
 				<tr>
 					<th scope="col"></th>
@@ -97,36 +89,15 @@
 			</thead>
 			<tbody>
 
-
 				<c:forEach var="eventVO" items="${eventVOList}">
-					<c:if test="${eventVO.event_type==4}">
-						<tr>
+					<c:if test="${eventVO.event_type==4&&eventVO.event_status==1}">
+						<tr onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 							<th scope="row"><img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="latest-events"></th>
 							<td>${eventVO.event_title}</td>
 						</tr>
 					</c:if>
 				</c:forEach>
 
-				<!--             <tr> -->
-				<!--                 <th scope="row"> -->
-				<!--                 <img src="" alt="" class="latest-events"></th> -->
-				<!--                 <td>內容內容內容內容內容內容內容內容內容</td> -->
-				<!--             </tr> -->
-				<!--             <tr> -->
-				<!--                 <th scope="row"> -->
-				<!--                 <img src="" alt="" class="latest-events"></th> -->
-				<!--                 <td>內容內容內容內容內容內容內容內容內容</td> -->
-				<!--             </tr> -->
-				<!--             <tr> -->
-				<!--                 <th scope="row"> -->
-				<!--                 <img src="" alt="" class="latest-events"></th> -->
-				<!--                 <td>內容內容內容內容內容內容內容內容內容</td> -->
-				<!--             </tr> -->
-				<!--             <tr> -->
-				<!--                 <th scope="row"> -->
-				<!--                 <img src="" alt="" class="latest-events"></th> -->
-				<!--                 <td>內容內容內容內容內容內容內容內容內容</td> -->
-				<!--             </tr> -->
 			</tbody>
 		</table>
 	</div>
@@ -141,255 +112,43 @@
                 熱門排行榜
             </div> -->
 
-			<div class="playall">
-				<i class="fas fa-play"></i> 全部播放
-			</div>
+<!-- 			<div class="playall"> -->
+<!-- 				<i class="fas fa-play"></i> 全部播放 -->
+<!-- 			</div> -->
 			<div class="lea-time">2020 / xx / xx ~ 2020 / xx / xx</div>
-		</div>
-		<div class="lea-song-list">
-			<div class="song-line">
-				<div class="num">
-					1 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<!-- 					<img src="./images/排行榜歌圖1.png" alt=""> -->
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00000" alt="">
-
-					<div class="in-play" style="display: none;">
-						<i class="far fa-play-circle img-play"></i>
+		</div>		
+			<% int i = 1; %>
+			<c:forEach var="albumVO" items="${albumVOList}" begin="1" end="10">
+			
+					<div class="lea-song-list">
+						<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${bandSvc.getOneBand(albumVO.band_id).band_id}';">
+							<div class="num">
+								<%= i++ %> <i class="fas fa-sort-up"></i>
+							</div>
+							<div class="lea-img" >
+								<!-- 					<img src="./images/排行榜歌圖1.png" alt=""> -->
+								<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" alt="">
+			
+								<div class="in-play" style="display: none;">
+									<i class="far fa-play-circle img-play"></i>
+								</div>
+							</div>
+							<div class="song-name">
+								${albumVO.album_name}<br> <span> ${bandSvc.getOneBand(albumVO.band_id).band_name} </span>
+							</div>
+							<div class="add">
+								<i class="fas fa-plus"></i>
+							</div>
+							<div class="heart">
+								<i class="fas fa-heartbeat"></i> 18.8k
+							</div>
+							<div class="play-mu">
+								<i class="far fa-play-circle"></i>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00000").album_name}<br> <span>${bandSvc.getOneBand("BAND00000").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 18.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					2 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00050" alt="">
-					<div class="in-play" style="display: none;">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00050").album_name}<br> <span>${bandSvc.getOneBand("BAND00050").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 17.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					3 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00100" alt="">
-					<div class="in-play" style="display: none;">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00100").album_name}<br> <span>${bandSvc.getOneBand("BAND00100").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 16.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					4 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00150" alt="">
-					<div class="in-play" style="display: none;">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00150").album_name}<br> <span>${bandSvc.getOneBand("BAND00150").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 15.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					5 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00200" alt="">
-					<div class="in-play">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00200").album_name}<br> <span>${bandSvc.getOneBand("BAND00200").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 14.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					6 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00250" alt="">
-					<div class="in-play">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00250").album_name}<br> <span>${bandSvc.getOneBand("BAND00250").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 13.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					7 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00300" alt="">
-					<div class="in-play">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00300").album_name}<br> <span>${bandSvc.getOneBand("BAND00300").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 12.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					8 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00350" alt="">
-					<div class="in-play">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00350").album_name}<br> <span>${bandSvc.getOneBand("BAND00350").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 11.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					9 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00400" alt="">
-					<div class="in-play">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00400").album_name}<br> <span>${bandSvc.getOneBand("BAND00400").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 10.8k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-			<div class="song-line">
-				<div class="num">
-					10 <i class="fas fa-sort-up"></i>
-				</div>
-				<div class="lea-img">
-					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00450" alt="">
-					<div class="in-play">
-						<i class="far fa-play-circle img-play"></i>
-					</div>
-				</div>
-				<div class="song-name">
-					${albumSvc.getOneAlbum("ALBUM00450").album_name}<br> <span>${bandSvc.getOneBand("BAND00450").band_name}</span>
-				</div>
-				<div class="add">
-					<i class="fas fa-plus"></i>
-				</div>
-				<div class="heart">
-					<i class="fas fa-heartbeat"></i> 10.5k
-				</div>
-				<div class="play-mu">
-					<i class="far fa-play-circle"></i>
-				</div>
-			</div>
-			<hr class="songlist-hr">
-		</div>
+				
+			</c:forEach>
 	</div>
 
 
@@ -397,41 +156,14 @@
 	<div class="wrap">
 		<h2 class="wrap-title">每日好聲音</h2>
 		<div class="card-deck">
-			<div class="card">
-				<!-- 			<img src="./images/美日好聲音1.jpg" class="card-img-top" alt="..."> -->
-				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00000" class="card-img-top" alt="">
-				<div class="card-body">
-					<h5 class="card-title">${bandSvc.getOneBand("BAND00000").band_name}</h5>
-					<!-- 					<p class="card-text">歌手</p> -->
-					<!-- 					<p class="card-text"> -->
-					<!-- 						<small class="text-muted">2020/xx/oo</small> -->
-					<!-- 					</p> -->
-				</div>
-			</div>
-			<div class="card">
-				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00050" class="card-img-top" alt="">
-				<div class="card-body">
-					<h5 class="card-title">${bandSvc.getOneBand("BAND00050").band_name}</h5>
-				</div>
-			</div>
-			<div class="card">
-				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00100" class="card-img-top" alt="">
-				<div class="card-body">
-					<h5 class="card-title">${bandSvc.getOneBand("BAND00100").band_name}</h5>
-				</div>
-			</div>
-			<div class="card">
-				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00150" class="card-img-top" alt="">
-				<div class="card-body">
-					<h5 class="card-title">${bandSvc.getOneBand("BAND00150").band_name}</h5>
-				</div>
-			</div>
-			<div class="card">
-				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00200" class="card-img-top" alt="">
-				<div class="card-body">
-					<h5 class="card-title">${bandSvc.getOneBand("BAND00200").band_name}</h5>
-				</div>
-			</div>
+			<c:forEach var="bandVO" items="${bandVOList}" begin="1" end="5">
+					<div class="card" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${bandVO.band_id}';">
+						<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=${bandVO.band_id}" class="card-img-top" alt="">
+						<div class="card-body">
+							<h5 class="card-title">${bandVO.band_name}</h5>
+						</div>	
+					</div>
+			</c:forEach>
 		</div>
 	</div>
 
@@ -449,72 +181,19 @@
 				<div class="row row-cols-1 row-cols-md-3">
 
 					<c:forEach var="eventVO" items="${eventVOList}" begin="1" end="6">
-						<c:if test="${eventVO.event_status==1}">
 							<div class="col mb-4">
 								<div class="card">
 									<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top">
 									<div class="card-body">
 										<i class="fas fa-calendar-alt"><fmt:formatDate value="${eventVO.event_start_time}" pattern="yyyy-MM-dd HH:mm" /></i>
-										<button class="view-event-btn">檢視活動</button>
-										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
+										<button class="view-event-btn" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">檢視活動</button>
 									</div>
 								</div>
 							</div>
-						</c:if>
 					</c:forEach>
 
 
 
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖2.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖3.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖4.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖5.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖6.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
 
 				</div>
 			</div>
@@ -528,7 +207,7 @@
 									<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top">
 									<div class="card-body">
 										<i class="fas fa-calendar-alt"><fmt:formatDate value="${eventVO.event_start_time}" pattern="yyyy-MM-dd HH:mm" /></i>
-										<button class="view-event-btn">檢視活動</button>
+										<button class="view-event-btn" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">檢視活動</button>
 										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 									</div>
 								</div>
@@ -536,56 +215,6 @@
 						</c:if>
 					</c:forEach>
 
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖8.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖9.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖10.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖11.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖3.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
 
 				</div>
 			</div>
@@ -599,65 +228,13 @@
 									<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top">
 									<div class="card-body">
 										<i class="fas fa-calendar-alt"><fmt:formatDate value="${eventVO.event_start_time}" pattern="yyyy-MM-dd HH:mm" /></i>
-										<button class="view-event-btn">檢視活動</button>
+										<button class="view-event-btn" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">檢視活動</button>
 										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 									</div>
 								</div>
 							</div>
 						</c:if>
 					</c:forEach>
-
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖6.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖9.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖11.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖1.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-					<!-- 					<div class="col mb-4"> -->
-					<!-- 						<div class="card"> -->
-					<!-- 							<img src="./images/活動圖7.jpg" class="card-img-top" alt="..."> -->
-					<!-- 							<div class="card-body"> -->
-					<!-- 								<i class="fas fa-calendar-alt">2020/10/28 19:00</i> -->
-					<!-- 								<button class="view-event-btn">檢視活動</button> -->
-					<!-- 								<p class="card-text">活動內容活動內容活動內容活動內容</p> -->
-					<!-- 							</div> -->
-					<!-- 						</div> -->
-					<!-- 					</div> -->
-
 				</div>
 			</div>
 		</div>
@@ -686,17 +263,10 @@
 			</div>
 		</div>
 	</c:if>
-
-
-
-	<hr>
 	
 	<jsp:include page="/front-end/header_footer/footer.jsp"></jsp:include>
 
 
-	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 
 
 	<script type="text/javascript" src="<%=request.getContextPath()%>/vendors/slick/slick.min.js"></script>
@@ -796,7 +366,7 @@
 
 		var userName = '${memberVo.memberId}';
 		var friend = 'EMP00000';
-		var endPointURL = 'ws://localhost:8081/TEA102G6/FriendWS/' + userName;
+		var endPointURL = 'ws://localhost:8081/TEA102G6_20210112/FriendWS/' + userName;
 			
 		var messagesArea = document.getElementById("chat-logs");
 		var self = userName;
