@@ -3,6 +3,10 @@ package com.product.model;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.orderlist.model.OrderListVO;
 
@@ -131,59 +135,98 @@ public class ProductService {
 	}
 
 	// 這是鈺涵的
-	public List<ProductVO> getAllByBand(String band_id) {
-		Long nowTime = System.currentTimeMillis();
-		List<ProductVO> bandProduct = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
-				.filter(e -> e.getProduct_on_time().getTime() < nowTime)
-				.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
-				.collect(Collectors.toList());
-		return bandProduct;
-	}
-
-	// 這是鈺涵的
-	public List<ProductVO> getAllAvailableProduct() {
-		Long nowTime = System.currentTimeMillis();
-		List<ProductVO> productList = dao.getAll().stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
-				.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
-				.collect(Collectors.toList());
-		return productList;
-	}
-
-	// 這是鈺涵的
-	public void updateStock(String productId, int stockDifference) {
-		try {
-
-			dao.updateStock(productId, stockDifference);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	// 這是鈺涵的
-	public List<ProductVO> findByProductName(String productName) {
-		try {
+		public List<ProductVO> getAllByBand(String band_id) {
 			Long nowTime = System.currentTimeMillis();
-			return dao.findByProductName(productName).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+			List<ProductVO> bandProduct = dao.getAll().stream().filter(e -> e.getBand_id().equals(band_id))
+					.filter(e -> e.getProduct_on_time().getTime() < nowTime)
 					.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
 					.collect(Collectors.toList());
-		} catch (Exception e) {
-			e.printStackTrace();
+			return bandProduct;
 		}
-		return null;
-	}
 
-	// 這是鈺涵的
-	public List<ProductVO> findByProductType(String productType) {
-		Long nowTime = System.currentTimeMillis();
-		try {
-			return dao.findByProductType(productType).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+		// 這是鈺涵的
+		public List<ProductVO> getAllAvailableProduct() {
+			Long nowTime = System.currentTimeMillis();
+
+			
+			List<ProductVO> productList = dao.getAll().stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
 					.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
 					.collect(Collectors.toList());
-		} catch (Exception e) {
-			e.printStackTrace();
+			Map<Long,String> productTime = new HashMap<Long, String>();
+			long[] timeStampArray = new long[productList.size()];
+			
+			for(ProductVO product:productList) {
+				productTime.put(product.getProduct_on_time().getTime(),product.getProduct_id());
+			}
+			
+			for(int i = 0 ;i<timeStampArray.length;i++) {
+				timeStampArray[i]=productList.get(i).getProduct_on_time().getTime();
+			}
+			
+			Arrays.sort(timeStampArray);
+			
+			List<ProductVO> productListOrderByTime = new ArrayList<ProductVO>();
+			
+			for(int k  =timeStampArray.length-1 ; k>=0 ;k--) {
+				for (int i = 0; i < productList.size(); i++) {
+					if (productTime.get(timeStampArray[k]).equals(productList.get(i).getProduct_id())) {
+						productListOrderByTime.add(productList.get(i));
+					}
+				}
+			}
+			
+			return productListOrderByTime;
 		}
-		return null;
-	}
+
+		// 這是鈺涵的
+		public void updateStock(String productId, int stockDifference) {
+			try {
+
+				dao.updateStock(productId, stockDifference);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		// 這是鈺涵的
+		public List<ProductVO> findByProductName(String productName) {
+			try {
+				Long nowTime = System.currentTimeMillis();
+				return dao.findByProductName(productName).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+						.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+						.collect(Collectors.toList());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		// 這是鈺涵的
+		public List<ProductVO> findByProductType(String productType) {
+			Long nowTime = System.currentTimeMillis();
+			try {
+				return dao.findByProductType(productType).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+						.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+						.collect(Collectors.toList());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		// 這是鈺涵的
+		public List<ProductVO> findProductForList(String productName ,String productType){
+
+			Long nowTime = System.currentTimeMillis();
+			try {
+				return dao.findProductForList(productName, productType).stream().filter(e -> e.getProduct_on_time().getTime() < nowTime)
+						.filter(e -> e.getProduct_off_time().getTime() > nowTime).filter(e -> e.getProduct_status() == 1)
+						.collect(Collectors.toList());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return new ArrayList<ProductVO>();
+		}
 	
 	//冠華
 	//這是新增的搜尋方法

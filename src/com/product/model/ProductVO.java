@@ -21,6 +21,17 @@ public class ProductVO implements java.io.Serializable {
 	private Timestamp product_discount_off_time;
 	private Timestamp product_last_edit_time;
 	private String product_last_editor;
+	
+	/**
+	 * added by Sophia (DB無須新增欄位)
+	 */
+	private Integer review_score;
+	/**
+	 * added by Sophia (DB無須新增欄位)
+	 */
+	private Integer review_count;
+	
+	
 	public String getProduct_id() {
 		return product_id;
 	}
@@ -142,6 +153,32 @@ public class ProductVO implements java.io.Serializable {
 				+ ", product_last_editor=" + product_last_editor + "]";
 	}
 	
+	/**
+	 * added by Sophia (DB無須新增欄位)
+	 */
+	public Integer getReview_score() {
+		return review_score;
+	}
 	
+	/**
+	 * added by Sophia (DB無須新增欄位)
+	 */
+	public void setReview_score(Integer review_score) {
+		this.review_score = review_score;
+	}
+	
+	/**
+	 * added by Sophia (DB無須新增欄位)
+	 */
+	public Integer getReview_count() {
+		return review_count;
+	}
+	
+	/**
+	 * added by Sophia (DB無須新增欄位)
+	 */
+	public void setReview_count(Integer review_count) {
+		this.review_count = review_count;
+	}
 	
 }

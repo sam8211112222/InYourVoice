@@ -35,6 +35,9 @@ public class YUProductServlet extends HttpServlet {
 	private OrderListService os_service;
 	private FavoritesService favoritesService;
 	public static final Integer PRODUCT_FAVORITE_TYPE = 2;
+
+//	private Timer timer = null;
+
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -42,33 +45,71 @@ public class YUProductServlet extends HttpServlet {
 		productPhotoSvc = new ProductPhotoService();
 		os_service = new OrderListService();
 		favoritesService = new FavoritesService();
+
+//		ServletContext context = getServletContext();
+
+//		timer = new Timer();
+
+//		TimerTask task = new TimerTask() {
+//
+//			public void run() {
+//
+//				Map<String, Integer> reviewTotal = new ConcurrentHashMap<String, Integer>();
+//
+//				List<ProductVO> allProductList = proService.getAll();
+//				for (ProductVO product : allProductList) {
+//					String productId = product.getProduct_id();
+//					List<ReviewVO> reviewList = os_service.getReviewListByProductId(productId);
+//					Integer reviewScore = new Integer(0);
+//					for (ReviewVO review : reviewList) {
+//						reviewScore += review.getReview_score();
+//					}
+//					if (reviewList.size() > 0) {
+//						reviewScore = reviewScore / reviewList.size();
+//						reviewTotal.put(productId, reviewScore);
+//
+//					}
+//				}
+//
+//				context.setAttribute("reviewTotal", reviewTotal);
+//				System.out.println("reviewTotal:"+reviewTotal.size());
+//			}
+//		};
+//
+//		GregorianCalendar gc = new GregorianCalendar();
+//		timer.scheduleAtFixedRate(task, gc.getTime(), 5 * 1000);
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
-		if(action==null||"".equals(action)) {
-			List<ProductVO> productList = proService.getAllAvailableProduct();
+		if (action == null || "".equals(action)) {
+
+			List<ProductVO> productList = proService.findProductForList( null ,null);
+
 			req.setAttribute("productList", productList);
+			req.setAttribute("os_service", os_service);
+
 			String url = "/front-end/product/band_productAll.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
-		if("findByProductName".equals(action)) {
+		if ("findByProductName".equals(action)) {
 			String productName = req.getParameter("productName");
-			req.setAttribute("productList", proService.findByProductName(productName));
+			req.setAttribute("productList", proService.findProductForList( productName ,null));
 			String url = "/front-end/product/band_productAll.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
-		if("findByProductType".equals(action)) {
+		if ("findByProductType".equals(action)) {
 			String productType = req.getParameter("productType");
-			req.setAttribute("productList", proService.findByProductType(productType));
+			req.setAttribute("productList", proService.findProductForList( null ,productType));
 			String url = "/front-end/product/band_productAll.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
+		
 
 		if ("show_me_one".equals(action)) {
 
@@ -76,21 +117,19 @@ public class YUProductServlet extends HttpServlet {
 			ProductVO productVO = proService.getOneProduct(id);
 			List<OrderListVO> list = os_service.findByProductId(id);
 			List<String> photoIdList = productPhotoSvc.getIdListByProductId(id);
-			List<ReviewVO> reviewList = os_service.getReviewListByProductId( id);
+			List<ReviewVO> reviewList = os_service.getReviewListByProductId(id);
 			HttpSession session = req.getSession();
 			FavoritesVO favoritesVO = null;
 			if (session.getAttribute("memberVo") != null) {
 				MemberVo loginMember = (MemberVo) session.getAttribute("memberVo");
 				String member_id = loginMember.getMemberId();
-				favoritesVO = favoritesService.findByMemberIdAndProductId(member_id,productVO.getProduct_id());
+				favoritesVO = favoritesService.findByMemberIdAndProductId(member_id, productVO.getProduct_id());
 			}
 			req.setAttribute("productVO", productVO);
 			req.setAttribute("orderListVO", list);
 			req.setAttribute("photoIdList", photoIdList);
 			req.setAttribute("reviewList", reviewList);
 			req.setAttribute("favoritesVO", favoritesVO);
-			
-			
 
 			String url = "/front-end/product/band_productDetail.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
@@ -102,20 +141,18 @@ public class YUProductServlet extends HttpServlet {
 
 			List<ProductVO> bandProduct = proService.getAllByBand(band_id);
 			req.setAttribute("bandProduct", bandProduct);
+			req.setAttribute("os_service", os_service);
 
 			String url = "/front-end/product/bandID_product.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 		}
-		
-
-//		doPost(req, res);
 
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
+
 		req.setCharacterEncoding("UTF-8");
 		String action = req.getParameter("action");
 //
@@ -138,21 +175,20 @@ public class YUProductServlet extends HttpServlet {
 			ProductVO productVO = proService.getOneProduct(id);
 			List<OrderListVO> list = os_service.findByProductId(id);
 			List<String> photoIdList = productPhotoSvc.getIdListByProductId(id);
-			
+
 			HttpSession session = req.getSession();
 			FavoritesVO favoritesVO = null;
 			if (session.getAttribute("memberVo") != null) {
 				System.out.println("hi1");
 				MemberVo loginMember = (MemberVo) session.getAttribute("memberVo");
 				String member_id = loginMember.getMemberId();
-				favoritesVO = favoritesService.findByMemberIdAndProductId(member_id,productVO.getProduct_id());
-				System.out.println("hi2:"+favoritesVO);
+				favoritesVO = favoritesService.findByMemberIdAndProductId(member_id, productVO.getProduct_id());
+				System.out.println("hi2:" + favoritesVO);
 			}
 			req.setAttribute("productVO", productVO);
 			req.setAttribute("orderListVO", list);
 			req.setAttribute("photoIdList", photoIdList);
 			req.setAttribute("favoritesVO", favoritesVO);
-			
 
 			String url = "/front-end/product/band_productDetail.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
@@ -172,7 +208,8 @@ public class YUProductServlet extends HttpServlet {
 				if (session.getAttribute("memberVo") != null) {
 					MemberVo loginMember = (MemberVo) session.getAttribute("memberVo");
 					String member_id = loginMember.getMemberId();
-					favoritesService.addFavorites(member_id, PRODUCT_FAVORITE_TYPE, req.getParameter("productId"), new Timestamp(System.currentTimeMillis()));
+					favoritesService.addFavorites(member_id, PRODUCT_FAVORITE_TYPE, req.getParameter("productId"),
+							new Timestamp(System.currentTimeMillis()));
 
 					res.getWriter().write("true");
 				} else {
@@ -201,8 +238,7 @@ public class YUProductServlet extends HttpServlet {
 			}
 			return;
 		}
-		
-		
+
 	}
 
 }
