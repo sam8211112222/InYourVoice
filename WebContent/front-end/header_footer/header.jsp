@@ -82,7 +82,7 @@ header {
 	display: block;
 	text-align: center;
 	top: 49px !important;
-	left: -79px !important;
+	left: 49px !important;
 }
 
 .logo {
@@ -176,6 +176,7 @@ header {
 					</form>
 				</ul>
 			</div>
+			</nav>
 			<c:if test="${memberVo.memberId!=null}">
 				<!-- 小鈴鐺   -->
 				<div class="dropdown dropleft">

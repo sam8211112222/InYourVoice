@@ -52,7 +52,7 @@
 
 		<c:forEach var="eventVO" items="${eventVOList}">
 			<c:if test="${eventVO.event_type==3}">
-				<div class="ls-slide">
+				<div class="ls-slide" style="cursor:pointer;" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 					<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}">
 				</div>
 			</c:if>
@@ -88,7 +88,7 @@
 	<!-- 最新消息 -->
 	<div class="wrap">
 		<h2 class="wrap-title">最新消息</h2>
-		<table class="table table-dark table-hover">
+		<table class="table table table-hover">
 			<thead>
 				<tr>
 					<th scope="col"></th>
@@ -100,7 +100,7 @@
 
 				<c:forEach var="eventVO" items="${eventVOList}">
 					<c:if test="${eventVO.event_type==4}">
-						<tr>
+						<tr onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 							<th scope="row"><img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="latest-events"></th>
 							<td>${eventVO.event_title}</td>
 						</tr>
@@ -455,7 +455,7 @@
 									<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top">
 									<div class="card-body">
 										<i class="fas fa-calendar-alt"><fmt:formatDate value="${eventVO.event_start_time}" pattern="yyyy-MM-dd HH:mm" /></i>
-										<button class="view-event-btn">檢視活動</button>
+										<button class="view-event-btn" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">檢視活動</button>
 										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 									</div>
 								</div>
@@ -528,7 +528,7 @@
 									<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top">
 									<div class="card-body">
 										<i class="fas fa-calendar-alt"><fmt:formatDate value="${eventVO.event_start_time}" pattern="yyyy-MM-dd HH:mm" /></i>
-										<button class="view-event-btn">檢視活動</button>
+										<button class="view-event-btn" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">檢視活動</button>
 										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 									</div>
 								</div>
@@ -599,7 +599,7 @@
 									<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" class="card-img-top">
 									<div class="card-body">
 										<i class="fas fa-calendar-alt"><fmt:formatDate value="${eventVO.event_start_time}" pattern="yyyy-MM-dd HH:mm" /></i>
-										<button class="view-event-btn">檢視活動</button>
+										<button class="view-event-btn" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">檢視活動</button>
 										<!-- <p class="card-text">活動內容活動內容活動內容活動內容</p> -->
 									</div>
 								</div>
@@ -686,10 +686,6 @@
 			</div>
 		</div>
 	</c:if>
-
-
-
-	<hr>
 	
 	<jsp:include page="/front-end/header_footer/footer.jsp"></jsp:include>
 

@@ -496,9 +496,6 @@ public class bandServlet extends HttpServlet {
 			String path = req.getContextPath();
 			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
 		}
-	}
-
-		
 		// 冠華
 		//這是新增的搜尋方法	
 				if ("searchName".equals(action)) {
@@ -508,12 +505,6 @@ public class bandServlet extends HttpServlet {
 					req.getSession().setAttribute("name", name);
 					res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
 				}
-
-		
-		
-		
 	}
-	
-
 }
 
