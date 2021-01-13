@@ -469,7 +469,7 @@ public class bandServlet extends HttpServlet {
 			RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/protect/bandSignupRelpy.jsp");
 			failureView.forward(req, res);
 		}
-<<<<<<< HEAD
+
 		if("bandSignupUpdate".equals(action)) {
 			
 			String bandName=(String)req.getParameter("bandName");
@@ -497,7 +497,7 @@ public class bandServlet extends HttpServlet {
 			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
 		}
 	}
-=======
+
 		
 		// 冠華
 		//這是新增的搜尋方法	
@@ -514,6 +514,6 @@ public class bandServlet extends HttpServlet {
 		
 	}
 	
->>>>>>> 8c03eed5c4c6e0fed1325a1742c6f201152be1fa
+
 }
 
