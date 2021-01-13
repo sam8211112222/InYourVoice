@@ -71,7 +71,7 @@
 	font-size: 45px;
 }
 .product-thumb .item img {
-	height: 100px;
+	height: 100px !important;
 	
 }
 .product-name {
@@ -106,7 +106,7 @@
     font-size: 13px;
 }
 .reviews-counter span {
-	vertical-align: -2px;
+	vertical-align: -6px;
 }
 .rate {
     float: left;
@@ -149,7 +149,7 @@
 	line-height: 24px;
 	color: #7a7a7a;
 }
-.product-dtl .form-control {
+.product-dtl  {
 	font-size: 15px;
 }
 .product-dtl label {
@@ -201,12 +201,42 @@
 	color: #212529;
 	text-decoration: none;
 }
-
-.product-info-tabs {
-	margin-top: 25px; 
+.round-black-btn-now {
+	border-radius: 4px;
+    background: #f9595f;
+    color: #fff;
+    padding: 7px 45px;
+    display: inline-block;
+    margin-top: 20px;
+    border: solid 2px #f9595f; 
+    transition: all 0.5s ease-in-out 0s;
 }
+.round-black-btn-now:hover,
+.round-black-btn-now:focus {
+	background: transparent;
+	color: #212529;
+	text-decoration: none;
+}
+.round-black-btn-add {
+	border-radius: 4px;
+    background: #2cbcf4;
+    color: #fff;
+    padding: 7px 45px;
+    display: inline-block;
+    margin-top: 20px;
+    border: solid 2px #2cbcf4; 
+    transition: all 0.5s ease-in-out 0s;
+}
+.round-black-btn-add:hover,
+.round-black-btn-add:focus {
+	background: transparent;
+	color: #212529;
+	text-decoration: none;
+}
+
+
 .product-info-tabs .nav-tabs {
-	border-bottom: 2px solid #d8d8d8;
+	border-bottom: 2px solid #FFB6C1;
 }
 .product-info-tabs .nav-tabs .nav-item {
 	margin-bottom: 0;
@@ -223,7 +253,7 @@
 .product-info-tabs .nav-tabs .nav-link.active, 
 .product-info-tabs .nav-tabs .nav-link.active:hover {
 	border: none; 
-	border-bottom: 2px solid #d8d8d8;
+	border-bottom: 2px solid #f9595f;
 	font-weight: bold;
 }
 .product-info-tabs .tab-content .tab-pane {
@@ -316,6 +346,7 @@ div.product-name{
 div.owl-carousel{
 	width:400px;
 	border-radius: .4rem;
+	margin:0 80px;
 }
 .row{
 	    margin-right: 50px;
@@ -323,7 +354,8 @@ div.owl-carousel{
 }
 .product-price-discount{
 	font-size:20px;
-	color:#6c757d;
+	color:#d62672;
+	font-weight:bold;
 }
 body {
 	background-color: #fafafa ! important;
@@ -377,7 +409,7 @@ body {
 
 .comment-list {
 	margin: 0 auto;
-	width: 546px;
+	width: 100%;
 }
 
 .comment-list .comments-header {
@@ -431,7 +463,8 @@ h1 {
 
 .comment-list .project-collaborator {
 	float: left;
-	width: 52px;
+	width: 50px;
+	height:50px;
 	margin-right: 20px;
 }
 
@@ -630,9 +663,9 @@ img.project-collaborator{
 border-radius: 50px;
 }
 div.product-info-tabs{
-margin: 50px 50px 50px 0px;
+margin: 50px 150px 50px 0px;
 	padding: 0px, 50px, 50px, 0px;
-	width:80%;
+	width:90%;
 	
 }
 

@@ -22,7 +22,7 @@ function goOrders(){
     window.location.href = "<%=request.getContextPath()%>/orders/myOrderServlet";
 }
 function backToHomePage(){
-    window.location.href = "<%=request.getContextPath()%>/orders/myOrderServlet";
+    window.location.href = "<%=request.getContextPath()%>/index.jsp";
 }
 </script>
 	<!-- 進度列 -->

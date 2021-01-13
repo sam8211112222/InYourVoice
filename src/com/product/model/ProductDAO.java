@@ -956,6 +956,15 @@ public class ProductDAO implements ProductDAO_interface {
 		return null;
 	}
 	
+	/**
+	 * added by  鈺涵
+	 */
+	@Override
+	public List<ProductVO> findProductForList(String productName, String productType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	//冠華
 	//這是新增的搜尋方法
 		@Override
