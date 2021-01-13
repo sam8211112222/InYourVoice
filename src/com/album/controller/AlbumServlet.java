@@ -33,7 +33,7 @@ import com.pieces.model.PiecesVO;
 
 @WebServlet("/album/album.do")
 @MultipartConfig
-public class albumServlet extends HttpServlet {
+public class AlbumServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

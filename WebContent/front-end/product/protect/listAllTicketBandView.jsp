@@ -8,11 +8,9 @@
 
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	if (memberVo == null) {
-		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
-	} ;
+	
 	EventService EventSvc = new EventService();
-    List<EventVO> list = EventSvc.getEventsByBandId("memberVo.getBandId()");
+    List<EventVO> list = EventSvc.getEventsByBandId(memberVo.getBandId());
     pageContext.setAttribute("list",list);
 %>
 <html>
@@ -21,6 +19,7 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
 <%@ include file="/css/member/member_center_top.file" %>
 <div align="center" style="position:relative" id="table-1">
 	票卷訂單資料 

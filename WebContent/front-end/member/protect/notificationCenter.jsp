@@ -41,7 +41,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th scope="col"></th>
+							
 							<th scope="col">標題</th>
 							<th scope="col">接收人</th>
 							<th scope="col">時間</th>
@@ -50,7 +50,7 @@
 					<tbody>
 					<c:forEach var="memNoti" items="${mesg}">
 						<tr>
-							<th scope="row">1</th>
+						
 							<td>${memNoti.title}</td>
 							<td>${memNoti.receiver}</td>
 							<td><fmt:formatDate value="${memNoti.sendTime}" pattern="yyyy-MM-dd"/></td>

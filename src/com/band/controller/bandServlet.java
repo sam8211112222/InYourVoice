@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ import com.utils.ImageUtil;
 
 @WebServlet("/band/band.do")
 @ServerEndpoint("/FolloWS/{userName}")
+@MultipartConfig
 public class bandServlet extends HttpServlet {
 	
 	private static final Set<Session> connectedSessions = Collections.synchronizedSet(new HashSet<>());
@@ -345,6 +347,7 @@ public class bandServlet extends HttpServlet {
 		// Kevin===========================================================================
 		//註冊樂團
 		if("bandSignup".equals(action)) {
+		
 			String bandName=(String)req.getParameter("bandName");
 			String bandIntro=req.getParameter("bandIntro");
 			String memberId=(String)req.getParameter("memberId"); //取得會員ID
@@ -372,7 +375,7 @@ public class bandServlet extends HttpServlet {
 			HttpSession session = req.getSession();
 			session.setAttribute("memberVo", newmemberVo);
 			String path = req.getContextPath();
-			res.sendRedirect(path+"/front-end/member/memberCenter2.jsp");
+			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
 		}
 		//取得試聽作品
 		if("getSong".equals(action)) {
@@ -421,6 +424,7 @@ public class bandServlet extends HttpServlet {
 			sout.close();
 		}
 		if("getband".equals(action)) {
+			
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
 			BandVO bandVO = bandSvc.getOneBand(bandId);
@@ -459,11 +463,32 @@ public class bandServlet extends HttpServlet {
 			RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/protect/bandSignupRelpy.jsp");
 			failureView.forward(req, res);
 		}
-		
-		
-		
-	}
+		if("bandSignupUpdate".equals(action)) {
+			
+			String bandName=(String)req.getParameter("bandName");
+			String bandIntro=req.getParameter("bandIntro");
+			String bandId=(String)req.getParameter("bandId"); //取得會員ID
+			Part part1 = req.getPart("bandPieceCheck");
+			InputStream in1 = part1.getInputStream();
+			byte[] bandPieceCheck = new byte[in1.available()];
+			in1.read(bandPieceCheck);
+			Part part2 = req.getPart("bandBanner");
+			InputStream in2 = part2.getInputStream();
+			byte[] bandBanner = new byte[in2.available()];
+			in2.read(bandBanner);
+			in1.close();
+			in2.close();
+			//取得會員頭相
 
+			BandService bandSvc = new BandService();
+	
+			bandSvc.updateSignup(bandId, bandName, bandIntro, bandBanner, bandPieceCheck);
+			BandVO newbandVo = bandSvc.getOneBand(bandId); //取得新的樂團資料回傳
+			HttpSession session = req.getSession();
+			session.setAttribute("bandVo", newbandVo);
+			String path = req.getContextPath();
+			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
+		}
 	}
 }
 
