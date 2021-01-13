@@ -78,6 +78,7 @@ public class Login extends HttpServlet {
 			
 			String path = request.getContextPath();
 			String location = (String) session.getAttribute("location");
+			System.out.println("location = " + location);
 			if(location != null) {
 				response.sendRedirect(location);
 				return;

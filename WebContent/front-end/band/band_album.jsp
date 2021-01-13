@@ -87,20 +87,27 @@
 
                 <div class="col-6 albums_wrapper">
                     <div class="album_pieces">
-                        <ul class="pieces_list">
+<!--                     	<a href=""><button>將此專輯的歌曲加入我的最愛</button></a> -->
                             <div id="player1" class="aplayer"></div>
+                        <h2 style="margin-top: 20px;">歌曲清單</h2>
+                        <ul class="pieces_list">
                             <% int i = 1; %>
+                            <hr>
                             <c:forEach var="piecesVO" items="${piecesVOList}" >
                             <c:if test="${piecesVO.piece_status == 1 }">
-	                            <li class="piece_card" data-title="${piecesVO.piece_name}" data-author="" data-url="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" data-pic="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${piecesVO.album_id}" data-lrc="">
-	                                <!-- <div class="row piece_card justify-content-between"></div>
- 	                                    <div class="piece_order col-1 outer"><%= i++ %></div>
- 	                                    <div class="piece_name col-2.5 outer">${piecesVO.piece_name}</div>
- 	                                    <div class="piece_audio col-6"></div>
- 	                                    <div class="piece_btn col-0.5"><i class="far fa-play-circle"></i></div> 
- 	                                    <div class="piece_btn col-0.5"><i class="fas fa-plus-square"></i></div> 
- 	                                    <div class="piece_btn col-0.5"><i class="fas fa-heart"></i></div>
- 	                                </div> -->
+	                            <li class="piece_card" data-path="<%= request.getContextPath() %>" data-piece_id="${piecesVO.piece_id}" data-title="${piecesVO.piece_name}" data-author="" data-url="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" data-pic="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${piecesVO.album_id}" data-lrc="" data-fav="">
+	                                <div class="row piece_card justify-content-between">
+ 	                                    <div class="piece_order col-3 outer"><%= i++ %></div>
+ 	                                    <div class="piece_name col-3 outer">${piecesVO.piece_name}</div>
+<!--  	                                    <div class="piece_audio col-6"></div> -->
+<!--  	                                    <div class="piece_btn col-1"><i class="far fa-play-circle"></i></div>  -->
+<!--  	                                    <div class="piece_btn col-1"><i class="fas fa-plus-square"></i></div>  -->  
+                                         <div class="col-1"></div>
+                                         <div class="piece_btn col-1"><i class="fas fa-heart"></i></div>
+                                         <div class="col-1"></div>
+                                         
+ 	                                </div>
+ 	                                <hr>
 	                            </li>
 <!-- 	                            <audio controls muted autoplay> -->
 <%-- 								<source src="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" type="audio/mpeg"> --%>

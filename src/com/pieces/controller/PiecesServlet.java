@@ -28,7 +28,10 @@ import javax.servlet.http.Part;
 
 import com.album.model.AlbumService;
 import com.album.model.AlbumVO;
+import com.favorites.model.FavoritesService;
+import com.favorites.model.FavoritesVO;
 import com.google.gson.Gson;
+import com.member.model.MemberVo;
 import com.pieces.model.PiecesService;
 import com.pieces.model.PiecesVO;
 import com.sun.org.apache.bcel.internal.generic.INVOKEINTERFACE;
@@ -434,6 +437,42 @@ public class PiecesServlet extends HttpServlet {
 			jedis.close();
 //			System.out.println("close");
 
+		}
+		
+		
+		if("checkPieceFav".equals(action)) {
+			
+			res.setCharacterEncoding("UTF-8");
+			String piece_id = req.getParameter("piece_id");
+			MemberVo memberVO = (MemberVo) req.getSession().getAttribute("memberVo");
+			
+			FavoritesService favSvc = new FavoritesService();
+			List<FavoritesVO> favList = null;
+			int favState = -1;
+			if(memberVO!=null) {
+				favList= favSvc.getAll().stream()
+						.filter(f -> (f.getMember_id()).equals(memberVO.getMemberId()))
+						.filter(f -> (f.getFavorite_id()).equals(piece_id))
+						.collect(Collectors.toList());
+				favState = favList.size();
+				
+				String todo = req.getParameter("todo");
+				if("toggle".equals(todo)){
+					if(favState == 0) {
+						
+					}else if(favState == 1) {
+						
+					}
+				}
+			}
+			
+			System.out.println("favList size = " + favState);
+			Gson gson = new Gson();
+			String jsonStr = gson.toJson(favState);
+			PrintWriter out = res.getWriter();
+			out.write(jsonStr);
+			
+			
 		}
 
 	}

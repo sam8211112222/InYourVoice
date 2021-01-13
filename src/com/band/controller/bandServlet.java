@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,7 @@ import com.utils.ImageUtil;
 
 @WebServlet("/band/band.do")
 @ServerEndpoint("/FolloWS/{userName}")
+@MultipartConfig
 public class bandServlet extends HttpServlet {
 	
 	private static final Set<Session> connectedSessions = Collections.synchronizedSet(new HashSet<>());
@@ -326,6 +328,7 @@ public class bandServlet extends HttpServlet {
 			for(FavoritesVO favVO: favoriteVOList) {
 				System.out.println(favVO.getUniqueid());
 				favSvc.deleteFavorites(favVO.getUniqueid());
+				// 樂團
 				if(favorite_type == 1) {
 					String followCount = String.valueOf(favSvc.getAll().stream()
 							.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
@@ -333,6 +336,9 @@ public class bandServlet extends HttpServlet {
 					
 					updateFollowCount(followCount);
 				}
+				
+				
+				
 			}
 			
 			// 回傳json

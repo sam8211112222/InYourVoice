@@ -33,7 +33,7 @@ import com.pieces.model.PiecesVO;
 
 @WebServlet("/album/album.do")
 @MultipartConfig
-public class albumServlet extends HttpServlet {
+public class AlbumServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -91,7 +91,7 @@ public class albumServlet extends HttpServlet {
 
 // 取得樂團照片		
 		if ("getAlbumPhoto".equals(action)) {
-
+			System.out.println("getAlbumPhoto");
 			String album_id = req.getParameter("album_id");
 			ServletOutputStream out = res.getOutputStream();
 
