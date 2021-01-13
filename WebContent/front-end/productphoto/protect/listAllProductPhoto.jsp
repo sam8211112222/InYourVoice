@@ -22,7 +22,8 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
+	<%@ include file="/front-end/header_footer/header.jsp"%>
+	<%@ include file="/css/member/member_center_top.file"%>
 <div id="table-1">
 	所有照片資料 
 </div>
@@ -80,6 +81,7 @@
 </table>
 </div>
 <%@ include file="page2.file" %>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

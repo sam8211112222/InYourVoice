@@ -489,14 +489,22 @@ public class bandServlet extends HttpServlet {
 			String path = req.getContextPath();
 			res.sendRedirect(path + "/front-end/member/protect/memberCenter2.jsp");
 		}
+			if("bandreply".equals(action)) {
+				String memberId = req.getParameter("memberId");
+				MemberService memberSvc = new MemberService();
+				MemberVo memberVo = memberSvc.getOne(memberId);
+				HttpSession session = req.getSession();
+				session.setAttribute("memberVo", memberVo);
+				res.sendRedirect(req.getContextPath()+"/front-end/band/protect/bandSignup.jsp");
+			}
 		// 冠華
 		// 這是新增的搜尋方法
 		if ("searchName".equals(action)) {
 
-			String name = req.getParameter("search");
+					String name = req.getParameter("search");
 
-			req.getSession().setAttribute("name", name);
-			res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
-		}
+					req.getSession().setAttribute("name", name);
+					res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
+				}
 	}
 }

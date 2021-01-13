@@ -39,8 +39,8 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
 <link rel="stylesheet" href="<%=request.getContextPath() %>/css/productphoto/productphotoDisplay.css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
-
+	<%@ include file="/front-end/header_footer/header.jsp"%>
+	<%@ include file="/css/member/member_center_top.file"%>
 <div align="center" style="position:relative" id="table-1">
 	新增照片資料 
 </div>
@@ -70,7 +70,7 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
 	<tr>
 		<td>商品編號:<font color=red><b>*</b></font></td>
 		<td><select size="1" name="product_id">
-			<c:forEach var="productVO" items="${productSvc.all}">
+			<c:forEach var="productVO" items="${productSvc.getBand(memberVo.getBandId())}">
 				<option value="${productVO.product_id}" ${(productPhotoVO.product_id==productVO.product_id)? 'selected':'' } >${productVO.product_id}
 			</c:forEach>
 		</select></td>
@@ -204,6 +204,7 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
         //      }});
         
 </script>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

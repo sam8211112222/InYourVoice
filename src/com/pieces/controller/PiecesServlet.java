@@ -455,15 +455,6 @@ public class PiecesServlet extends HttpServlet {
 						.filter(f -> (f.getFavorite_id()).equals(piece_id))
 						.collect(Collectors.toList());
 				favState = favList.size();
-				
-				String todo = req.getParameter("todo");
-				if("toggle".equals(todo)){
-					if(favState == 0) {
-						
-					}else if(favState == 1) {
-						
-					}
-				}
 			}
 			
 			System.out.println("favList size = " + favState);

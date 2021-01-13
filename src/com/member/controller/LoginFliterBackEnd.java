@@ -43,7 +43,7 @@ private FilterConfig config;
 		HttpSession session = req.getSession();
 		Object empVO = session.getAttribute("empVO");
 		if(empVO== null) {
-			session.setAttribute("location", req.getRequestURI());
+//			session.setAttribute("location", req.getRequestURI());
 			res.sendRedirect(req.getContextPath() + "/LoginBackEnd.jsp");
 			return;
 		}

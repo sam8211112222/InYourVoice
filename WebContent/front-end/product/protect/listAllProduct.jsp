@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="BIG5"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.product.model.*"%>  
@@ -12,7 +12,7 @@
 		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
 	} ;
 	ProductService ProductSvc = new ProductService();
-    List<ProductVO> list = ProductSvc.getBand("memberVo.getBandId()");
+    List<ProductVO> list = ProductSvc.getBand(memberVo.getBandId());
     pageContext.setAttribute("list",list);
 %>
 
@@ -37,7 +37,6 @@
 <a href='<%=request.getContextPath()%>/front-end/product/protect/listAllTicketBandView.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/product/protect/listAllTicketBandView.jsp')">列出票卷訂單</button></a>
 <a href='<%=request.getContextPath()%>/front-end/productphoto/protect/select_page.jsp'><button id="searchTable" onclick="window.location.href('<%=request.getContextPath()%>/front-end/productphoto/protect/select_page.jsp')">商品照片首頁</button></a>
 </div>
-
 <%-- 錯誤表列 --%>
 <c:if test="${not empty errorMsgs}">
 	<font style="color:red">請修正以下錯誤:</font>
@@ -67,6 +66,12 @@
 		<th>上下架狀態</th>
 		<th>預計上架時間</th>
 		<th>預計下架時間</th>
+		<th>折扣</th>
+		<th>折扣開始時間</th>
+		<th>折扣結束時間</th>
+		<th>最後修改時間</th>
+		<th>最後修改者</th>
+		<th>修改</th>	
 	</tr>
 		<tr>
 			<td>${productVO.product_id}</td>
@@ -111,16 +116,6 @@
 			</td>
 			<td><fmt:formatDate value="${productVO.product_on_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			<td><fmt:formatDate value="${productVO.product_off_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-		</tr>
-		<tr>
-		<th>折扣</th>
-		<th>折扣開始時間</th>
-		<th>折扣結束時間</th>
-		<th>最後修改時間</th>
-		<th>最後修改者</th>
-		<th>修改</th>	
-		</tr>
-		<tr>
 			<td>${productVO.product_discount}</td>
 			<td><fmt:formatDate value="${productVO.product_discount_on_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 			<td><fmt:formatDate value="${productVO.product_discount_off_time}" pattern="yyyy-MM-dd HH:mm:ss"/></td>

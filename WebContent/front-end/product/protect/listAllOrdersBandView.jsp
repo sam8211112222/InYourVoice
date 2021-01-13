@@ -13,7 +13,7 @@
 		response.sendRedirect(request.getContextPath() + "/front-end/member/Login.jsp");
 	} ;
 	ProductService ProductSvc = new ProductService();
-    List<OrderListVO> list = ProductSvc.getOrder("memberVo.getBandId()");
+    List<OrderListVO> list = ProductSvc.getOrder(memberVo.getBandId());
     pageContext.setAttribute("list",list);
 %>
 
@@ -23,7 +23,8 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor='white'>
-<%@ include file="/css/member/member_center_top.file" %>
+<%@ include file="/front-end/header_footer/header.jsp"%>
+<%@ include file="/css/member/member_center_top.file"%>
 <div id="table-1">
 	列出商品訂單
 </div>
@@ -50,7 +51,6 @@
 
 <div class="table" >
 <table width = "100%">
-	<tbody>
 	<tr>
 		<th>訂單明細編號</th>
 		<th>訂單編號</th>
@@ -62,7 +62,6 @@
 		<th>評價時間</th>
 		<th>金額</th>			
 	</tr>
-	</tbody>
 	<%@ include file="page1.file" %> 
 <%-- 	<jsp:useBean id="p" class="com.product.model.ProductVO"></jsp:useBean> --%>
 <%-- 	<jsp:useBean id="o" class="com.orderlist.model.OrderListVO"></jsp:useBean> --%>
@@ -82,6 +81,7 @@
 </table>
 <%@ include file="page2.file" %>
 </div>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>

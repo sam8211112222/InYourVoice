@@ -2,6 +2,7 @@ package com.productphoto.model;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 import com.productphoto.model.ProductPhotoVO;
 
@@ -80,5 +81,13 @@ public class ProductPhotoService {
 					e.printStackTrace();
 				}
 				return result;
+			}
+			public byte[] findFirst(String productId) {
+				ProductPhotoService  ppSvc = new ProductPhotoService();
+				List<ProductPhotoVO> list = ppSvc.getAll();
+				Optional<ProductPhotoVO> productphoto = list.stream().filter(p -> p.getProduct_id().equals(productId)).findFirst();
+				ProductPhotoVO ph = productphoto.get();
+				byte[] photo = ph.getProductphoto_photo();				
+				return photo;			
 			}
 	}
