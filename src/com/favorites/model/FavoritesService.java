@@ -1,6 +1,7 @@
 package com.favorites.model;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -92,6 +93,12 @@ public class FavoritesService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void deleteFav(String favId) {
+		FavoritesService favsvc = new FavoritesService();
+		List<FavoritesVO> favList = favsvc.getAll();
+		Optional<FavoritesVO> fav = favList.stream().filter(f -> f.getFavorite_id().equals(favId)).findFirst();
+		dao.delete(fav.get().getUniqueid());
 	}
 	
 // Test=======================================================================================================	
