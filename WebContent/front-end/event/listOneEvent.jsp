@@ -4,6 +4,7 @@
 <%@ page import="com.ticket.model.*"%>
 <%@ page import="java.util.*"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%
 	if (request.getParameter("event_id") != null) {
@@ -19,7 +20,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 
 <title>${eventVO.event_title}</title>
 
@@ -41,6 +42,11 @@
  	opacity: 0 !important; 
  	pointer-events: none !important; 
  } 
+ 
+ .container {
+    width: 860px !important;
+}
+
 
   .display-flex {  
   	display: flex;  
@@ -219,8 +225,10 @@
 													<tr>
 														<td class="name">${ticketVO.ticket_name}</td>
 														<td class="period"><span class="period-time">
-																<span class="time"><span class="timezoneSuffix">${ticketVO.ticket_onsale_time}</span></span>
-																~ <span class="time"><span class="timezoneSuffix">${ticketVO.ticket_endsale_time}</span></span>
+																<span class="time"><span class="timezoneSuffix"><fmt:formatDate value="${ticketVO.ticket_onsale_time}"
+								pattern="yyyy/MM/dd HH:mm" /></span></span>
+																~ <span class="time"><span class="timezoneSuffix"><fmt:formatDate value="${ticketVO.ticket_endsale_time}"
+								pattern="yyyy/MM/dd HH:mm" /></span></span>
 														</span></td>
 														<td class="price">
 															<ul>

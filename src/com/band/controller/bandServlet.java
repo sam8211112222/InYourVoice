@@ -51,9 +51,9 @@ import com.utils.ImageUtil;
 @ServerEndpoint("/FolloWS/{userName}")
 @MultipartConfig
 public class bandServlet extends HttpServlet {
-	
+
 	private static final Set<Session> connectedSessions = Collections.synchronizedSet(new HashSet<>());
-	
+
 	@OnOpen
 	public void onOpen(@PathParam("userName") String userName, Session userSession) throws IOException {
 		connectedSessions.add(userSession);
@@ -69,8 +69,8 @@ public class bandServlet extends HttpServlet {
 //		}
 //		System.out.println("Message received: " + message);
 //	}
-	
-	public void updateFollowCount(String followCount){
+
+	public void updateFollowCount(String followCount) {
 		for (Session session : connectedSessions) {
 			if (session.isOpen())
 				session.getAsyncRemote().sendText(followCount);
@@ -90,8 +90,7 @@ public class bandServlet extends HttpServlet {
 	public void onError(Session userSession, Throwable e) {
 		System.out.println("Error: " + e.toString());
 	}
-	
-	
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doPost(request, response);
@@ -181,8 +180,7 @@ public class bandServlet extends HttpServlet {
 			if (searchKeyWord == null || searchKeyWord.length() == 0) {
 				System.out.println("no searchKeyWord");
 				// list all
-				List<BandVO> bandVOList = bandSvc.getAllBand().stream()
-						.filter(b -> b.getBand_status() == 1)
+				List<BandVO> bandVOList = bandSvc.getAllBand().stream().filter(b -> b.getBand_status() == 1)
 						.collect(Collectors.toList());
 				req.setAttribute("bandVOList", bandVOList);
 				String url = "/front-end/band/listAllBand.jsp";
@@ -203,7 +201,7 @@ public class bandServlet extends HttpServlet {
 		}
 
 		if ("addFavorite".equals(action)) {
-			
+
 			res.setCharacterEncoding("UTF-8");
 
 			// 用type區別新增的最愛類別
@@ -240,38 +238,37 @@ public class bandServlet extends HttpServlet {
 			default:
 				break;
 			}
-			
+
 			String favorite_id_effective_final = favorite_id;
 
 			FavoritesService favSvc = new FavoritesService();
-			System.out.println("member_id = " + member_id + ", favorite_type = " + favorite_type + ", favorite_id = " + favorite_id + ", favorite_add_time = " + favorite_add_time);
-			
-			List<FavoritesVO> favoriteVOList = favSvc.getAll().stream()
-					.filter(f -> f.getMember_id().equals(member_id))
-					.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
-					.collect(Collectors.toList());
-			
-			for(FavoritesVO favVO: favoriteVOList) {
+			System.out.println("member_id = " + member_id + ", favorite_type = " + favorite_type + ", favorite_id = "
+					+ favorite_id + ", favorite_add_time = " + favorite_add_time);
+
+			List<FavoritesVO> favoriteVOList = favSvc.getAll().stream().filter(f -> f.getMember_id().equals(member_id))
+					.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final)).collect(Collectors.toList());
+
+			for (FavoritesVO favVO : favoriteVOList) {
 				System.out.println(favVO.getUniqueid());
 			}
-			
+
 			// 回傳json
 			Gson gson = new Gson();
 			PrintWriter out = res.getWriter();
 //			String jsonStr = gson.toJson("member_id = " + member_id + ", favorite_type = " + favorite_type + ", favorite_id = " + favorite_id + ", favorite_add_time = " + favorite_add_time);
 			String jsonStr = "";
-			
-			if(favoriteVOList.size()>0) {
+
+			if (favoriteVOList.size() > 0) {
 				jsonStr = "existed";
-			}else {
+			} else {
 				favSvc.addFavorites(member_id, favorite_type, favorite_id, favorite_add_time);
 				jsonStr = "added";
 				// 如果是新增追蹤專輯，就push追蹤數
-				if(favorite_type == 1) {
-					String followCount = String.valueOf(favSvc.getAll().stream()
-							.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
-							.collect(Collectors.toList()).size());
-					
+				if (favorite_type == 1) {
+					String followCount = String.valueOf(
+							favSvc.getAll().stream().filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
+									.collect(Collectors.toList()).size());
+
 					updateFollowCount(followCount);
 				}
 			}
@@ -318,29 +315,25 @@ public class bandServlet extends HttpServlet {
 			String favorite_id_effective_final = favorite_id;
 
 			FavoritesService favSvc = new FavoritesService();
-			List<FavoritesVO> favoriteVOList = favSvc.getAll().stream()
-					.filter(f -> f.getMember_id().equals(member_id))
-					.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
-					.collect(Collectors.toList());
-			
+			List<FavoritesVO> favoriteVOList = favSvc.getAll().stream().filter(f -> f.getMember_id().equals(member_id))
+					.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final)).collect(Collectors.toList());
+
 			System.out.println(favoriteVOList.size());
-			
-			for(FavoritesVO favVO: favoriteVOList) {
+
+			for (FavoritesVO favVO : favoriteVOList) {
 				System.out.println(favVO.getUniqueid());
 				favSvc.deleteFavorites(favVO.getUniqueid());
 				// 樂團
-				if(favorite_type == 1) {
-					String followCount = String.valueOf(favSvc.getAll().stream()
-							.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
-							.collect(Collectors.toList()).size());
-					
+				if (favorite_type == 1) {
+					String followCount = String.valueOf(
+							favSvc.getAll().stream().filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
+									.collect(Collectors.toList()).size());
+
 					updateFollowCount(followCount);
 				}
-				
-				
-				
+
 			}
-			
+
 			// 回傳json
 			Gson gson = new Gson();
 			PrintWriter out = res.getWriter();
@@ -348,16 +341,15 @@ public class bandServlet extends HttpServlet {
 			jsonStr = gson.toJson(jsonStr);
 			out.write(jsonStr);
 		}
-		
-		
+
 		// Kevin===========================================================================
-		//註冊樂團
-		if("bandSignup".equals(action)) {
-		
-			String bandName=(String)req.getParameter("bandName");
-			String bandIntro=req.getParameter("bandIntro");
-			String memberId=(String)req.getParameter("memberId"); //取得會員ID
-			Integer bnadStatus = new Integer(0);//預設申請狀態為0
+		// 註冊樂團
+		if ("bandSignup".equals(action)) {
+
+			String bandName = (String) req.getParameter("bandName");
+			String bandIntro = req.getParameter("bandIntro");
+			String memberId = (String) req.getParameter("memberId"); // 取得會員ID
+			Integer bnadStatus = new Integer(0);// 預設申請狀態為0
 			Part part1 = req.getPart("bandPieceCheck");
 			InputStream in1 = part1.getInputStream();
 			byte[] bandPieceCheck = new byte[in1.available()];
@@ -368,7 +360,7 @@ public class bandServlet extends HttpServlet {
 			in2.read(bandBanner);
 			in1.close();
 			in2.close();
-			//取得會員頭相
+			// 取得會員頭相
 			MemberService memberSvc = new MemberService();
 			MemberVo memberVo = memberSvc.getOne(memberId);
 			byte[] bandPhoto = memberVo.getMemberPhoto();
@@ -376,15 +368,16 @@ public class bandServlet extends HttpServlet {
 			Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
 			BandService bandSvc = new BandService();
 			String band_last_editor = null;
-			bandSvc.insertBand(bandName, bandIntro, bandPhoto, bandBanner, bandPieceCheck, bandAddTime, bnadStatus, bandLastEditTime, band_last_editor, memberId);
+			bandSvc.insertBand(bandName, bandIntro, bandPhoto, bandBanner, bandPieceCheck, bandAddTime, bnadStatus,
+					bandLastEditTime, band_last_editor, memberId);
 			MemberVo newmemberVo = memberSvc.getOne(memberId);
 			HttpSession session = req.getSession();
 			session.setAttribute("memberVo", newmemberVo);
 			String path = req.getContextPath();
-			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
+			res.sendRedirect(path + "/front-end/member/protect/memberCenter2.jsp");
 		}
-		//取得試聽作品
-		if("getSong".equals(action)) {
+		// 取得試聽作品
+		if ("getSong".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
 			byte[] song = bandSvc.getBandSong(bandId);
@@ -394,7 +387,7 @@ public class bandServlet extends HttpServlet {
 			out.close();
 		}
 //	取得樂團橫幅
-		if("getBanner".equals(action)) {
+		if ("getBanner".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
 			byte[] banner = bandSvc.getBanner(bandId);
@@ -403,8 +396,8 @@ public class bandServlet extends HttpServlet {
 			out.write(banner);
 			out.close();
 		}
-		//更新樂團STATUS
-		if("updateStatus".equals(action)) {
+		// 更新樂團STATUS
+		if ("updateStatus".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			String bandLastEditor = req.getParameter("bandLastEditor");
 
@@ -412,14 +405,14 @@ public class bandServlet extends HttpServlet {
 			Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
 			bandSvc.updateBandStatusBackEnd(bandId, "1", bandLastEditTime, bandLastEditor);
 		}
-		//退回樂團申請
-		if("return".equals(action)) {
+		// 退回樂團申請
+		if ("return".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			String bandLastEditor = req.getParameter("bandLastEditor");
 			BandService bandSvc = new BandService();
-			
+
 		}
-		if("picDisplay".equals(action)) {
+		if ("picDisplay".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
 			byte[] pic = bandSvc.getBandpic(bandId);
@@ -429,8 +422,8 @@ public class bandServlet extends HttpServlet {
 			sout.write(pic2);
 			sout.close();
 		}
-		if("getband".equals(action)) {
-			
+		if ("getband".equals(action)) {
+
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
 			BandVO bandVO = bandSvc.getOneBand(bandId);
@@ -438,14 +431,14 @@ public class bandServlet extends HttpServlet {
 			RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/bandSignupRelpy.jsp");
 			failureView.forward(req, res);
 		}
-		if("updateBackEnd".equals(action)) {
+		if ("updateBackEnd".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			String bandStatus = req.getParameter("bandStatus");
 			String bandLastEditor = req.getParameter("bandLastEditor");
 			System.out.println(bandId);
 			System.out.println(bandStatus);
 			System.out.println(bandLastEditor);
-			Map<String,String> msg = new HashMap<String,String>();
+			Map<String, String> msg = new HashMap<String, String>();
 			Gson gson = new Gson();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			java.util.Date date = new java.util.Date();
@@ -454,14 +447,14 @@ public class bandServlet extends HttpServlet {
 			String d = sdf.format(time);
 			System.out.println(d);
 			msg.put("bandLastEditor", bandLastEditor);
-			msg.put("bandLastEditTime",d);
+			msg.put("bandLastEditTime", d);
 			PrintWriter pw = res.getWriter();
 			pw.write(gson.toJson(msg));
 			pw.close();
 			BandService bandSvc = new BandService();
 			bandSvc.updateBandStatusBackEnd(bandId, bandStatus, ts, bandLastEditor);
 		}
-		if("getAuditPage".equals(action)) {
+		if ("getAuditPage".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
 			BandVO bandVO = bandSvc.getOneBand(bandId);
@@ -470,11 +463,11 @@ public class bandServlet extends HttpServlet {
 			failureView.forward(req, res);
 		}
 
-		if("bandSignupUpdate".equals(action)) {
-			
-			String bandName=(String)req.getParameter("bandName");
-			String bandIntro=req.getParameter("bandIntro");
-			String bandId=(String)req.getParameter("bandId"); //取得會員ID
+		if ("bandSignupUpdate".equals(action)) {
+
+			String bandName = (String) req.getParameter("bandName");
+			String bandIntro = req.getParameter("bandIntro");
+			String bandId = (String) req.getParameter("bandId"); // 取得會員ID
 			Part part1 = req.getPart("bandPieceCheck");
 			InputStream in1 = part1.getInputStream();
 			byte[] bandPieceCheck = new byte[in1.available()];
@@ -485,35 +478,25 @@ public class bandServlet extends HttpServlet {
 			in2.read(bandBanner);
 			in1.close();
 			in2.close();
-			//取得會員頭相
+			// 取得會員頭相
 
 			BandService bandSvc = new BandService();
-	
+
 			bandSvc.updateSignup(bandId, bandName, bandIntro, bandBanner, bandPieceCheck);
-			BandVO newbandVo = bandSvc.getOneBand(bandId); //取得新的樂團資料回傳
+			BandVO newbandVo = bandSvc.getOneBand(bandId); // 取得新的樂團資料回傳
 			HttpSession session = req.getSession();
 			session.setAttribute("bandVo", newbandVo);
 			String path = req.getContextPath();
-			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
+			res.sendRedirect(path + "/front-end/member/protect/memberCenter2.jsp");
+		}
+		// 冠華
+		// 這是新增的搜尋方法
+		if ("searchName".equals(action)) {
+
+			String name = req.getParameter("search");
+
+			req.getSession().setAttribute("name", name);
+			res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
 		}
 	}
-
-		
-		// 冠華
-		//這是新增的搜尋方法	
-				if ("searchName".equals(action)) {
-
-					String name = req.getParameter("search");
-
-					req.getSession().setAttribute("name", name);
-					res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
-				}
-
-		
-		
-		
-	}
-	
-
 }
-
