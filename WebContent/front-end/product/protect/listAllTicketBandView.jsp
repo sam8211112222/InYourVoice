@@ -8,7 +8,6 @@
 
 <%
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
-	
 	EventService EventSvc = new EventService();
     List<EventVO> list = EventSvc.getEventsByBandId(memberVo.getBandId());
     pageContext.setAttribute("list",list);
@@ -19,8 +18,8 @@
 <link href="<%=request.getContextPath()%>/css/product/product.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
-<%@ include file="/css/member/member_center_top.file" %>
+<%@ include file="/front-end/header_footer/header.jsp"%>
+<%@ include file="/css/member/member_center_top.file"%>
 <div align="center" style="position:relative" id="table-1">
 	票卷訂單資料 
 </div>
@@ -63,11 +62,35 @@
 		<th>活動縣市</th>
 		<th>活動縣市分區</th>
 		<th>活動地址</th>
+		<th>活動開始時間</th>
+		<th>活動上架時間</th>
+		<th>最後修改時間</th>
+		<th>最後修改者</th>
+		<th>活動狀態</th>
+		<th>座位圖</th>
 	</tr>
 		<tr>
 			<td>${eventVO.event_id}</td>
 			<td>${eventVO.band_id}</td>
-			<td>${eventVO.event_type}</td>
+			<td>
+			<c:choose>
+			<c:when test="${eventVO.event_type == 0}">
+			 一般活動
+			</c:when>
+			<c:when test="${eventVO.event_type == 1}">
+			 放鬆好去處
+			</c:when>
+			<c:when test="${eventVO.event_type == 2}">
+			 特色活動
+			</c:when>
+			<c:when test="${eventVO.event_type == 3}">
+			 主打活動
+			</c:when>
+			<c:otherwise>
+			最新消息
+			</c:otherwise>
+			</c:choose>
+			</td>
 			<td>${eventVO.event_sort}</td>
 			<td>${eventVO.event_title}</td>
 			<td>${eventVO.event_detail}</td>
@@ -77,17 +100,7 @@
 			<td>${eventVO.event_city}</td>
 			<td>${eventVO.event_cityarea}</td>
 			<td>${eventVO.event_address}</td>
-		</tr>
-		<tr>
-		<th>活動開始時間</th>
-		<th>活動上架時間</th>
-		<th>最後修改時間</th>
-		<th>最後修改者</th>
-		<th>活動狀態</th>
-		<th>座位圖</th>
-		</tr>
-		<tr>
-		<td>${eventVO.event_start_time}</td>
+			<td>${eventVO.event_start_time}</td>
 			<td>${eventVO.event_on_time}</td>
 			<td>${eventVO.event_last_edit_time}</td>
 			<td>${eventVO.event_last_editor}</td>
@@ -98,6 +111,7 @@
 </table>
 <%@ include file="page2.file" %>
 </div>
-<%@ include file="/css/member/member_center_bottom.file" %>
+<%@ include file="/css/member/member_center_bottom.file"%>
+	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 </body>
 </html>
