@@ -19,7 +19,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>活動新增</title>
+<title>活動修改</title>
 
 
 <style>
@@ -31,30 +31,31 @@
 	height: 151px; /* height:  151px; */
 }
 
-div.inputblock	{
-	margin-bottom: 8px;
+div.inputblock {
+	margin: 4px 20px;
 }
 
-div.poster{
+div.poster {
 	width: 400px;
-    height: 210px;
-    border: 2px #4e73df solid;
-    box-sizing: border-box;
+	height: 210px;
+	border: 2px #4e73df solid;
+	box-sizing: border-box;
 }
 
-div.seat{
+div.seat {
 	width: 400px;
-    height: 500px;
-    border: 2px #4e73df solid;
-    box-sizing: border-box;
+	height: 500px;
+	border: 2px #4e73df solid;
+	box-sizing: border-box;
 }
+
 img {
- width: 100%;
- height:100%;
+	width: 100%;
+	height: 100%;
 }
 
-div.ticket{
-margin-bottom: 8px;
+div.ticket {
+	margin-bottom: 8px;
 }
 </style>
 <script
@@ -84,9 +85,10 @@ margin-bottom: 8px;
 
 <body id="page-top">
 
-<%@ include file="sb/page1.file" %>
+<%@ include file="/back-end/sb/page1.file" %>
+<div class="inputblock">
 					<!-- Page Heading -->
-					<h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+					<h1 class="h3 mb-4 text-gray-800">活動修改</h1>
 
 					<c:if test="${not empty errorMsgs}">
 						<font style="color: red">請修正以下錯誤:</font>
@@ -247,7 +249,8 @@ margin-bottom: 8px;
 <input type="hidden" name="action" value="update">
 <input type="submit" value="送出修改" id="submit"></FORM>
 <br><button type ="button" id="addTicket">新增票種</button>
-<%@ include file="sb/page2.file" %>
+</div>
+<%@ include file="/back-end/sb/page2.file" %>
 </body>
 
 

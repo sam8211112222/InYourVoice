@@ -2,12 +2,10 @@ package com.event.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -355,11 +353,9 @@ public class EventServlet extends HttpServlet {
 				java.sql.Timestamp event_last_edit_time = null;
 				event_last_edit_time = new java.sql.Timestamp(System.currentTimeMillis());
 
-				String event_last_editor = req.getParameter("event_last_editor").trim();
-				if (event_last_editor == null || event_last_editor.trim().length() == 0) {
-					System.out.println("使用者錯誤");
-					errorMsgs.add("網頁出現未知錯誤");
-				}
+				HttpSession session = req.getSession();
+				EmpVO empVO = (EmpVO) session.getAttribute("empVO");
+				String event_last_editor = empVO.getEmp_id();
 
 				EventVO eventVO = new EventVO();
 				eventVO.setEvent_id(event_id);
@@ -526,6 +522,7 @@ public class EventServlet extends HttpServlet {
 
 				/*************************** 其他可能的錯誤處理 *************************************/
 			} catch (Exception e) {
+				e.printStackTrace();
 				errorMsgs.add("修改資料失敗:" + e.getMessage());
 				RequestDispatcher failureView = req.getRequestDispatcher("/back-end/events/update_event_input.jsp");
 				failureView.forward(req, res);
@@ -652,11 +649,9 @@ public class EventServlet extends HttpServlet {
 				java.sql.Timestamp event_last_edit_time = null;
 				event_last_edit_time = new java.sql.Timestamp(System.currentTimeMillis());
 
-				String event_last_editor = req.getParameter("event_last_editor").trim();
-				if (event_last_editor == null || event_last_editor.trim().length() == 0) {
-					System.out.println("使用者錯誤");
-					errorMsgs.add("網頁出現未知錯誤");
-				}
+				HttpSession session = req.getSession();
+				EmpVO empVO = (EmpVO) session.getAttribute("empVO");
+				String event_last_editor = empVO.getEmp_id();
 
 				EventVO eventVO = new EventVO();
 				eventVO.setBand_id(band_id);

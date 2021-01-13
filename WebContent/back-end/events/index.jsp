@@ -94,7 +94,7 @@ img {
 							<th>最後修改者</th>
 							<th>活動狀態</th>
 							<th>修改</th>
-							<th>刪除</th>
+							<th>下架</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -130,9 +130,9 @@ img {
 									<FORM METHOD="post"
 										ACTION="<%=request.getContextPath()%>/event/EventServlet"
 										style="margin-bottom: 0px;">
-										<input type="submit" value="刪除" class="del_btn"> <input
+										<input type="submit" value="下架" class="del_btn"> <input
 											type="hidden" name="event_id" value="${eventVO.event_id}">
-										<input type="hidden" name="action" value="delete">
+										<input type="hidden" name="action" value="off-shelf">
 									</FORM>
 								</td>
 							</tr>
@@ -178,7 +178,7 @@ img {
 
 	$(function() {
 		$(document).on("click", ".del_btn", function(e) {
-			if (!confirm("確定要刪除嗎?")) {
+			if (!confirm("確定要下架嗎?")) {
 				e.preventDefault();
 				alert("已取消操作!")
 			}
