@@ -147,11 +147,11 @@
 			<div class="lea-time">2020 / xx / xx ~ 2020 / xx / xx</div>
 		</div>
 		<div class="lea-song-list">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00000';">
 				<div class="num">
 					1 <i class="fas fa-sort-up"></i>
 				</div>
-				<div class="lea-img">
+				<div class="lea-img" >
 					<!-- 					<img src="./images/排行榜歌圖1.png" alt=""> -->
 					<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=ALBUM00000" alt="">
 
@@ -173,7 +173,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00050';">
 				<div class="num">
 					2 <i class="fas fa-sort-up"></i>
 				</div>
@@ -197,7 +197,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00100';">
 				<div class="num">
 					3 <i class="fas fa-sort-up"></i>
 				</div>
@@ -221,7 +221,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00150';">
 				<div class="num">
 					4 <i class="fas fa-sort-up"></i>
 				</div>
@@ -245,7 +245,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00200';">
 				<div class="num">
 					5 <i class="fas fa-sort-up"></i>
 				</div>
@@ -269,7 +269,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00250';">
 				<div class="num">
 					6 <i class="fas fa-sort-up"></i>
 				</div>
@@ -293,7 +293,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00300';">
 				<div class="num">
 					7 <i class="fas fa-sort-up"></i>
 				</div>
@@ -317,7 +317,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00350';">
 				<div class="num">
 					8 <i class="fas fa-sort-up"></i>
 				</div>
@@ -341,7 +341,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00400';">
 				<div class="num">
 					9 <i class="fas fa-sort-up"></i>
 				</div>
@@ -365,7 +365,7 @@
 				</div>
 			</div>
 			<hr class="songlist-hr">
-			<div class="song-line">
+			<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00450';">
 				<div class="num">
 					10 <i class="fas fa-sort-up"></i>
 				</div>
@@ -397,7 +397,7 @@
 	<div class="wrap">
 		<h2 class="wrap-title">每日好聲音</h2>
 		<div class="card-deck">
-			<div class="card">
+			<div class="card" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00000';">
 				<!-- 			<img src="./images/美日好聲音1.jpg" class="card-img-top" alt="..."> -->
 				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00000" class="card-img-top" alt="">
 				<div class="card-body">
@@ -408,25 +408,25 @@
 					<!-- 					</p> -->
 				</div>
 			</div>
-			<div class="card">
+			<div class="card" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00050';">
 				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00050" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00050").band_name}</h5>
 				</div>
 			</div>
-			<div class="card">
+			<div class="card" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00100';">
 				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00100" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00100").band_name}</h5>
 				</div>
 			</div>
-			<div class="card">
+			<div class="card" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00150';">
 				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00150" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00150").band_name}</h5>
 				</div>
 			</div>
-			<div class="card">
+			<div class="card" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=BAND00200';">
 				<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=BAND00200" class="card-img-top" alt="">
 				<div class="card-body">
 					<h5 class="card-title">${bandSvc.getOneBand("BAND00200").band_name}</h5>
@@ -690,9 +690,6 @@
 	<jsp:include page="/front-end/header_footer/footer.jsp"></jsp:include>
 
 
-	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 
 
 	<script type="text/javascript" src="<%=request.getContextPath()%>/vendors/slick/slick.min.js"></script>

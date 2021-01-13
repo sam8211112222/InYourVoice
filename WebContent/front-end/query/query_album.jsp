@@ -56,7 +56,7 @@
 						
 			<c:forEach var="albumVO" items="${albumSvc.getAlbumByName(name)}"> 
 
-				<div class="song-line">
+				<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${albumVO.band_id}';">
 					<div class="num"></div>
 					<div class="lea-img">
 						<!-- 					<img src="./images/排行榜歌圖1.png" alt=""> -->
@@ -88,6 +88,5 @@
 
 
 	<%@include file="/front-end/header_footer/footer.jsp" %>
-	
 </body>
 </html>
