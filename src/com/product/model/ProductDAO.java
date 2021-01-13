@@ -13,6 +13,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.orderlist.model.OrderListVO;
+import com.ticket.model.TicketVO;
 
 
 public class ProductDAO implements ProductDAO_interface {
@@ -124,6 +125,8 @@ public class ProductDAO implements ProductDAO_interface {
 	//冠華
 	//這是新增的搜尋方法
 	private static final String GET_PRODUCT_BYNAME_PSTMT = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME LIKE ?";
+	// Sam
+	private static final String GET_EORDER = "SELECT ticket.ticket_id,ticket.event_id, ticket.ticket_name, ticket.ticket_amount, ticket.ticket_price,event.event_id, event.band_id FROM ticket JOIN event ON ticket.event_id = event.event_id AND event.band_id = ?";		
 	
 	
 	@Override
@@ -1018,6 +1021,64 @@ public class ProductDAO implements ProductDAO_interface {
 				if (conn != null) {
 					try {
 						conn.close();
+					} catch (Exception e) {
+						e.printStackTrace(System.err);
+					}
+				}
+			}
+			return list;
+		}
+		
+		// Sam
+		@Override
+		public List<TicketVO> getEOrder(String band_id) {
+			List<TicketVO> list = new ArrayList<TicketVO>();
+			TicketVO ticketVO = null;		
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			
+			try {
+				
+				con = ds.getConnection();
+				pstmt = con.prepareStatement(GET_EORDER);
+				pstmt.setString(1, band_id);
+				rs = pstmt.executeQuery();
+				
+				while (rs.next()) {
+					// empVO 銋迂� Domain objects
+					ticketVO = new TicketVO();
+					ticketVO.setTicket_id(rs.getString("ticket_id"));
+					ticketVO.setEvent_id(rs.getString("event_id"));
+					ticketVO.setTicket_name(rs.getString("ticket_name"));
+					ticketVO.setTicket_amount(rs.getInt("ticket_amount"));
+					ticketVO.setTicket_price(rs.getInt("ticket_price"));
+					list.add(ticketVO); // Store the row in the list
+				}
+				
+				// Handle any driver errors
+			} catch (SQLException se) {
+				throw new RuntimeException("A database error occured. "
+						+ se.getMessage());
+				// Clean up JDBC resources
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException se) {
+						se.printStackTrace(System.err);
+					}
+				}
+				if (con != null) {
+					try {
+						con.close();
 					} catch (Exception e) {
 						e.printStackTrace(System.err);
 					}

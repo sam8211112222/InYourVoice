@@ -78,35 +78,48 @@ $(function(){
     },1000);
     
     // 載入追蹤狀態
-    $("li.piece_card").each(function(index, item){
+    function piece_status(){
 
-        let that = $(this);
-        let piece_id = $(this).attr("data-piece_id");
-        console.log("data-piece_id = " + piece_id);
-        let path = $(this).attr("data-path");
-        console.log("data-path = " + path);
-        
-        url = path + "/pieces/pieces.do?action=checkPieceFav&piece_id=" + piece_id;
-        
-        // 檢查歌曲追蹤狀態
-        $.ajax({
-            url:  url,           // 資料請求的網址
-            type: "GET",                            // GET | POST | PUT | DELETE | PATCH
-            data: "",                         // 傳送資料到指定的 url
-            // processData: false,
-            // contentType : false,
-            // cache: false,
-            dataType: "json",                        // 預期會接收到回傳資料的格式： json | xml | html
-            timeout: 0,                              //  request 可等待的毫秒數 | 0 代表不設定 timeout
-            success: function(data){    
-                console.log("favState = " + data);
-                that.attr("data-fav", data);
-                // return data;
-            }
-        })
+        $("li.piece_card").each(function(index, item){
     
+            let that = $(this);
+            let piece_id = $(this).attr("data-piece_id");
+            console.log("data-piece_id = " + piece_id);
+            let path = $(this).attr("data-path");
+            console.log("data-path = " + path);
+            
+            url = path + "/pieces/pieces.do?action=checkPieceFav&piece_id=" + piece_id;
+            
+            // 檢查歌曲追蹤狀態
+            $.ajax({
+                url:  url,           // 資料請求的網址
+                type: "GET",                            // GET | POST | PUT | DELETE | PATCH
+                data: "",                         // 傳送資料到指定的 url
+                // processData: false,
+                // contentType : false,
+                // cache: false,
+                dataType: "json",                        // 預期會接收到回傳資料的格式： json | xml | html
+                timeout: 0,                              //  request 可等待的毫秒數 | 0 代表不設定 timeout
+                success: function(data){    
+                    console.log("favState = " + data);
+                    that.attr("data-fav", data);
+                    // return data;
+                    if(data==-1){
+                        that.find("div.piece_btn").css("display","none");
+                    }else if(data==0){
+                        that.find("div.piece_btn").html('<i class="far fa-heart"></i>');
+                        that.addClass("addFav");
+                    }else if(data==1){
+                        that.find("div.piece_btn").html('<i class="fas fa-heart"></i>');
+                        that.addClass("delFav");
+                    }
+                }
+            })
         
-    })
+            
+        })
+    }
+    piece_status();
 
 	
 	
@@ -172,7 +185,7 @@ $(function(){
                                             <!-- <div class="piece_btn col-1"><i class="far fa-play-circle"></i></div>  -->
                                             <!-- <div class="piece_btn col-1"><i class="fas fa-plus-square"></i></div>  -->
                                             <div class="col-1"></div>
-                                            <div class="piece_btn col-1"><i class="fas fa-heart"></i></div>
+                                            <div class="piece_btn col-1"></div>
                                             <div class="col-1"></div>
                                         </div>
                                         <hr>
@@ -182,7 +195,9 @@ $(function(){
 
 
 
+
                     }
+                    piece_status();
                 }
             }
         });
@@ -221,12 +236,21 @@ $(function(){
     // 追蹤相關
     $(document).on("click", "li.piece_card .piece_btn", function(e){
         e.stopPropagation();
+        let that = $(this);
         let piece_id = $(this).closest("li.piece_card").attr("data-piece_id");
         console.log("data-piece_id = " + piece_id);
         let path = $(this).closest("li.piece_card").attr("data-path");
         console.log("data-path = " + path);
+        let hasAddFav = $(this).closest("li.piece_card").hasClass("addFav");
+        let hasDelFav = $(this).closest("li.piece_card").hasClass("delFav");
+        let favStatus;
+        if(hasAddFav){
+            favStatus = "addFavorite";
+        }else if(hasDelFav){
+            favStatus = "delFavorite";
+        }
         
-        url = path + "/pieces/pieces.do?action=checkPieceFav&todo=toggle&piece_id=" + piece_id;
+        url = path + "/band/band.do?action=" + favStatus + "&piece_id=" + piece_id + "&type=piece";
         
         // 檢查歌曲追蹤狀態 及更新
         $.ajax({
@@ -241,6 +265,22 @@ $(function(){
             success: function(data){    
                 console.log("favState = " + data);
                 // return data;
+                if(data==-1){
+                    alert("請先登入會員再使用追蹤功能!");
+                }else if(data=="existed"){
+                    alert("已新增過!");
+                }else if(data=="added"){
+                    alert("已新增!");
+                    that.closest("li.piece_card").removeClass("addFav");
+                    that.closest("li.piece_card").addClass("delFav");
+                    that.html('<i class="fas fa-heart"></i>');
+                }else if(data=="deleted"){
+                    alert("已刪除!");
+                    that.closest("li.piece_card").removeClass("delFav");
+                    that.closest("li.piece_card").addClass("addFav");
+                    that.html('<i class="far fa-heart"></i>');
+
+                }
             }
         });
 
