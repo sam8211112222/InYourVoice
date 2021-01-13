@@ -931,6 +931,16 @@ public class EventServlet extends HttpServlet {
 			RequestDispatcher failureView = req.getRequestDispatcher("/front-end/event/allevent.jsp");
 			failureView.forward(req, res);
 		}
+		
+		//冠華
+		//這是新增的搜尋方法
+		if ("searchName".equals(action)) {
+
+			String name = req.getParameter("search");
+
+			req.getSession().setAttribute("name", name);
+			res.sendRedirect(req.getContextPath() + "/front-end/query/query_event.jsp");
+		}
 	}
 
 	public void destroy() {

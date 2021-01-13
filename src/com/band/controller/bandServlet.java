@@ -181,7 +181,9 @@ public class bandServlet extends HttpServlet {
 			if (searchKeyWord == null || searchKeyWord.length() == 0) {
 				System.out.println("no searchKeyWord");
 				// list all
-				List<BandVO> bandVOList = bandSvc.getAllBand();
+				List<BandVO> bandVOList = bandSvc.getAllBand().stream()
+						.filter(b -> b.getBand_status() == 1)
+						.collect(Collectors.toList());
 				req.setAttribute("bandVOList", bandVOList);
 				String url = "/front-end/band/listAllBand.jsp";
 				RequestDispatcher listAllView = req.getRequestDispatcher(url);
@@ -326,6 +328,7 @@ public class bandServlet extends HttpServlet {
 			for(FavoritesVO favVO: favoriteVOList) {
 				System.out.println(favVO.getUniqueid());
 				favSvc.deleteFavorites(favVO.getUniqueid());
+				// 樂團
 				if(favorite_type == 1) {
 					String followCount = String.valueOf(favSvc.getAll().stream()
 							.filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
@@ -333,6 +336,9 @@ public class bandServlet extends HttpServlet {
 					
 					updateFollowCount(followCount);
 				}
+				
+				
+				
 			}
 			
 			// 回傳json
@@ -463,6 +469,7 @@ public class bandServlet extends HttpServlet {
 			RequestDispatcher failureView = req.getRequestDispatcher("/back-end/band/protect/bandSignupRelpy.jsp");
 			failureView.forward(req, res);
 		}
+<<<<<<< HEAD
 		if("bandSignupUpdate".equals(action)) {
 			
 			String bandName=(String)req.getParameter("bandName");
@@ -490,5 +497,23 @@ public class bandServlet extends HttpServlet {
 			res.sendRedirect(path+"/front-end/member/protect/memberCenter2.jsp");
 		}
 	}
+=======
+		
+		// 冠華
+		//這是新增的搜尋方法	
+				if ("searchName".equals(action)) {
+
+					String name = req.getParameter("search");
+
+					req.getSession().setAttribute("name", name);
+					res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
+				}
+
+		
+		
+		
+	}
+	
+>>>>>>> 8c03eed5c4c6e0fed1325a1742c6f201152be1fa
 }
 

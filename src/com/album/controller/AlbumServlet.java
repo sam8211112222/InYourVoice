@@ -91,7 +91,7 @@ public class AlbumServlet extends HttpServlet {
 
 // 取得樂團照片		
 		if ("getAlbumPhoto".equals(action)) {
-
+			System.out.println("getAlbumPhoto");
 			String album_id = req.getParameter("album_id");
 			ServletOutputStream out = res.getOutputStream();
 

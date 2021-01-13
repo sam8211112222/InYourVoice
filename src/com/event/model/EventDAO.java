@@ -20,4 +20,8 @@ public interface EventDAO {
 	
 	public List<EventVO> eventSelcet(String sql);
 	
+	//冠華
+	//這是新增的搜尋方法
+		public List<EventVO> findByName(String event_title);
+	
 }

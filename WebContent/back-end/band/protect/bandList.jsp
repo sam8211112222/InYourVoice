@@ -120,6 +120,9 @@
 	<%@ include file="/back-end/sb/page2.file"%>
 	<script
 		src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
+		<script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script>
 		$(".updatebtn")
 				.click(

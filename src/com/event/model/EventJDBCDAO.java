@@ -35,6 +35,10 @@ public class EventJDBCDAO implements EventDAO {
 	// Kevin
 	private static final String GET_ALL_EVENT = "select * from event order by event_start_time desc";
 	
+	// 冠華
+	//這是新增的搜尋方法
+		private static final String GET_EVENT_BYNAME_PSTMT = "SELECT * FROM EVENT WHERE EVENT_TITLE LIKE ?";
+	
 	@Override
 	public String insert(EventVO eventVO) {
 		Connection con = null;
@@ -621,4 +625,80 @@ public class EventJDBCDAO implements EventDAO {
 		}
 		return list;
 	}
+	
+	//冠華
+	//這是新增的搜尋方法
+		@Override
+		public List<EventVO> findByName(String event_title) {
+			List<EventVO> list = new ArrayList<>();
+			EventVO eventVO = null;
+
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+
+			try {
+				Class.forName(driver);
+				conn = DriverManager.getConnection(url, userid, passwd);
+				pstmt = conn.prepareStatement(GET_EVENT_BYNAME_PSTMT);
+
+				pstmt.setString(1, "%" + event_title + "%");
+				
+				rs = pstmt.executeQuery();
+
+				while (rs.next()) {
+
+					eventVO = new EventVO();
+					eventVO.setEvent_id(rs.getString("event_id"));
+					eventVO.setBand_id(rs.getString("band_id"));
+					eventVO.setEvent_type(rs.getInt("event_type"));
+					eventVO.setEvent_sort(rs.getInt("event_sort"));
+					eventVO.setEvent_title(rs.getString("event_title"));
+					eventVO.setEvent_detail(rs.getString("event_detail"));
+					eventVO.setEvent_poster(rs.getBytes("event_poster"));
+					eventVO.setEvent_area(rs.getInt("event_area"));
+					eventVO.setEvent_place(rs.getString("event_place"));
+					eventVO.setEvent_city(rs.getString("event_city"));
+					eventVO.setEvent_cityarea(rs.getString("event_cityarea"));
+					eventVO.setEvent_address(rs.getString("event_address"));
+					eventVO.setEvent_start_time(rs.getTimestamp("event_start_time"));
+					eventVO.setEvent_on_time(rs.getTimestamp("event_on_time"));
+					eventVO.setEvent_last_edit_time(rs.getTimestamp("event_last_edit_time"));
+					eventVO.setEvent_last_editor(rs.getString("event_last_editor"));
+					eventVO.setEvent_status(rs.getInt("event_status"));
+					eventVO.setEvent_seat(rs.getBytes("event_seat"));
+					list.add(eventVO);
+				}
+
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace(System.err);
+			} catch (SQLException e) {
+				e.printStackTrace(System.err);
+			} finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (pstmt != null) {
+					try {
+						pstmt.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						e.printStackTrace(System.err);
+					}
+				}
+
+			}
+
+			return list;
+		}
 }

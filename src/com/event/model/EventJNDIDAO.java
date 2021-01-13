@@ -43,6 +43,9 @@ public class EventJNDIDAO implements EventDAO {
 	private static final String GET_LIST_BY_BANDID = "SELECT event_id, band_id, event_type, event_sort, event_title, event_detail, event_poster, event_area, event_place, event_city,event_cityarea, event_address, event_start_time, event_on_time, event_last_edit_time,event_last_editor, event_status, event_seat FROM event WHERE BAND_ID = ?  ORDER BY EVENT_SORT";
 	// Kevin
 	private static final String GET_ALL_EVENT = "select * from event order by event_start_time desc";
+	// 冠華
+	//這是新增的搜尋方法
+		private static final String GET_EVENT_BYNAME_PSTMT = "SELECT * FROM EVENT WHERE EVENT_TITLE LIKE ?";
 	
 	@Override
 	public String insert(EventVO eventVO) {
@@ -503,6 +506,77 @@ public class EventJNDIDAO implements EventDAO {
 			}
 
 			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	// 冠華
+	@Override
+	public List<EventVO> findByName(String event_title) {
+		List<EventVO> list = new ArrayList<>();
+		EventVO eventVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(GET_EVENT_BYNAME_PSTMT);
+
+			pstmt.setString(1, "%" + event_title + "%");
+			
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+
+				eventVO = new EventVO();
+				eventVO.setEvent_id(rs.getString("event_id"));
+				eventVO.setBand_id(rs.getString("band_id"));
+				eventVO.setEvent_type(rs.getInt("event_type"));
+				eventVO.setEvent_sort(rs.getInt("event_sort"));
+				eventVO.setEvent_title(rs.getString("event_title"));
+				eventVO.setEvent_detail(rs.getString("event_detail"));
+				eventVO.setEvent_poster(rs.getBytes("event_poster"));
+				eventVO.setEvent_area(rs.getInt("event_area"));
+				eventVO.setEvent_place(rs.getString("event_place"));
+				eventVO.setEvent_city(rs.getString("event_city"));
+				eventVO.setEvent_cityarea(rs.getString("event_cityarea"));
+				eventVO.setEvent_address(rs.getString("event_address"));
+				eventVO.setEvent_start_time(rs.getTimestamp("event_start_time"));
+				eventVO.setEvent_on_time(rs.getTimestamp("event_on_time"));
+				eventVO.setEvent_last_edit_time(rs.getTimestamp("event_last_edit_time"));
+				eventVO.setEvent_last_editor(rs.getString("event_last_editor"));
+				eventVO.setEvent_status(rs.getInt("event_status"));
+				eventVO.setEvent_seat(rs.getBytes("event_seat"));
+				list.add(eventVO);
+			}
+
 		} catch (SQLException se) {
 			throw new RuntimeException("A database error occured. " + se.getMessage());
 			// Clean up JDBC resources

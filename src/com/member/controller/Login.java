@@ -77,7 +77,14 @@ public class Login extends HttpServlet {
 			session.setAttribute("memberVo", memberVo);
 			
 			String path = request.getContextPath();
+			String location = (String) session.getAttribute("location");
+			System.out.println("location = " + location);
+			if(location != null) {
+				response.sendRedirect(location);
+				return;
+			}
 			response.sendRedirect(path+"/index.jsp");
+			return;
 		}
 		}
 		//ajax 驗證註冊帳號

@@ -79,7 +79,7 @@ public class BandService {
 	public List<BandVO> getBySearchKeyWord(String searchKeyWord){
 		List<BandVO> listOfSearch = dao.getAll().stream()
 				.filter(b -> b.getBand_name().contains(searchKeyWord) || b.getBand_intro().contains(searchKeyWord))
-//				.filter(b -> b.getBand_intro().contains(searchKeyWord))
+				.filter(b -> b.getBand_status() == 1)
 				.collect(Collectors.toList());
 			System.out.println(listOfSearch.size());
 		return listOfSearch;		
@@ -133,6 +133,17 @@ public class BandService {
 		return bandVo;
 		
 	}
+	
+	
+	//冠華
+	//這是新增的搜尋方法	與  拿圖片
+		public List<BandVO> getBandByName(String band_name) {
+			return dao.findByName(band_name);
+		}
+		public BandVO getBandPhoto(String band_id) {
+			return dao.getBandPhoto(band_id);
+		}
+	
 
 
 }
