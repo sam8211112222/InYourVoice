@@ -1,18 +1,18 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
 
-* {
-	box-sizing: border-box;
-	font-weight: normal;
-	/* border: 1px solid black; */
-}
+/* * { */
+/* 	box-sizing: border-box; */
+/* 	font-weight: normal; */
+/* 	/* border: 1px solid black; */ */
+/* } */
 
-body {
-	color: rgba(85, 85, 85, 0.199);
-	background: #fafafa;
-	text-align: center ;
-	font-family: 'Roboto Mono';
-	/* padding: 1em; */
-}
+/* body { */
+/* 	color: rgba(85, 85, 85, 0.199); */
+/* 	background: #fafafa; */
+/* 	text-align: center ; */
+/* 	font-family: 'Roboto Mono'; */
+/* 	/* padding: 1em; */ */
+/* } */
 
 h1 {
 	font-size: 1.5em;
@@ -137,28 +137,6 @@ div#productType {
 	margin-top: -2.5em;
 }
 
-a.btn-custom {
-	font-weight: 200;
-	width: 100%;
-	max-width: 100%;
-	color: white !important;
-	margin: 0 auto;
-	display: inline-block;
-}
-
-a.btn-color-primary:focus {
-	border-width: 1px;
-	border-style: solid color: white !important;
-	border-color: #f9595f;
-}
-
-a.btn-color-primary:hover {
-	background-color: #ffc3c3;
-}
-
-a.btn-color-primary {
-	background-color: #f9595f;
-}
 
 
 h5.productType {

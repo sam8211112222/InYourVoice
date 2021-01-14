@@ -484,7 +484,7 @@ td {
       <label for="order-delivery-method">送貨方式</label>
       <span class="select-cart-form">
         <select id="order-delivery-method" class="form-control" ng-disabled="multiSelect &amp;&amp; state &amp;&amp; state.isCartLoading">
-              <option value="5d4a7cad766094003ed8abf8" >宅配到府（信用卡 / LINE Pay）</option>
+              <option value="5d4a7cad766094003ed8abf8" >宅配到府（信用卡 ）</option>
              
         </select>
       </span>
@@ -493,7 +493,7 @@ td {
         <span class="select-cart-form">
           <select id="order-payment-method" class="form-control" ng-disabled="multiSelect &amp;&amp; state &amp;&amp; state.isCartLoading">
               <option value="5e16edd64d9f35002781c3e1" selected="" ng-non-bindable="">信用卡</option>
-              <option value="5d72301088906f0023afa815" ng-non-bindable="">LINE Pay</option>
+             
           </select>
         </span>
           <span class="help-block" ng-non-bindable="">支援國內外 Visa, Mastercard, JCB 等信用卡。</span>

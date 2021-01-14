@@ -363,6 +363,7 @@ public class OrdersServlet extends HttpServlet {
 		}
 
 		if ("checkout".equals(action)) {
+			System.out.println("checkout");
 			List<String> errorMsgs = new LinkedList<String>();
 			
 			req.setAttribute("errorMsgs", errorMsgs);

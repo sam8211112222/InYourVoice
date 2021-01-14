@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 <%@ page import="com.orderlist.model.ReviewVO"%>
 <%@ page import="java.util.*"%>
+<%@ page import="com.product.enums.ProductType"%>
 <%
 	List<ReviewVO> reviewList = (List<ReviewVO>)request.getAttribute("reviewList");
 	int review_score = 0;
@@ -78,6 +79,107 @@ hr.new3 {
 .rate2>.shine {
 	color: #ffc700;
 }
+span.free {
+	color: red;
+}
+
+div.intro {
+	margin: 15px;
+}
+
+p.comment-text {
+	margin: auto 0px auto 72px;
+}
+
+div.productType {
+	background-color: #fff;
+	margin: 50px 50px 50px 50px;
+	padding: 0px, 50px, 50px, 50px;
+	position: relative;
+	min-height: 1px;
+	padding-right: 15px;
+	padding-left: 15px;
+	border-radius: .4rem;
+	border: 1px solid #e4e4e4;
+	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .1)
+}
+
+a.btn-custom {
+	font-weight: 200;
+	width: 100px!important;
+	
+	color: white !important;
+	margin: 0 auto 0 auto;
+	display: inline-block;
+}
+
+a.btn-color-primary:focus {
+	border-width: 1px;
+	border-style: solid color: white !important;
+	border-color: #f9595f;
+}
+
+a.btn-color-primary:hover {
+	background-color: #f9595f;
+}
+
+a.btn-color-primary {
+	background-color: #f5b6b8;
+}
+
+a.btn-custom {
+	font-weight: 200;
+	width: 100px!important;
+	
+	color: white !important;
+	margin: 0 auto 0 auto;
+	display: inline-block;
+}
+
+a.btn-color-primary-search:focus {
+	border-width: 1px;
+	border-style: solid color: white !important;
+	border-color: #f9595f;
+}
+
+a.btn-color-primary-search:hover {
+	background-color: #f563ac;
+}
+
+a.btn-color-primary-search {
+	background-color: #f9595f;
+	
+}
+
+input.form-control {
+    display: inline-block;
+    width: 210px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+div.type{
+ display: inline-block !important;
+}
+
+button.round-black-btn-end{
+border-radius: 4px;
+    background: #9c979a;
+    color: #fff;
+    padding: 7px 45px;
+    display: inline-block;
+    margin-top: 20px;
+    border: solid 2px #9c979a ; 
+    transition: all 0.5s ease-in-out 0s;
+}
 </style>
 </head>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -91,7 +193,7 @@ hr.new3 {
 
 
 <body>
-<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
+ <jsp:include page="/front-end/header_footer/header.jsp" flush="true" /> 
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="<%=request.getContextPath()%>/js/product/band_productDetail.js"></script>
@@ -164,6 +266,32 @@ function updateFavorite(action){
 
 }		
 	</script>
+	<script>
+	function queryProduct() {
+
+		document.getElementById("queryForm").submit();
+	}
+</script>
+	<jsp:useBean id="product" scope="page" class="com.product.model.ProductService" />
+	<c:set var="productTypeList" value="ProductType.values()" />
+	<div class="productType">
+		<form action="<%=request.getContextPath()%>/product/YUproductServlet" method="GET" id="queryForm">
+			<input name="action" value="findByProductName" type="hidden" /> <input name="productName" placeholder="請輸入關鍵字或產品名稱" class="form-control" style="margin: 20px auto 0 auto;" /> <a id="back_page"
+				class="btn btn-custom btn-color-primary-search" style="margin: 15px; width: 30%;" onclick="queryProduct();">查詢</a>
+
+			<a id="back_page" class="btn btn-custom btn-color-primary" style="margin-bottom: 5px; width: 40%; border-radius: 30px;" href="<%=request.getContextPath()%>/product/YUproductServlet">全部商品</a>&nbsp;&nbsp;
+			<c:forEach items="${ProductType.values()}" var="productType">
+				<a id="back_page" class="btn btn-custom btn-color-primary" style="margin-bottom: 5px; width: 30%; border-radius: 30px;"
+					href="<%=request.getContextPath()%>/product/YUproductServlet?action=findByProductType&productType=${productType.code}">${productType.name}</a>&nbsp;&nbsp;
+
+</c:forEach>
+		</form>
+		
+		
+
+	</div>
+	
+	
 	<div class="form1">
 		<div class="container">
 			<div class="heading-section"></div>
@@ -201,36 +329,55 @@ function updateFavorite(action){
 						<div class="product-dtl" id="productInfo">
 
 							<div class="product-info">
-							<hr class="new3" size="12px" align="left" width="80%" color="#f9595f" >
+								<hr class="new3" size="12px" align="left" width="80%" color="#f9595f" style="margin: 0px 0px 35px 0px;">
 
 								<div class="product-name">${productVO.product_name}</div>
 								<div class="reviews-counter">
 									<div class="rate2">
-										<input type="hidden" id="star1" name="rate" value="1" /> <span class="<c:if test='${review_score>0}'>shine</c:if>">1 star</span> <input type="hidden" id="star2" name="rate"
-											value="2" /> <span class="<c:if test='${review_score>1}'>shine</c:if>">2 stars</span> <input type="hidden" id="star3" name="rate" value="3" /> <span
-											class="<c:if test='${review_score>2}'>shine</c:if>">3 stars</span> <input type="hidden" id="star4" name="rate" value="4" /> <span
-											class="<c:if test='${review_score>3}'>shine</c:if>">4 stars</span> <input type="hidden" id="star5" name="rate" value="5" /> <span
-											class="<c:if test='${review_score>4}'>shine</c:if>">5 stars</span>
+										<input type="hidden" id="star1" name="rate" value="1" /> <span class="<c:if test='${review_score>0}'>shine</c:if>">1 star</span> <input type="hidden" id="star2" name="rate" value="2" /> <span
+											class="<c:if test='${review_score>1}'>shine</c:if>">2 stars</span> <input type="hidden" id="star3" name="rate" value="3" /> <span class="<c:if test='${review_score>2}'>shine</c:if>">3
+											stars</span> <input type="hidden" id="star4" name="rate" value="4" /> <span class="<c:if test='${review_score>3}'>shine</c:if>">4 stars</span> <input type="hidden" id="star5" name="rate"
+											value="5" /> <span class="<c:if test='${review_score>4}'>shine</c:if>">5 stars</span>
 									</div>
-									<span style="font-size:12px;">${fn:length(reviewList)} Review<c:if test="${fn:length(reviewList)>1}">s</c:if></span>
+									<span style="font-size: 12px;">${fn:length(reviewList)} Review<c:if test="${fn:length(reviewList)>1}">s</c:if></span>
 								</div>
 								<div class="product-price-discount">
-									<span class="product-price-discount">NT:<fmt:formatNumber value="${productVO.product_price}" pattern="$#,###" /></span>
+									<span class="product-price-discount"><span style="color: #444">NT</span>
+									<fmt:formatNumber value="${productVO.product_price}" pattern="$#,###" /></span>
+								</div>
+								<div>
+									<span>結帳方式 : 信用卡</span><br /> <span>配送方式 : 宅配</span>&nbsp&nbsp<span class="free">限時優惠，全館免運!!</span><br>
 								</div>
 							</div>
-							<p>${productVO.product_intro}</p>
+							<div class="intro">
+								<p>${productVO.product_intro}</p>
+							</div>
 
 
-							<div class="product-count">
+										<div class="product-count">
 								<label for="size">數量</label>
 								<div class="display-flex">
 									<div class="qtyminus" id="qtyminus">-</div>
 									<input type="text" id="quantity" name="quantity" value="1" class="qty">
+									<c:if test="${productVO.product_stock>0}">
 									<div class="qtyplus" id="qtyplus">+</div>
+									</c:if>
+									<c:if test="${productVO.product_stock<=0}">
+									<div class="qtyplus" id="qtyplus" style="pointer-events:none;"><i class="fas fa-ban"></i></div>
+									</c:if>
 								</div>
+								<c:if test="${productVO.product_stock>0}">
 								<input type="hidden" name="productId" value="${productVO.product_id}" /> <input type="hidden" name="productName" value="${productVO.product_name}" /> <input type="hidden" name="productPrice"
-									value="${productVO.product_price}" /> <input type="hidden" name="productPhotoId" value="" /> <input type="submit" value="立即購買" class="round-black-btn" /> <input type="hidden" name="action"
-									value="goToCart" /> <input type="button" value="加入購物車" class="round-black-btn" onclick="addToCart();" />
+									value="${productVO.product_price}" /> <input type="hidden" name="productPhotoId" value="" /> <input type="submit" value="立即購買" class="round-black-btn-now" /> <input type="hidden"
+									name="action" value="goToCart" />
+								<button class="round-black-btn-add" onclick="addToCart();">
+									<i class="fas fa-cart-plus"></i>&nbsp 加入購物車
+								</button>
+								</c:if>
+								<c:if test="${productVO.product_stock<=0}">
+								<button class="round-black-btn-end" disabled="disabled" >售完捕貨中</button>
+								
+								</c:if>
 								<c:if test="${empty favoritesVO}">
 									<button class="round-black-btn" onclick="updateFavorite('addFavorite');return false;">
 										<i class="fa-1.5x fas fa-heart"></i>&nbsp 加入我的最愛
@@ -241,8 +388,7 @@ function updateFavorite(action){
 										<i class="fa-1.5x fas fa-heart"></i>&nbsp 移除我的最愛
 									</button>
 								</c:if>
-<%-- 								<br /> <a href="<%=request.getContextPath()%>/product/YUproductServlet">返回商品列表</a>  --%>
-<%-- 								<a href="<%=request.getContextPath()%>/cart/cartServlet">購物車</a> --%>
+							
 
 							</div>
 
@@ -257,10 +403,10 @@ function updateFavorite(action){
 					<li class="nav-item"><a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">評價</a></li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
-					<div class="tab-pane fade active show" id="description" role="tabpanel" aria-labelledby="description-tab">${productVO.product_intro}</div>
+					<div class="tab-pane fade active show" id="description" role="tabpanel" aria-labelledby="description-tab">${productVO.product_detail}</div>
 					<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
 						<div class="review-heading">REVIEWS</div>
-						<div class="comment-list">
+				<div class="comment-list">
 							<ul class="comments">
 								<c:if test="${not empty reviewList}">
 									<c:forEach items="${reviewList}" var="reviewVo">
@@ -268,41 +414,29 @@ function updateFavorite(action){
 												<img class="project-collaborator" src="data:image/png;base64,${reviewVo.photoData}">
 											</c:if> <c:if test="${ empty reviewVo.photoData}">
 												<img class="project-collaborator" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/454262/default.png">
-											</c:if>
-											<div class="comment-body">
-<c:if test="${ not empty reviewVo.member_nickname}">
-														<h1 class="comment-username">${reviewVo.member_nickname}</h1>
-													</c:if>
-													<c:if test="${empty reviewVo.member_nickname}">
-													<div>
-														<h6>匿名</h6>
-														</div>
-													</c:if>
-													<time class="comment-date">
-																<fmt:formatDate value="${reviewVo.review_time}" pattern="yyyy-MM-dd HH:mm:ss" />
-															</time>
-												<header class="comment-body-header">
-													<div>
-														<div class="rate2">
-															<input type="hidden" id="star1" name="rate" value="1" /> 
-															<span  class="<c:if test='${reviewVo.review_score>0}'>shine</c:if>">1 star</span>
-															<input type="hidden" id="star2" name="rate" value="2" /> 
-															<span  class="<c:if test='${reviewVo.review_score>1}'>shine</c:if>">2 stars</span> 
-															<input type="hidden" id="star3" name="rate" value="3" /> 
-															<span  class="<c:if test='${reviewVo.review_score>2}'>shine</c:if>">3 stars</span>
-															<input type="hidden" id="star4" name="rate" value="4" /> 
-															<span  class="<c:if test='${reviewVo.review_score>3}'>shine</c:if>">4 stars</span>  
-															<input type="hidden" id="star5" name="rate" value="5" /> 
-															<span  class="<c:if test='${reviewVo.review_score>4}'>shine</c:if>">5 stars</span> 
-														</div>
-														<div>
-														</div>
+											</c:if> <c:if test="${ not empty reviewVo.member_nickname}">
+												<h1 class="comment-username">${reviewVo.member_nickname}</h1>
+											</c:if> <c:if test="${empty reviewVo.member_nickname}">
+												<div>
+													<h6>匿名</h6>
+												</div>
+											</c:if> <time class="comment-date">
+												<fmt:formatDate value="${reviewVo.review_time}" pattern="yyyy-MM-dd HH:mm:ss" />
+											</time> <header class="comment-body-header">
+												<div>
+													<div class="rate2">
+														<input type="hidden" id="star1" name="rate" value="1" /> <span class="<c:if test='${reviewVo.review_score>0}'>shine</c:if>">1 star</span> <input type="hidden" id="star2" name="rate"
+															value="2" /> <span class="<c:if test='${reviewVo.review_score>1}'>shine</c:if>">2 stars</span> <input type="hidden" id="star3" name="rate" value="3" /> <span
+															class="<c:if test='${reviewVo.review_score>2}'>shine</c:if>">3 stars</span> <input type="hidden" id="star4" name="rate" value="4" /> <span
+															class="<c:if test='${reviewVo.review_score>3}'>shine</c:if>">4 stars</span> <input type="hidden" id="star5" name="rate" value="5" /> <span
+															class="<c:if test='${reviewVo.review_score>4}'>shine</c:if>">5 stars</span>
 													</div>
-													
-												</header>
-												<p class="comment-text">${reviewVo.review_msg}</p>
+													<div></div>
+												</div>
 
-											</div></li>
+											</header>
+											<p class="comment-text">${reviewVo.review_msg}</p>
+											<hr color="#FFB6C1" size=10px></li>
 									</c:forEach>
 								</c:if>
 								<c:if test="${empty reviewList}">
@@ -311,6 +445,7 @@ function updateFavorite(action){
 
 							</ul>
 						</div>
+
 
 					</div>
 				</div>
@@ -324,6 +459,6 @@ function updateFavorite(action){
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="	sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
-<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+<%--  <jsp:include page="/front-end/header_footer/footer.jsp" flush="true" /> --%>
 </body>
 </html>

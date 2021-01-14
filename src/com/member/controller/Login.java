@@ -249,7 +249,8 @@ public class Login extends HttpServlet {
 			pw.write(gson.toJson(msg));				
 			pw.close();
 			String authcode = genAuthCode();
-			sendMail(memberAccount,authcode);
+			String url = request.getScheme()+"://"+request.getServerName()+"/"+request.getContextPath();
+			sendMail(memberAccount,authcode,url);
 			Jedis jedis = new Jedis("localhost", 6379);
 			jedis.auth("123456");
 			jedis.set("authCode", authcode);
@@ -407,7 +408,8 @@ public class Login extends HttpServlet {
 			msg.put("msg", "true");
 			pw.write(gson.toJson(msg));
 			pw.close();
-			passwordMail(memberAccount);
+			String url = request.getScheme()+"://"+request.getServerName()+"/"+request.getContextPath();
+			passwordMail(memberAccount,url);
 		}
 		if("google".equals(str)) {
 			String memberName = request.getParameter("memberName");
@@ -449,7 +451,7 @@ public class Login extends HttpServlet {
 		String code = String.valueOf(c);//用valueof將字元陣列轉換字串
 		return code;
 	}
-	public void sendMail(String memberAccount,String code) {
+	public void sendMail(String memberAccount,String code,String url) {
 		String targetEmail = memberAccount;
 
 	      // Sender's email ID needs to be mentioned
@@ -489,7 +491,7 @@ public class Login extends HttpServlet {
 		   message.setSubject("恭喜你已成功註冊成為InYourVoice會員");
 		
 		   // Now set the actual message
-		   message.setText("恭喜你已註冊完成請點擊下列網址進行首次登入驗證"+"<a href='http://localhost:8081/TEA102G6/Login?action=auth&authCode="
+		   message.setText("恭喜你已註冊完成請點擊下列網址進行首次登入驗證"+"<a href="+url+"/Login?action=auth&authCode="
 	                + code + "'></a>");
 
 		   // Send message
@@ -501,7 +503,7 @@ public class Login extends HttpServlet {
 	         throw new RuntimeException(e);
 	      }
 	}
-	public void passwordMail(String memberAccount) {
+	public void passwordMail(String memberAccount,String url) {
 		String targetEmail = memberAccount;
 
 	      // Sender's email ID needs to be mentioned
@@ -541,7 +543,7 @@ public class Login extends HttpServlet {
 		   message.setSubject("更改會員密碼");
 		
 		   // Now set the actual message
-		   message.setText("請點選下列網址進行更改密碼"+"<a href='http://localhost:8081/TEA102G6/front-end/member/forgetPassword.jsp?memberAccount="
+		   message.setText("請點選下列網址進行更改密碼"+"<a href="+url+"/front-end/member/forgetPassword.jsp?memberAccount="
 	                + memberAccount + "'></a>");
 
 		   // Send message

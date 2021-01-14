@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eventorderlist.model.EventOrderListVO;
 import com.orderlist.model.OrderListVO;
 import com.productphoto.model.ProductPhotoVO;
 import com.ticket.model.TicketVO;
@@ -63,22 +64,32 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 	//這是新增的搜尋方法
 		private static final String GET_PRODUCT_BYNAME_PSTMT = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME LIKE ?";
 	// Sam
-		private static final String GET_EORDER = "SELECT ticket.ticket_id,ticket.event_id, ticket.ticket_name, ticket.ticket_amount, ticket.ticket_price,event.event_id, event.band_id FROM ticket JOIN event ON ticket.event_id = event.event_id AND event.band_id = ?";	
+		private static final String GET_EORDER = "SELECT * FROM eventorderlist JOIN ticket ON eventorderlist.ticket_id = ticket.ticket_id  JOIN event ON ticket.event_id = event.event_id AND event.band_id = ?";	
 	
 	
-	/**
-	 * added by  鈺涵
-	 */
-	private static final String FIND_BY_NAME_STMT = "SELECT * FROM product where upper(product_name) LIKE upper(?)";
-	/**
-	 * added by  鈺涵
-	 */
-	private static final String FIND_BY_TYPE_STMT = "SELECT * FROM product where product_type = ?";
-	
-	/**
-	 * added by  鈺涵
-	 */
-	private static final String UPDATE_STOCK = "UPDATE PRODUCT SET PRODUCT_STOCK = PRODUCT_STOCK + ? where PRODUCT_ID = ?";
+		/**
+		 * added by  鈺涵
+		 */
+		private static final String FIND_BY_NAME_STMT = "SELECT * FROM product where upper(product_name) LIKE upper(?)";
+		
+		/**
+		 * added by  鈺涵
+		 */
+		private static final String FIND_BY_TYPE_STMT = "SELECT * FROM product where product_type = ?";
+		
+		/**
+		 * added by  鈺涵
+		 */
+		private static final String UPDATE_STOCK = "UPDATE PRODUCT SET PRODUCT_STOCK = PRODUCT_STOCK + ? where PRODUCT_ID = ?";
+
+		/**
+		 * added by  鈺涵
+		 */
+		private static final String SELECT_PRODUCT_FOR_LIST_STMT = "SELECT PRODUCT_ID,BAND_ID,PRODUCT_TYPE,PRODUCT_NAME,PRODUCT_INTRO,PRODUCT_PRICE,PRODUCT_STOCK,PRODUCT_CHECK_STATUS,PRODUCT_STATUS,PRODUCT_ON_TIME, " + 
+				"PRODUCT_OFF_TIME,PRODUCT_ADD_TIME,PRODUCT_DISCOUNT,PRODUCT_DISCOUNT_ON_TIME,PRODUCT_DISCOUNT_OFF_TIME,PRODUCT_LAST_EDIT_TIME,PRODUCT_LAST_EDITOR, " + 
+				"AVG(ORDERLIST.REVIEW_SCORE) AS REVIEW_SCORE,COUNT(orderlist.orderlist_id) AS REVIEW_COUNT FROM PRODUCT INNER JOIN ORDERLIST USING(PRODUCT_ID) WHERE orderlist.review_time IS NOT NULL %S GROUP BY " + 
+				"PRODUCT_ID,BAND_ID,PRODUCT_TYPE,PRODUCT_NAME,PRODUCT_INTRO,PRODUCT_PRICE,PRODUCT_STOCK,PRODUCT_CHECK_STATUS,PRODUCT_STATUS,PRODUCT_ON_TIME, " + 
+				"PRODUCT_OFF_TIME,PRODUCT_ADD_TIME,PRODUCT_DISCOUNT,PRODUCT_DISCOUNT_ON_TIME,PRODUCT_DISCOUNT_OFF_TIME,PRODUCT_LAST_EDIT_TIME,PRODUCT_LAST_EDITOR";
 
 	@Override
 	public void insert(ProductVO productVO) {
@@ -1153,6 +1164,105 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		return list;
 	}
 	
+	/**
+	 * added by  鈺涵
+	 */
+	@Override
+	public List<ProductVO> findProductForList(String productName ,String productType) {
+		List<ProductVO> list = new ArrayList<ProductVO>();
+		ProductVO productVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			
+			StringBuilder clause = new StringBuilder();
+			
+			if(productName!=null) {
+				clause.append(" and upper(product_name) LIKE upper(?) ");
+			}
+			if(productType!=null) {
+				clause.append(" and product_type = ? ");
+			}
+			
+			String stmt = String.format(SELECT_PRODUCT_FOR_LIST_STMT, clause.toString());
+			
+			pstmt = con.prepareStatement(stmt);
+			int index = 1;
+			
+			if(productName!=null) {
+				pstmt.setString(index++, "%"+productName+"%");
+			}
+
+			if(productType!=null) {
+				pstmt.setString(index, productType);
+			} 
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// empVO 也稱為 Domain objects
+				productVO = new ProductVO();
+				productVO.setProduct_id(rs.getString("product_id"));
+				productVO.setBand_id(rs.getString("band_id"));
+				productVO.setProduct_type(rs.getInt("product_type"));
+				productVO.setProduct_name(rs.getString("product_name"));
+				productVO.setProduct_intro(rs.getString("product_intro"));
+//				productVO.setProduct_detail(rs.getString("product_detail"));
+				productVO.setProduct_price(rs.getDouble("product_price"));
+				productVO.setProduct_stock(rs.getInt("product_stock"));
+				productVO.setProduct_check_status(rs.getInt("product_check_status"));
+				productVO.setProduct_status(rs.getInt("product_status"));
+				productVO.setProduct_on_time(rs.getTimestamp("product_on_time"));
+				productVO.setProduct_off_time(rs.getTimestamp("product_off_time"));
+				productVO.setProduct_add_time(rs.getTimestamp("product_add_time"));
+				productVO.setProduct_discount(rs.getDouble("product_discount"));
+				productVO.setProduct_discount_on_time(rs.getTimestamp("product_discount_on_time"));
+				productVO.setProduct_discount_off_time(rs.getTimestamp("product_discount_off_time"));
+				productVO.setProduct_last_edit_time(rs.getTimestamp("product_last_edit_time"));
+				productVO.setProduct_last_editor(rs.getString("product_last_editor"));
+				productVO.setReview_count(rs.getInt("review_count"));
+				productVO.setReview_score(rs.getInt("review_score"));
+				list.add(productVO); // Store the row in the list
+			}
+			// Handle any driver errors
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. " + e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			se.printStackTrace();
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}	
+	
 	//冠華
 	//這是新增的搜尋方法
 		@Override
@@ -1231,10 +1341,10 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		
 		//Sam
 		@Override
-		public List<TicketVO> getEOrder(String band_id) {
-			List<TicketVO> list =new ArrayList<TicketVO>();
+		public List<EventOrderListVO> getEOrder(String band_id) {
+			List<EventOrderListVO> list =new ArrayList<EventOrderListVO>();
 			
-			TicketVO ticketVO = null;
+			EventOrderListVO eventOrderListVO = null;
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -1249,14 +1359,13 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 				rs = pstmt.executeQuery();
 				
 				while (rs.next()) {
-//					
-					ticketVO = new TicketVO();
-					ticketVO.setTicket_id(rs.getString("ticket_id"));
-					ticketVO.setEvent_id(rs.getString("event_id"));
-					ticketVO.setTicket_name(rs.getString("ticket_name"));
-					ticketVO.setTicket_amount(rs.getInt("ticket_amount"));
-					ticketVO.setTicket_price(rs.getInt("ticket_price"));
-					list.add(ticketVO); // Store the row in the list			
+					eventOrderListVO = new EventOrderListVO();
+					eventOrderListVO.setOrderlist_id(rs.getString("orderlist_id"));
+					eventOrderListVO.setTicket_id(rs.getString("ticket_id"));
+					eventOrderListVO.setEvent_order_id(rs.getString("event_order_id"));
+					eventOrderListVO.setOrderlist_goods_amount(rs.getInt("orderlist_goods_amount"));
+					eventOrderListVO.setOrderlist_remarks(rs.getString("orderlist_remarks"));
+					list.add(eventOrderListVO); // Store the row in the list		
 				}
 				con.commit();
 				// Handle any driver errors

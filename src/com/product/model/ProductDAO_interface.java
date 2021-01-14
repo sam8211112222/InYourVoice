@@ -2,6 +2,7 @@ package com.product.model;
 
 import java.util.List;
 
+import com.eventorderlist.model.EventOrderListVO;
 import com.orderlist.model.OrderListVO;
 import com.productphoto.model.ProductPhotoVO;
 import com.ticket.model.TicketVO;
@@ -54,10 +55,17 @@ public interface ProductDAO_interface {
      */
 	List<ProductVO> findByProductType(String productType);
 	
+	/**
+	 * added by  鈺涵
+	 */
+	List<ProductVO> findProductForList(String productName, String productType);
+	
+	
+	
 	//冠華
 	//這是新增的搜尋方法
     public List<ProductVO> findByName(String product_name);
     
     //Sam
-    public List<TicketVO> getEOrder(String band_id);
+    public List<EventOrderListVO> getEOrder(String band_id);
 }

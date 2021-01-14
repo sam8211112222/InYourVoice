@@ -38,11 +38,14 @@ public class CheckTicketController extends HttpServlet {
 		if ("check-in".equals(action)) {
 			// 取得票券ID
 			String orderlist_id = req.getParameter("orderListId");
+			System.out.println(orderlist_id);
 
 			// 更新票券狀態
 			EventOrderListService eventOrderListSvc = new EventOrderListService();
 			EventOrderListVO eventOrderListVO = eventOrderListSvc.getOneByOrderListId(orderlist_id);
-			if (eventOrderListVO.getOrderlist_status() == 0) {
+			System.out.println(eventOrderListVO);
+			int originStatus = eventOrderListVO.getOrderlist_status();
+			if (originStatus == 0) {
 				Integer status = new Integer(1);
 				eventOrderListSvc.updateOrderStatus(status, eventOrderListVO);
 			} else {
