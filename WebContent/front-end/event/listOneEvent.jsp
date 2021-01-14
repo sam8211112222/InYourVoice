@@ -222,6 +222,7 @@
 											</thead>
 											<tbody>
 												<c:forEach var="ticketVO" items="${ticketList}">
+													<c:if test="${ticketRestAmount.get(ticketVO.ticket_id)<=0}">
 													<tr>
 														<td class="name">${ticketVO.ticket_name}</td>
 														<td class="period"><span class="period-time">
@@ -237,7 +238,7 @@
 																		class="currency-value">${ticketVO.ticket_price}</span></span></li>
 															</ul>
 														</td>
-														<td class="rest">${ticketVO.ticket_amount}</td>
+														<td class="rest">${ticketRestAmount.get(ticketVO.ticket_id)}</td>
 														<td><div class="display-flex">
 																<span class="qtyminus" id="qtyminus">-</span> <input
 																	type="text" id="quantity" name="orderlist_goods_amount"
@@ -247,6 +248,7 @@
 																	value="${ticketVO.ticket_id}">
 															</div></td>
 													</tr>
+													</c:if>
 												</c:forEach>
 											</tbody>
 										</table>
