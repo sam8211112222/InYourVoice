@@ -350,7 +350,7 @@ function updateFavorite(action){
 								</div>
 							</div>
 							<div class="intro">
-								<p>${productVO.product_intro}</p>
+								<p>${productVO.product_detail}</p>
 							</div>
 
 

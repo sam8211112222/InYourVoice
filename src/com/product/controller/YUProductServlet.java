@@ -86,7 +86,7 @@ public class YUProductServlet extends HttpServlet {
 		String action = req.getParameter("action");
 		if (action == null || "".equals(action)) {
 
-			List<ProductVO> productList = proService.findProductForList( null ,null);
+			List<ProductVO> productList = proService.findProductForList(null,null);
 
 			req.setAttribute("productList", productList);
 			req.setAttribute("os_service", os_service);
