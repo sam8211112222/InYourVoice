@@ -70,7 +70,7 @@ ProductPhotoVO productPhotoVO = (ProductPhotoVO) request.getAttribute("productPh
 	<tr>
 		<td>°Ó«~½s¸¹:<font color=red><b>*</b></font></td>
 		<td><select size="1" name="product_id">
-			<c:forEach var="productVO" items="${productSvc.all}">
+			<c:forEach var="productVO" items="${productSvc.getBand(memberVo.getBandId())}">
 				<option value="${productVO.product_id}" ${(productPhotoVO.product_id==productVO.product_id)? 'selected':'' } >${productVO.product_id}
 			</c:forEach>
 		</select></td>

@@ -223,9 +223,15 @@ public class EventOrderController extends HttpServlet {
 						orders);
 				Thread th = new Thread(ticketRedisThread);
 				th.start();
+				
+				String orderId = null ;
+				Set<String> keySet = orders.keySet();
+				for(String key :keySet) {
+					orderId = key;
+				}
 
 				session.removeAttribute("ticket" + member_id);
-				req.setAttribute("orders", orders);
+				req.setAttribute("orderId", orderId);
 				req.setAttribute("order_place_time", order_place_time);
 				req.setAttribute("ticketPrice", ticketPrice);
 				String url = "/front-end/eventorder/checkoutsuccess.jsp";

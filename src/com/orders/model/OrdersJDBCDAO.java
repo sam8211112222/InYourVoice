@@ -14,9 +14,9 @@ public class OrdersJDBCDAO implements OrdersDAO_interface {
 	String userid = "TEA102G6";
 	String password = "123456";
 
-	private static final String INSERT_STMT = "INSERT INTO orders (order_id,member_id,order_status,order_place_time,order_name,order_mail,order_phone,order_delivery_time,order_received_time)VALUES('ORDERS'||LPAD(ORDERS_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?,?,?,?)";
+	private static final String INSERT_STMT = "INSERT INTO orders (order_id,member_id,order_status,order_place_time,order_name,order_mail,order_phone,order_delivery_time,order_received_time)VALUES('ORDERS'||LPAD(ORDERS_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?,?,?,?) order by order_place_time DESC";
 
-	private static final String GET_ALL_STMT = "SELECT * FROM  orders order by order_id";
+	private static final String GET_ALL_STMT = "SELECT * FROM  orders order by order_place_time DESC";
 
 	private static final String GET_ONE_STMT = "SELECT order_id,member_id,order_status,order_place_time,order_name,order_mail,order_phone,order_delivery_time,order_received_time FROM orders where order_id=?";
 
@@ -26,9 +26,9 @@ public class OrdersJDBCDAO implements OrdersDAO_interface {
 	
 	private static final String DELETE = "DELETE FROM orders where order_id = ?";
 
-	private static final String UPDATE = "UPDATE orders set member_id=?, order_status=?, order_place_time=?, order_name=?, order_mail=?, order_phone=?, order_delivery_time=?, order_received_time=? where order_id=?";
+	private static final String UPDATE = "UPDATE orders set member_id=?, order_status=?, order_place_time=?, order_name=?, order_mail=?, order_phone=?, order_delivery_time=?, order_received_time=? where order_id=? ";
 
-	private static final String GET_ONE_WITH_TOTAL_STMT_MEMBER_ID = "SELECT order_id,ORDERS.order_status,orders.order_place_time,sum(orderlist_goods_amount*price) as total_price FROM ORDERS INNER JOIN ORDERLIST USING(order_id) where orders.member_id = ? GROUP BY order_id,ORDERS.order_status,orders.order_place_time";
+	private static final String GET_ONE_WITH_TOTAL_STMT_MEMBER_ID = "SELECT order_id,ORDERS.order_status,orders.order_place_time,sum(orderlist_goods_amount*price) as total_price FROM ORDERS INNER JOIN ORDERLIST USING(order_id) where orders.member_id = ? GROUP BY order_id,ORDERS.order_status,orders.order_place_time order by order_place_time DESC";
 	
 	@Override
 	public OrdersVO insert(OrdersVO ordersVO) {

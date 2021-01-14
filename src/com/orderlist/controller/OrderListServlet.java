@@ -38,6 +38,8 @@ public class OrderListServlet extends HttpServlet {
 //		OrdersVO vo = orderDao.findByPrimaryKey(id);
 //		List<OrderListVO> list = orderListDao.findByOrderId(id);
 
+		String totalPrice = req.getParameter("totalPrice");
+		Integer realTotalPrice = new Integer(totalPrice);
 		OrdersVO order = oSvc.getOneOrders(id);
 		ProductService productSvc = new ProductService();
 		List<OrderListVO> list = olSvc.findByOrderId(id);
@@ -48,6 +50,7 @@ public class OrderListServlet extends HttpServlet {
 //			product_list.add(produtSvc.getOneProduct(product_id));
 //		}
 
+		req.setAttribute("realTotalPrice", realTotalPrice);
 		req.setAttribute("order", order);
 		req.setAttribute("list", list);
 //		req.setAttribute("productItem", product_list);

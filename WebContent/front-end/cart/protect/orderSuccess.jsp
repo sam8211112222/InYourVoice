@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>s
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -22,7 +22,7 @@ function goOrders(){
     window.location.href = "<%=request.getContextPath()%>/orders/myOrderServlet";
 }
 function backToHomePage(){
-    window.location.href = "<%=request.getContextPath()%>/orders/myOrderServlet";
+    window.location.href = "<%=request.getContextPath()%>/index.jsp";
 }
 </script>
 	<!-- 進度列 -->

@@ -295,7 +295,7 @@ function defaultMemberData(){
 	<div class="footer_btn">
 		<div class="row">
 			<div class="col-sm-6">
-				<a style="text-align: center; margin: 15px;color:#FFB6C1" class="btn btn-link pull-left" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">&lt; 返回購物車</a>
+				<a style="text-align: center; margin: 15px 0px 15px 50px;color:#FFB6C1" class="btn btn-link pull-left" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">&lt; 返回購物車</a>
 			</div>
 			<div class="col-sm-6">
 
@@ -306,7 +306,7 @@ function defaultMemberData(){
 			</div>
 		</div>
 	</div>
-<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
+<%-- <jsp:include page="/front-end/header_footer/footer.jsp" flush="true" /> --%>
 </body>
 
 </html>

@@ -103,7 +103,7 @@
 <!--  	                                    <div class="piece_btn col-1"><i class="far fa-play-circle"></i></div>  -->
 <!--  	                                    <div class="piece_btn col-1"><i class="fas fa-plus-square"></i></div>  -->  
                                          <div class="col-1"></div>
-                                         <div class="piece_btn col-1"><i class="fas fa-heart"></i></div>
+                                         <div class="piece_btn col-1"></div>
                                          <div class="col-1"></div>
                                          
  	                                </div>
