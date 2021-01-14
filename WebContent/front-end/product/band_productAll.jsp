@@ -109,7 +109,9 @@ a.btn-color-primary-search {
 	background-color: #f9595f;
 	
 }
-
+h4.productName{
+font-size:15px;
+}
 </style>
 </head>
 
@@ -171,7 +173,7 @@ a.btn-color-primary-search {
 									<span style="font-size: 14px;">${vo.review_count} Review<c:if test="${vo.review_count>1}">s</c:if></span>
 								</div>
 									<div class="info" style="margin:10px;">
-									<h4  style="text-align: left !important;color:#444;">${vo.product_name}</h4>
+									<h4 class="productName" style="text-align: left !important;color:#444;">${vo.product_name}</h4>
 									<h6 style="text-align: left !important;color:#888;">NT$<fmt:formatNumber value="${vo.product_price}" pattern="#,###" />
 										</h6>
 									</div>

@@ -75,7 +75,7 @@
 	
 }
 .product-name {
-	font-size: 22px;
+	font-size: 26px;
 	font-weight: 500;
 	line-height: 22px;
 	margin-bottom: 4px;
@@ -340,9 +340,7 @@ li.nav-item{
 font-size:20px;
 }
 
-div.product-name{
-	font-size:35px;
-}
+
 div.owl-carousel{
 	width:400px;
 	border-radius: .4rem;

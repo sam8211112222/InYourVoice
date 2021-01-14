@@ -221,7 +221,7 @@ header {
 						</div>
 					</c:if>
 					<div style="color: #2cbcf4">${memberVo.memberName}</div>
-					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
+					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/cart/cartServlet">購物車</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
 					<c:if test="${memberVo.memberId==null}">
 						<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
 					</c:if>
