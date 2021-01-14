@@ -3,12 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.event.model.*"%>  
+<%@ page import="com.eventorderlist.model.*"%>  
 <%@ page import="com.ticket.model.*"%>  
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%
-	TicketService ticketSvc = new TicketService();
-    List<TicketVO> list = ticketSvc.getAll();
+	EventOrderListService evoSvc = new EventOrderListService();
+    List<EventOrderListVO> list = evoSvc.getAll();
     pageContext.setAttribute("list",list);
 %>
 <html>
@@ -73,23 +74,26 @@
 <div class="table" align="center">
 <table>
 	<%@ include file="page1.file" %> 
-	<c:forEach var="ticketVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
-		
+	<c:forEach var="eVO" items="${list}" begin="<%=pageIndex%>" end="<%=pageIndex+rowsPerPage-1%>">
 	<tr>
-		<th>活動票券編號</th>
+		<jsp:useBean id="TicketSvc" scope="page"
+				class="com.ticket.model.TicketService" />
+		<th>票券訂單編號</th>
 		<th>活動編號</th>
-		<th>活動票種名稱</th>
+		<th>活動票券編號</th>
 		<th>票種張數</th>
 		<th>單張金額</th>
 		<th>總金額</th>
+		<th>備註</th>
 	</tr>
 		<tr>
-			<td>${ticketVO.ticket_id}</td>
-			<td>${ticketVO.event_id}</td>
-			<td>${ticketVO.ticket_name}</td>
-			<td>${ticketVO.ticket_amount}</td>		
-			<td>${ticketVO.ticket_price}</td>
-			<td>${ticketVO.ticket_amount*ticketVO.ticket_price }</td>
+			<td>${eVO.orderlist_id}</td>
+			<td>${eVO.ticket_id}</td>
+			<td>${eVO.event_order_id}</td>
+			<td>${eVO.orderlist_goods_amount}</td>		
+			<td>${TicketSvc.getOneTicket(eVO.ticket_id).ticket_price}</td>
+			<td>${eVO.orderlist_goods_amount*TicketSvc.getOneTicket(eVO.ticket_id).ticket_price }</td>
+			<td>${eVO.orderlist_remarks}</td>		
 		</tr>
 	</c:forEach>
 </table>

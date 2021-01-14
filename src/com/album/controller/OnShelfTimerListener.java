@@ -97,9 +97,9 @@ public class OnShelfTimerListener implements ServletContextListener {
 			}
 		};
 
-		timer.scheduleAtFixedRate(task, 0, 10 * 60 * 1000);
+//		timer.scheduleAtFixedRate(task, 0, 10 * 60 * 1000);
 //		timer.scheduleAtFixedRate(task, 0, 5 *1000);
-//		timer.scheduleAtFixedRate(task, 0, 15 *1000);
+		timer.scheduleAtFixedRate(task, 0, 15 *1000);
 
 	}
 	
@@ -107,7 +107,7 @@ public class OnShelfTimerListener implements ServletContextListener {
 						// memberAccount 是收件者email必須要有，其餘參數為自己需要再調整
 	public void sendMail(String memberAccount, String album_name, java.sql.Timestamp album_release_time, String album_id) {
 		String targetEmail = memberAccount; // 傳入收件人的email
-		
+		System.out.println("memberAccount = " + memberAccount);
 		// 填入寄信用的email
 		// Sender's email ID needs to be mentioned
 		String from = "myemailsender25@gmail.com";

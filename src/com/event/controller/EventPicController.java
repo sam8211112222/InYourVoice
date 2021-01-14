@@ -59,7 +59,7 @@ public class EventPicController extends HttpServlet {
 
 		if ("send-mail".equals(action)) {
 			
-			String orderlist_id =req.getParameter("orderlist_id");
+			String orderlist_id =req.getParameter("orderListId");
 			
 			JedisPool pool = JedisPoolUtil.getJedisPool();
 			Jedis jedis = pool.getResource();
@@ -72,6 +72,7 @@ public class EventPicController extends HttpServlet {
 			byte[] qrCodeByte = gson.fromJson(qrCode, byte[].class);
 			sos.write(qrCodeByte);
 			sos.close();
+			jedis.close();
 		}
 
 	}

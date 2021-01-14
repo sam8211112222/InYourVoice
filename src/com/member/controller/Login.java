@@ -249,7 +249,7 @@ public class Login extends HttpServlet {
 			pw.write(gson.toJson(msg));				
 			pw.close();
 			String authcode = genAuthCode();
-			String url = request.getContextPath();
+			String url = request.getScheme()+"://"+request.getServerName()+"/"+request.getContextPath();
 			sendMail(memberAccount,authcode,url);
 			Jedis jedis = new Jedis("localhost", 6379);
 			jedis.auth("123456");
@@ -408,7 +408,7 @@ public class Login extends HttpServlet {
 			msg.put("msg", "true");
 			pw.write(gson.toJson(msg));
 			pw.close();
-			String url = request.getContextPath();
+			String url = request.getScheme()+"://"+request.getServerName()+"/"+request.getContextPath();
 			passwordMail(memberAccount,url);
 		}
 		if("google".equals(str)) {

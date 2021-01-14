@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.eventorderlist.model.EventOrderListVO;
 import com.orderlist.model.OrderListVO;
 import com.productphoto.model.ProductPhotoVO;
 import com.ticket.model.TicketVO;
@@ -63,7 +64,7 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 	//這是新增的搜尋方法
 		private static final String GET_PRODUCT_BYNAME_PSTMT = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME LIKE ?";
 	// Sam
-		private static final String GET_EORDER = "SELECT ticket.ticket_id,ticket.event_id, ticket.ticket_name, ticket.ticket_amount, ticket.ticket_price,event.event_id, event.band_id FROM ticket JOIN event ON ticket.event_id = event.event_id AND event.band_id = ?";	
+		private static final String GET_EORDER = "SELECT * FROM eventorderlist JOIN ticket ON eventorderlist.ticket_id = ticket.ticket_id  JOIN event ON ticket.event_id = event.event_id AND event.band_id = ?";	
 	
 	
 		/**
@@ -1340,10 +1341,10 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		
 		//Sam
 		@Override
-		public List<TicketVO> getEOrder(String band_id) {
-			List<TicketVO> list =new ArrayList<TicketVO>();
+		public List<EventOrderListVO> getEOrder(String band_id) {
+			List<EventOrderListVO> list =new ArrayList<EventOrderListVO>();
 			
-			TicketVO ticketVO = null;
+			EventOrderListVO eventOrderListVO = null;
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -1358,14 +1359,13 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 				rs = pstmt.executeQuery();
 				
 				while (rs.next()) {
-//					
-					ticketVO = new TicketVO();
-					ticketVO.setTicket_id(rs.getString("ticket_id"));
-					ticketVO.setEvent_id(rs.getString("event_id"));
-					ticketVO.setTicket_name(rs.getString("ticket_name"));
-					ticketVO.setTicket_amount(rs.getInt("ticket_amount"));
-					ticketVO.setTicket_price(rs.getInt("ticket_price"));
-					list.add(ticketVO); // Store the row in the list			
+					eventOrderListVO = new EventOrderListVO();
+					eventOrderListVO.setOrderlist_id(rs.getString("orderlist_id"));
+					eventOrderListVO.setTicket_id(rs.getString("ticket_id"));
+					eventOrderListVO.setEvent_order_id(rs.getString("event_order_id"));
+					eventOrderListVO.setOrderlist_goods_amount(rs.getInt("orderlist_goods_amount"));
+					eventOrderListVO.setOrderlist_remarks(rs.getString("orderlist_remarks"));
+					list.add(eventOrderListVO); // Store the row in the list		
 				}
 				con.commit();
 				// Handle any driver errors

@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="com.band.model.*"%>
@@ -17,37 +16,28 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 
 <title>SB Admin 2 - Tables</title>
 
 <!-- Custom fonts for this template -->
-<link
-	href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/fontawesome-free/css/all.min.css"
-	rel="stylesheet" type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-	rel="stylesheet">
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link
-	href="<%=request.getContextPath()%>/vendors/sb-admin-2/css/sb-admin-2.min.css"
-	rel="stylesheet">
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/css/sb-admin-2.min.css" rel="stylesheet">
 
 <!-- Custom styles for this page -->
-<link
-	href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.css"
-	rel="stylesheet">
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 <style>
 .-none {
 	display: none;
 }
 
 .update {
-	width: 50px;
+	width: 80px;
 }
 </style>
 </head>
@@ -55,7 +45,7 @@
 <body id="page-top">
 
 
-		<%@ include file="/back-end/sb/page1.file"%>
+	<%@ include file="/back-end/sb/page1.file"%>
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 
@@ -68,8 +58,7 @@
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
-					<table class="table table-bordered" id="dataTable" width="100%"
-						cellspacing="0">
+					<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 						<thead>
 							<tr>
 								<th>樂團ID</th>
@@ -88,12 +77,26 @@
 								<tr>
 									<td><p>${bandVO.band_id}</p></td>
 									<td>${bandVO.band_name}</p></td>
-									<td><fmt:formatDate value="${bandVO.band_add_time}"
-											pattern="yyyy-MM-dd" /></td>
-									<td><p class="para">${bandVO.band_status}</p> <input
-										type="text" class="update -none" value="${bandVO.band_status}"></td>
-									<td><fmt:formatDate value="${bandVO.band_last_edit_time}"
-											pattern="yyyy-MM-dd HH:mm" /></td>
+									<td><fmt:formatDate value="${bandVO.band_add_time}" pattern="yyyy-MM-dd" /></td>
+									<td>
+									<c:if test="${bandVO.band_status==0}">
+									<p class="para">審核未通過</p>
+									</c:if>
+									<c:if test="${bandVO.band_status==1}">
+									<p class="para">審核通過</p>
+									</c:if>
+									<c:if test="${bandVO.band_status==2}">
+									<p class="para">樂團下架</p>
+									</c:if>
+									
+									<select class="update -none">	
+											<option ${bandVO.band_status == 0 ? "selected":""} value="0">審核未通過</option>
+											<option ${bandVO.band_status == 1 ? "selected":""} value="1">審核通過</option>
+											<option ${bandVO.band_status == 2 ? "selected":""} value="2">樂團下架</option>										
+									</select>
+								
+									</td>
+									<td><fmt:formatDate value="${bandVO.band_last_edit_time}" pattern="yyyy-MM-dd HH:mm" /></td>
 									<td>${bandVO.band_last_editor}</td>
 									<td><input type="button" class="updatebtn" value="修改"></td>
 
@@ -118,26 +121,48 @@
 
 	<!-- End of Main Content -->
 	<%@ include file="/back-end/sb/page2.file"%>
-	<script
-		src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
-		<script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+ <!-- Bootstrap core JavaScript-->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+ <script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+ <!-- Core plugin JavaScript-->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+ <!-- Custom scripts for all pages-->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/sb-admin-2.min.js"></script>
+
+ <!-- Page level plugins -->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/jquery.dataTables.min.js"></script>
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+ <!-- Page level custom scripts -->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/demo/datatables-demo.js"></script>
 	<script>
 		$(".updatebtn")
-				.click(
-						function(e) {
-							var that = $(this);
-							let status = that.closest("tr")
-									.find("input.update")[0].value.trim();
-
+				.click(function(e) {
+						var that = $(this);
+						let status = that.closest("tr").find("select.update")[0].value;
+							console.log(status);
 							if (status != "") {
-								that.closest("tr").find("input.update")
-										.toggleClass("-none");
-								that.closest("tr").find("p.para").toggleClass(
-										"-none");
+								that.closest("tr").find("select.update").toggleClass("-none");
+								that.closest("tr").find("p.para").toggleClass("-none");
 								let val = that.closest("tr").find("p.para")[0].innerText;
-								that.closest("tr").find("p.para")[0].innerText = status;
+								if(status==0){
+								that.closest("tr").find("p.para")[0].innerText = "審核未通過";
+								}else if(status==1){
+									that.closest("tr").find("p.para")[0].innerText = "審核通過";
+								}else if(status==2){
+									that.closest("tr").find("p.para")[0].innerText = "樂團下架";
+								}
 								var bandId = that.closest("td").closest("tr")[0].children[0].innerText;
 								var bandStatus = status;
 								var bandLastEditor = "${empVO.emp_id}";
@@ -149,13 +174,14 @@
 										bandLastEditor : bandLastEditor,
 										bandStatus : bandStatus,
 									}
-									$.ajax({
+									$
+											.ajax({
 												type : "POST",
 												url : "/TEA102G6/band/band.do",
 												dataType : "JSON",
 												data : obj,
 												success : function(result) {
-												
+
 													that.closest("td").closest(
 															"tr")[0].children[5].innerText = result.bandLastEditor;
 													that.closest("td").closest(

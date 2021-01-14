@@ -15,8 +15,9 @@
 // 	memberVoTest.setBandId("BAND00200");
 // 	session.setAttribute("memberVO", memberVoTest);
 // 	=============
-	MemberVo memberVO = (MemberVo) session.getAttribute("memberVo");
-    String band_id = memberVO.getBandId();
+	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
+	System.out.println(memberVo);
+    String band_id = memberVo.getBandId();
     pageContext.setAttribute("band_id", band_id);
 // 	String band_id = "BAND00000";
 	List <AlbumVO> albumVOList = albumSvc.getBandAlbums(band_id);

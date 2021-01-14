@@ -69,11 +69,11 @@
 
         var map;
         function initMap() {
-        	navigator.geolocation.getCurrentPosition(function(position){
-        		   lat = position.coords.latitude;
-        	        lng = position.coords.longitude;
-  			  console.log(position);
-  			});
+//         	navigator.geolocation.getCurrentPosition(function(position){
+//         		   lat = position.coords.latitude;
+//         	        lng = position.coords.longitude;
+//   			  console.log(position);
+//   			});
   var markers = [];
   var infoWindows = [];
   var loaction;
@@ -110,9 +110,9 @@
   }
 
   //使用地址或名稱標出位置
-  _geocoder('台北市',function(address){
+  _geocoder('台北市南京復興捷運站',function(address){
     var map = new google.maps.Map(document.getElementById('map'), {
-      center: { lat:lat, lng:lng },
+      center: address,
       zoom: 14,
   	mapTypeControl: false,
 	streetViewControl: false,

@@ -37,7 +37,7 @@ margin:0px 0px 5px 0px;
 
 		<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 			<c:forEach items="${band_event}" var="eventVO">
-				<div class="col">
+				<div class="col" style="cursor:pointer;" onclick="location.href='<%=request.getContextPath()%>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}'">
 					<div class="card shadow-sm">
 						<img
 							src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"
