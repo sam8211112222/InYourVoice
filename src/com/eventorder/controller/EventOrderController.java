@@ -87,7 +87,7 @@ public class EventOrderController extends HttpServlet {
 			HttpSession session = req.getSession();
 			System.out.println("有近來");
 			if (session.getAttribute("memberVo") == null) {
-				session.setAttribute("location", req.getRequestURI());
+				session.setAttribute("location", req.getRequestURI() + "?" + req.getQueryString());
 				res.sendRedirect(req.getContextPath() + "/front-end/member/Login.jsp");
 				return;
 			}
@@ -168,7 +168,7 @@ public class EventOrderController extends HttpServlet {
 					res.sendRedirect(
 							"http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
 									+ req.getParameter("event_id"));
-				
+
 				}
 
 			} else {
@@ -197,6 +197,7 @@ public class EventOrderController extends HttpServlet {
 				String order_mail = req.getParameter("orderMail");
 				String order_phone = req.getParameter("orderPhone");
 				String orderlist_remarks = req.getParameter("remarks");
+				
 				EventOrderService eventOrderSvc = new EventOrderService();
 				Map<String, List<String>> orders = eventOrderSvc.addOrder(member_id, event_id, order_place_time,
 						order_name, order_mail, order_phone, orderlist_remarks, cartList);
@@ -212,20 +213,22 @@ public class EventOrderController extends HttpServlet {
 					ticketPrice += (ticketSvc.getOneTicket(ticket_id).getTicket_price() * cartList.get(ticket_id));
 				}
 
-				String ticketCheckInURL = req.getContextPath() + "/CheckTicketController?action=check-in&orderListId=";
-				String ticketGetQrCodeURL = req.getContextPath() + "/EventPicController?action=send-mail&orderListId=";
-
 				EventService eventSvc = new EventService();
 				EventVO eventVO = eventSvc.getOneEvent(event_id);
 				String event_title = eventVO.getEvent_title();
 
-				TicketRedisThread ticketRedisThread = new TicketRedisThread(order_mail, event_title, ticketCheckInURL,ticketGetQrCodeURL,
-						orders);
+				TicketRedisThread ticketRedisThread = new TicketRedisThread(order_mail, event_title, orders);
 				Thread th = new Thread(ticketRedisThread);
 				th.start();
 
+				String orderId = null;
+				Set<String> keySet = orders.keySet();
+				for (String key : keySet) {
+					orderId = key;
+				}
+
 				session.removeAttribute("ticket" + member_id);
-				req.setAttribute("orders", orders);
+				req.setAttribute("orderId", orderId);
 				req.setAttribute("order_place_time", order_place_time);
 				req.setAttribute("ticketPrice", ticketPrice);
 				String url = "/front-end/eventorder/checkoutsuccess.jsp";
@@ -288,7 +291,7 @@ public class EventOrderController extends HttpServlet {
 			req.setAttribute("ticketSvc", ticketSvc);
 			req.setAttribute("amountPrice", amountPrice);
 
-			String url = "/front-end/orders/eventOrdersDetail.jsp";
+			String url = "/front-end/orders/protect/eventOrdersDetail.jsp";
 			RequestDispatcher successView = req.getRequestDispatcher(url);
 			successView.forward(req, res);
 

@@ -2,6 +2,7 @@ package com.product.model;
 
 import java.util.List;
 
+import com.eventorderlist.model.EventOrderListVO;
 import com.orderlist.model.OrderListVO;
 import com.productphoto.model.ProductPhotoVO;
 import com.ticket.model.TicketVO;
@@ -66,5 +67,5 @@ public interface ProductDAO_interface {
     public List<ProductVO> findByName(String product_name);
     
     //Sam
-    public List<TicketVO> getEOrder(String band_id);
+    public List<EventOrderListVO> getEOrder(String band_id);
 }

@@ -95,7 +95,7 @@
                             <hr>
                             <c:forEach var="piecesVO" items="${piecesVOList}" >
                             <c:if test="${piecesVO.piece_status == 1 }">
-	                            <li class="piece_card" data-path="<%= request.getContextPath() %>" data-piece_id="${piecesVO.piece_id}" data-title="${piecesVO.piece_name}" data-author="" data-url="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" data-pic="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${piecesVO.album_id}" data-lrc="" data-fav="">
+	                            <li style="cursor:pointer;" class="piece_card" data-path="<%= request.getContextPath() %>" data-piece_id="${piecesVO.piece_id}" data-title="${piecesVO.piece_name}" data-author="" data-url="<%= request.getContextPath() %>/pieces/pieces.do?action=getPiece&piece_id=${piecesVO.piece_id}" data-pic="<%= request.getContextPath() %>/album/album.do?action=getAlbumPhoto&album_id=${piecesVO.album_id}" data-lrc="" data-fav="">
 	                                <div class="row piece_card justify-content-between">
  	                                    <div class="piece_order col-3 outer"><%= i++ %></div>
  	                                    <div class="piece_name col-3 outer">${piecesVO.piece_name}</div>

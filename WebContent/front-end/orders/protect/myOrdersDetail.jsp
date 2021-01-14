@@ -47,7 +47,7 @@ a.btn-custom {
 
 a.btn-color-primary:focus {
 	border-width: 1px;
-	border-style: solid color: white !important;
+	border-style: solid white !important;
 	border-color: #f9595f;
 }
 
@@ -253,7 +253,8 @@ function addToCart(){
 									value="${orderListVO.price*orderListVO.orderlist_goods_amount}"
 									pattern="$#,###" /></td>
 							<td class="form2" align="center" valign="center">
-							
+<%-- 							<c:if test="${orderListVO.order_status==0}"> --%>
+<%--       						</c:if> --%>
 							<c:if test="${orderListVO.review_time==null}">
 									<a class="btn btn-custom btn-color-primary"
 										onclick="showReviewDialog('${orderListVO.orderlist_id}');">評價商品</a>

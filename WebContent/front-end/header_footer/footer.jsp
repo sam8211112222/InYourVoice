@@ -42,7 +42,7 @@ footer.footer {
 				</div>
 				<div>
 					<h1 style="color: white ; background-color: unset;">其他</h1>
-					<a href="#"><li style="color: white">聯絡我們</li></a>
+					<a href="<%=request.getContextPath()%>/front-end/band/protect/bandSignup.jsp"><li style="color: white">成為樂團</li></a>
 				</div>
 			</nav>
 		</footer>

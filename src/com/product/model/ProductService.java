@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.eventorderlist.model.EventOrderListVO;
 import com.orderlist.model.OrderListVO;
 import com.ticket.model.TicketVO;
 
@@ -237,7 +238,7 @@ public class ProductService {
 		
 	//Sam
 		//new
-		public List<TicketVO> getEOrder(String band_id) {
+		public List<EventOrderListVO> getEOrder(String band_id) {
 			return dao.getEOrder(band_id);
 		}
 }

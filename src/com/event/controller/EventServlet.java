@@ -34,7 +34,6 @@ import com.eventorderlist.model.EventOrderListVO;
 import com.ticket.model.TicketService;
 import com.ticket.model.TicketVO;
 
-import jdk.nashorn.internal.runtime.Context;
 
 @WebServlet(urlPatterns = "/event/EventServlet", loadOnStartup = 1)
 @MultipartConfig
@@ -139,7 +138,7 @@ public class EventServlet extends HttpServlet {
 						TicketVO ticketVO = it.next();
 						Integer ticketStatus = ticketVO.getTicket_status();
 						Integer ticket_amount = ticketVO.getTicket_amount();
-						if (ticketRestAmount.containsKey(ticketVO)) {
+						if (ticketRestAmount.containsKey(ticketVO.getTicket_id())) {
 							ticket_amount = ticketRestAmount.get(ticketVO.getTicket_id());
 						} else {
 							ticketRestAmount.put(ticketVO.getTicket_id(), ticket_amount);
@@ -805,7 +804,7 @@ public class EventServlet extends HttpServlet {
 				}
 
 				/*************************** 3.新增完成,準備轉交(Send the Success view) ***********/
-				String url = "/back-end/events/listAllEvents.jsp";
+				String url = "/back-end/events/index.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url); // 新增成功後轉交listAllEmp.jsp
 				successView.forward(req, res);
 
