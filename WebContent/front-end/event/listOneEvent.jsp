@@ -205,7 +205,7 @@
 				<div>
 					<c:choose>
 						<c:when test="${not empty ticketList}">
-							<form method="POST"
+							<form method="GET"
 								action="<%=request.getContextPath()%>/EventOrderController">
 								<div class="tickets">
 									<h2>活動票券</h2>
@@ -222,6 +222,7 @@
 											</thead>
 											<tbody>
 												<c:forEach var="ticketVO" items="${ticketList}">
+												<c:if test="${ticketRestAmount.get(ticketVO.ticket_id)>0}">
 													<tr>
 														<td class="name">${ticketVO.ticket_name}</td>
 														<td class="period"><span class="period-time">
@@ -247,6 +248,7 @@
 																	value="${ticketVO.ticket_id}">
 															</div></td>
 													</tr>
+												</c:if>
 												</c:forEach>
 											</tbody>
 										</table>

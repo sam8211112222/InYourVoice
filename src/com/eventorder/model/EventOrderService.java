@@ -76,11 +76,15 @@ public class EventOrderService {
 	public void sendTicketQRcode(String order_mail,  String event_title, String orderlist_id,
 			String ticket_name ,String ticketGetQrcodeURL) {
 		String targetEmail = order_mail;
-
+		System.out.println(order_mail);
 		// Sender's email ID needs to be mentioned
-		String from = "leotseng0807@gmail.com";
-		final String username = "leotseng0807";// change accordingly
-		final String password = "viyokgrzavbyjlgu";// change accordingly
+//		String from = "leotseng0807@gmail.com";
+//		final String username = "leotseng0807";// change accordingly
+//		final String password = "viyokgrzavbyjlgu";// change accordingly
+		
+		String from = "myemailsender25@gmail.com";
+		final String username = "myemailsender25@gmail.com";// change accordingly
+		final String password = "!123456aA";// change accordingly
 
 		// Assuming you are sending email through relay.jangosmtp.net
 		String host = "smtp.gmail.com";
@@ -133,7 +137,8 @@ public class EventOrderService {
 			messageBodyPart = new MimeBodyPart();
 //			File file = new File("檔案位置");
 //			FileDataSource fds = new FileDataSource(file);
-			String urlStr = ticketGetQrcodeURL+orderlist_id;
+//			String urlStr = "http://inyourvoice.ga/TEA102G6/EventPicController?action=send-mail&orderListId="+orderlist_id;
+			String urlStr = "http://localhost:8081/TEA102G6/EventPicController?action=send-mail&orderListId="+orderlist_id;
 			URL url = new URL(urlStr);
 			DataSource ds = new URLDataSource(url);
 			messageBodyPart.setDataHandler(new DataHandler(ds));

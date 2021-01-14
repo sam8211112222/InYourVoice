@@ -132,6 +132,10 @@ hr.new3 {
 
 <body>
 
+<jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
+	
+	<%@ include file="/css/member/member_center_top.file" %>
+
 
 	<div class="form1">
 		<div class="orders_title">
@@ -140,7 +144,11 @@ hr.new3 {
 		<h2>訂單明細</h2>
 		<hr class="new3" size="12px" align="center" width="100%"
 						color="#f9595f">
+						
+	
 		
+		<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/*"></script>
+		<script src="<%=request.getContextPath()%>/vendors/jquery/*"></script>
 		<script src="http://malsup.github.io/jquery.blockUI.js"></script>
 		<script>
 		var orderlist_id = '';
@@ -202,13 +210,16 @@ hr.new3 {
 			<a id="back_page" class="btn btn-custom btn-color-primary"
 				style="margin-bottom: 0px;">返回我的訂單</a>
 		</div>
+		
+		<%@ include file="/css/member/member_center_bottom.file" %>
+		<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 
 		<script>
 			$("#back_page").on("click", function() {
+				console.log("history.back()");
 				history.back();
 			})
 		</script>
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/*"></script>
-<script src="<%=request.getContextPath()%>/vendors/jquery/*"></script>
+
 </body>
 </html>

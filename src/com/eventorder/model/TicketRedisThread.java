@@ -28,15 +28,13 @@ import redis.util.JedisPoolUtil;
 public class TicketRedisThread implements Runnable {
 	private String order_mail;
 	private String event_title;
-	private String ticketCheckInURL;
-	private String ticketGetQrcodeURL;
+	private String ticketCheckInURL = "http://inyourvoice.ga/TEA102G6/CheckTicketController?action=check-in&orderListId=";
+	private String ticketGetQrcodeURL = "http://inyourvoice.ga/TEA102G6/EventPicController?action=send-mail&orderListId=";
 	private Map<String, List<String>> orders;
 
-	public TicketRedisThread(String order_mail,String event_title, String ticketCheckInURL,String ticketGetQrcodeURL, Map<String, List<String>> orders) {
+	public TicketRedisThread(String order_mail, String event_title, Map<String, List<String>> orders) {
 		this.order_mail = order_mail;
 		this.event_title = event_title;
-		this.ticketCheckInURL = ticketCheckInURL;
-		this.ticketGetQrcodeURL = ticketGetQrcodeURL;
 		this.orders = orders;
 	}
 
@@ -48,11 +46,11 @@ public class TicketRedisThread implements Runnable {
 			Jedis jedis = pool.getResource();
 			jedis.auth("123456");
 			jedis.select(10);
-			
+
 			EventOrderService eventOrderSvc = new EventOrderService();
 			EventOrderListService eventOrderListSvc = new EventOrderListService();
 			TicketService ticketSvc = new TicketService();
-			
+
 			Gson gson = new Gson();
 
 			// 設定QRcode相關資訊
@@ -70,6 +68,7 @@ public class TicketRedisThread implements Runnable {
 				List<String> orderListIds = orders.get(order_id);
 				for (String orderlist_id : orderListIds) {
 					String ticketQRcodeUrl = ticketCheckInURL + orderlist_id;
+					System.out.println(ticketQRcodeUrl);
 					try {
 						BitMatrix matrix = new MultiFormatWriter().encode(ticketQRcodeUrl, BarcodeFormat.QR_CODE, width,
 								height, hints);
@@ -78,14 +77,16 @@ public class TicketRedisThread implements Runnable {
 						byte[] qrCodeByte = os.toByteArray();
 						String qrCode = gson.toJson(qrCodeByte);
 //						String qrCode = new String(Base64.getEncoder().encodeToString(b));
-						
+
 						jedis.set(orderlist_id, qrCode);
-						
-						String ticket_name  = ticketSvc.getOneTicket(eventOrderListSvc.getOneByOrderListId(orderlist_id).getTicket_id()).getTicket_name();
-						
-						
-						eventOrderSvc.sendTicketQRcode(order_mail, event_title, orderlist_id, ticket_name, ticketGetQrcodeURL);
-						
+
+						String ticket_name = ticketSvc
+								.getOneTicket(eventOrderListSvc.getOneByOrderListId(orderlist_id).getTicket_id())
+								.getTicket_name();
+
+						eventOrderSvc.sendTicketQRcode(order_mail, event_title, orderlist_id, ticket_name,
+								ticketGetQrcodeURL);
+
 					} catch (WriterException e) {
 						e.printStackTrace();
 					} catch (IOException e) {

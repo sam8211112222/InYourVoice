@@ -367,8 +367,11 @@
 		})
 
 		var userName = '${memberVo.memberId}';
-		var friend = 'EMP00000';
-		var endPointURL = 'ws://localhost:8081/TEA102G6_20210112/FriendWS/' + userName;
+	    var friend = 'EMP00000';
+	    var host = window.location.host;
+	    var path = window.location.pathname;
+	    var webCtx = path.substring(0, path.indexOf('/', 1));
+	    var endPointURL = "ws://" + window.location.host + webCtx + "/FriendWS/" + userName;
 			
 		var messagesArea = document.getElementById("chat-logs");
 		var self = userName;

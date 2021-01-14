@@ -34,7 +34,6 @@ import com.google.gson.Gson;
 import com.member.model.MemberVo;
 import com.pieces.model.PiecesService;
 import com.pieces.model.PiecesVO;
-import com.sun.org.apache.bcel.internal.generic.INVOKEINTERFACE;
 
 import database.util.JedisUtil;
 import redis.clients.jedis.Jedis;
