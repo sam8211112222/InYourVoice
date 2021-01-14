@@ -1195,7 +1195,7 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 			int index = 1;
 			
 			if(productName!=null) {
-				pstmt.setString(index++, productName);
+				pstmt.setString(index++, "%"+productName+"%");
 			}
 
 			if(productType!=null) {

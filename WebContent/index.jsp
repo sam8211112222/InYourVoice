@@ -368,7 +368,7 @@
 
 		var userName = '${memberVo.memberId}';
 		var friend = 'EMP00000';
-		var endPointURL = 'ws://localhost:8081/TEA102G6_20210112/FriendWS/' + userName;
+		var endPointURL = 'ws://localhost:8081/TEA102G6/FriendWS/' + userName;
 			
 		var messagesArea = document.getElementById("chat-logs");
 		var self = userName;
