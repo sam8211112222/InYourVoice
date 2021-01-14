@@ -268,7 +268,9 @@
 
 
 
-
+        <script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
+        <script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
+        <script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/vendors/slick/slick.min.js"></script>
 
 	<!-- 輪播 -->
