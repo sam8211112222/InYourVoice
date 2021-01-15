@@ -169,6 +169,7 @@ header {
 				</ul>
 			</div>
 			</nav>
+			<div style="color: #3F51B5; font-size: 22px;word-break: keep-all; margin: auto; margin-right: 16px">${memberVo.memberName}</div>
 			<c:if test="${memberVo.memberId!=null}">
 				<!-- 小鈴鐺   -->
 				<div class="dropdown dropleft">
@@ -212,7 +213,6 @@ header {
 							<img src="<%=request.getContextPath()%>/Login?memberpic=picDisplay&memberId=${memberVo.memberId}">
 						</div>
 					</c:if>
-					<div style="color: #2cbcf4">${memberVo.memberName}</div>
 					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
 					<c:if test="${memberVo.memberId==null}">
 						<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
@@ -225,8 +225,8 @@ header {
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
+<%-- 	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script> --%>
+<%-- 	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script> --%>
 
 	<script>
 	//選擇搜尋類別
