@@ -44,11 +44,7 @@ div.lea-img{
 
 
 	<div class="title-song wrap">
-		<h2 class="wrap-title"><i class="fas fa-search"></i>【關鍵字】搜尋結果</h2>
-		<a href="<%= request.getContextPath() %>/album/album.do?action=searchName&search=${name}"><button class="view-event-btn">歌曲</button></a>
-		<a href="<%= request.getContextPath() %>/product/product.do?action=searchName&search=${name}"><button class="view-event-btn">商品</button></a>
-		<a href="<%= request.getContextPath() %>/event/EventServlet?action=searchName&search=${name}"><button class="view-event-btn">活動</button></a>
-		<a href="<%= request.getContextPath() %>/band/band.do?action=searchName&search=${name}"><button class="view-event-btn">樂團</button></a>
+		<h2 class="wrap-title"><i class="fas fa-search"></i>【關鍵字】搜尋結果</h2>		
 		<div class="leatitle-all">					
 
 			<div class="lea-time"></div>
@@ -67,16 +63,17 @@ div.lea-img{
 						</div>
 					</div>
 					<div class="song-name">
-						${eventVO.event_title}<br> <span>${eventVO.event_detail}</span>
+						${eventVO.event_title}<br> 
+
 					</div>
 						<div class="add">
 							<i class="fas fa-plus"></i>
 							<input type="hidden" class="favId" value="${eventVO.event_id}">
 						</div>
-						<div class="delete">
-							<i class="fas fa-minus"></i>
-							<input type="hidden" class="favId" value="${eventVO.event_id}">
-						</div>
+<!-- 						<div class="delete"> -->
+<!-- 							<i class="fas fa-minus"></i> -->
+<%-- 							<input type="hidden" class="favId" value="${eventVO.event_id}"> --%>
+<!-- 						</div> -->
 					</div>
 				<hr class="songlist-hr">
 			</c:forEach>

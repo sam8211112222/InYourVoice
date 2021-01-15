@@ -225,8 +225,8 @@ header {
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
-<%-- 	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script> --%>
-<%-- 	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script> --%>
+	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
+	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 
 	<script>
 	//選擇搜尋類別

@@ -35,6 +35,7 @@
 
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/homepage.css" />
 </head>
+
 <body onload="connect();" onunload="disconnect();">
 
 
@@ -65,11 +66,11 @@
 	%>
 
 	<!-- 輪播 -->
-	<div class="banner">
+	<div class="banner" style =  >
 
 		<c:forEach var="eventVO" items="${eventVOList}">
 			<c:if test="${eventVO.event_type==3&&eventVO.event_status==1}">
-				<div class="ls-slide" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
+				<div class="ls-slide" style="cursor:pointer;" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 					<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}">
 				</div>
 			</c:if>
@@ -139,9 +140,9 @@
 							<div class="add">
 								<i class="fas fa-plus"></i>
 							</div>
-							<div class="heart">
-								<i class="fas fa-heartbeat"></i> 18.8k
-							</div>
+<!-- 							<div class="heart"> -->
+<!-- 								<i class="fas fa-heartbeat"></i> 18.8k -->
+<!-- 							</div> -->
 							<div class="play-mu">
 								<i class="far fa-play-circle"></i>
 							</div>
@@ -268,14 +269,24 @@
 
 
 
-<%--         <script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script> --%>
-<%--         <script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script> --%>
-<%--         <script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script> --%>
+        <script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
+        <script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
+        <script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<%=request.getContextPath()%>/vendors/slick/slick.min.js"></script>
 
 	<!-- 輪播 -->
 	<script>
-		$('.banner').slick({});
+		$('.banner').slick({
+			 dots: true,
+			 infinite: true,
+			 speed: 300,
+			 slidesToShow: 1,
+			 centerMode: true,
+			 adaptiveHeight: true,
+			 variableWidth: true,
+			 autoplay: true,
+			 autoplaySpeed: 2000,
+		});
 	</script>
 	<!-- 客服聊天 -->
 	<script>
