@@ -396,22 +396,16 @@ public class bandServlet extends HttpServlet {
 			out.write(banner);
 			out.close();
 		}
-		// 更新樂團STATUS
+		// 更新樂團STATUS 通過 和退回
 		if ("updateStatus".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			String bandLastEditor = req.getParameter("bandLastEditor");
-
+			String bandStatus = req.getParameter("bandStatus");
 			BandService bandSvc = new BandService();
 			Timestamp bandLastEditTime = new Timestamp(System.currentTimeMillis());
-			bandSvc.updateBandStatusBackEnd(bandId, "1", bandLastEditTime, bandLastEditor);
+			bandSvc.updateBandStatusBackEnd(bandId, bandStatus, bandLastEditTime, bandLastEditor);
 		}
-		// 退回樂團申請
-		if ("return".equals(action)) {
-			String bandId = req.getParameter("bandId");
-			String bandLastEditor = req.getParameter("bandLastEditor");
-			BandService bandSvc = new BandService();
-
-		}
+	
 		if ("picDisplay".equals(action)) {
 			String bandId = req.getParameter("bandId");
 			BandService bandSvc = new BandService();
@@ -464,25 +458,41 @@ public class bandServlet extends HttpServlet {
 		}
 
 		if ("bandSignupUpdate".equals(action)) {
-
+			byte[] bandBanner = null;
+			byte[] bandPieceCheck =null;
 			String bandName = (String) req.getParameter("bandName");
 			String bandIntro = req.getParameter("bandIntro");
 			String bandId = (String) req.getParameter("bandId"); // 取得會員ID
 			Part part1 = req.getPart("bandPieceCheck");
+			Integer bandStatus = Integer.valueOf(req.getParameter("bandStatus"));
+				
 			InputStream in1 = part1.getInputStream();
-			byte[] bandPieceCheck = new byte[in1.available()];
+			bandPieceCheck = new byte[in1.available()];
 			in1.read(bandPieceCheck);
+			in1.close();
+			if(bandPieceCheck.length==0) {
+				BandService bandSvc = new BandService();
+				BandVO bandVO = bandSvc.getOneBand(bandId);
+				bandPieceCheck = bandVO.getBand_piece_check();	
+			}
+			
 			Part part2 = req.getPart("bandBanner");
 			InputStream in2 = part2.getInputStream();
-			byte[] bandBanner = new byte[in2.available()];
+			bandBanner = new byte[in2.available()];
 			in2.read(bandBanner);
-			in1.close();
 			in2.close();
+			if(bandBanner.length==0){
+				BandService bandSvc = new BandService();
+				BandVO bandVO = bandSvc.getOneBand(bandId);
+				bandBanner = bandVO.getBand_banner();
+			
+			}
+			
 			// 取得會員頭相
 
 			BandService bandSvc = new BandService();
 
-			bandSvc.updateSignup(bandId, bandName, bandIntro, bandBanner, bandPieceCheck);
+			bandSvc.updateSignup(bandId, bandName, bandIntro, bandBanner, bandPieceCheck,bandStatus);
 			BandVO newbandVo = bandSvc.getOneBand(bandId); // 取得新的樂團資料回傳
 			HttpSession session = req.getSession();
 			session.setAttribute("bandVo", newbandVo);

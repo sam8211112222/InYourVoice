@@ -38,49 +38,65 @@ public class CheckTicketController extends HttpServlet {
 		if ("check-in".equals(action)) {
 			// 取得票券ID
 			String orderlist_id = req.getParameter("orderListId");
-			System.out.println(orderlist_id);
 
 			// 更新票券狀態
 			EventOrderListService eventOrderListSvc = new EventOrderListService();
 			EventOrderListVO eventOrderListVO = eventOrderListSvc.getOneByOrderListId(orderlist_id);
-			System.out.println(eventOrderListVO);
+			EventOrderService eventOrderSvc = new EventOrderService();
+			EventOrderVO eventOrderVO = eventOrderSvc.getOneByEventOrderId(eventOrderListVO.getEvent_order_id());
+			TicketService ticketSvc = new TicketService();
+			TicketVO ticketVO = ticketSvc.getOneTicket(eventOrderListVO.getTicket_id());
+			Gson gson = new Gson();
+			JedisPool pool = JedisPoolUtil.getJedisPool();
+			Jedis jedis = pool.getResource();
+			jedis.auth("123456");
+			jedis.select(11);
+
+			char[] originMail = eventOrderVO.getOrder_mail().toCharArray();
+			for (int i = 0; i < eventOrderVO.getOrder_mail().length(); i++) {
+				if (i == 0) {
+					continue;
+				} else if (i >= (eventOrderVO.getOrder_mail().indexOf("@") - 1)) {
+					continue;
+				} else {
+					originMail[i] = '*';
+				}
+			}
+			String ticketOwner = new String(originMail);
+			// 查找完成 準備轉交
+
+			LocalDateTime dt = LocalDateTime.now();
+
 			int originStatus = eventOrderListVO.getOrderlist_status();
 			if (originStatus == 0) {
 				Integer status = new Integer(1);
 				eventOrderListSvc.updateOrderStatus(status, eventOrderListVO);
 			} else {
-				String url = "/front-end/eventorder/alreadyCheck.html";
+
+				dt = gson.fromJson(jedis.get(orderlist_id), LocalDateTime.class);
+				
+				req.setAttribute("time", dt);
+				req.setAttribute("ticketOwner", ticketOwner);
+				req.setAttribute("ticketVO", ticketVO);
+
+				String url = "/front-end/eventorder/alreadyCheck.jsp";
 				RequestDispatcher alreadyCheck = req.getRequestDispatcher(url);
 				alreadyCheck.forward(req, res);
 			}
 
+			String checkInTime = gson.toJson(dt);
 
-			JedisPool pool = JedisPoolUtil.getJedisPool();
-			Jedis jedis = pool.getResource();
-			jedis.auth("123456");
-			jedis.select(10);
-			
-			if(jedis.exists(orderlist_id)) {
-				jedis.del(orderlist_id);
+			if (jedis.exists(orderlist_id)) {
+				jedis.set(orderlist_id, checkInTime);
 			}
-			
+
 			jedis.close();
 
 			// 查找會員資料與票券資料
-			EventOrderService eventOrderSvc = new EventOrderService();
-			EventOrderVO eventOrderVO = eventOrderSvc.getOneByEventOrderId(eventOrderListVO.getEvent_order_id());
-			MemberService memberSvc = new MemberService();
-			TicketService ticketSvc = new TicketService();
-			MemberVo memberVO = memberSvc.getOne(eventOrderVO.getMember_id());
-			TicketVO ticketVO = ticketSvc.getOneTicket(eventOrderListVO.getTicket_id());
 
-			// 查找完成 準備轉交
-
-			LocalDateTime dt = LocalDateTime.now();
-
-			String url = "/front-end/eventorder/checkSuccess.html";
+			String url = "/front-end/eventorder/checkSuccess.jsp";
 			req.setAttribute("time", dt);
-			req.setAttribute("memberVO", memberVO);
+			req.setAttribute("ticketOwner", ticketOwner);
 			req.setAttribute("ticketVO", ticketVO);
 
 			RequestDispatcher successPage = req.getRequestDispatcher(url);
