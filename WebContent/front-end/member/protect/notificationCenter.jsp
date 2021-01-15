@@ -62,7 +62,8 @@
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>
-										<div class="modal-body">${memNoti.content}</div>
+										<a href="${memNoti.link}">
+										<div class="modal-body">${memNoti.content}</div></a>
 										<div class="modal-footer">
 											<button type="button" class="btn btn-secondary"
 												data-dismiss="modal">關閉</button>

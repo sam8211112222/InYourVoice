@@ -7,12 +7,11 @@
 <%@ page import="java.util.*"%>
 <%@ page import="com.notification.model.*"%>
 <%
- 	 	
- 		if ((MemberVo)session.getAttribute("memberVo") != null) { 
- 	 		request.setAttribute("isRead", JedisMessage.count(((MemberVo)session.getAttribute("memberVo")).getMemberId())); 
- 			request.setAttribute("new5", JedisMessage.getMessageNew5(((MemberVo)session.getAttribute("memberVo")).getMemberId())); 
- 		}
- %> 
+	if ((MemberVo) session.getAttribute("memberVo") != null) {
+		request.setAttribute("isRead",JedisMessage.count(((MemberVo) session.getAttribute("memberVo")).getMemberId()));
+		request.setAttribute("new5",JedisMessage.getMessageNew5(((MemberVo) session.getAttribute("memberVo")).getMemberId()));
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,7 +86,7 @@ header {
 
 .logo {
 	width: 200px;
-    height: 60px;
+	height: 60px;
 	position: relative;
 	cursor: pointer;
 	margin: auto;
@@ -187,8 +186,9 @@ header {
 
 							<c:when test="${new5.size()!=0}">
 								<c:forEach var="noti" items="${new5}">
-									<a href="${noti.link}" class="dropdown-item">${noti.title}</a>
-
+									<a href="${noti.link}" class="dropdown-item"><i class="fas fa-bullhorn" style="margin-right: 19px;"></i>${noti.title} 
+										<span style="font-size:1px;vertical-align: sub;"><fmt:formatDate value="${noti.sendTime}" pattern="MM-dd mm:ss"/></span>
+										</a>
 								</c:forEach>
 							</c:when>
 						</c:choose>
@@ -196,11 +196,7 @@ header {
 					</div>
 				</div>
 			</c:if>
-			<div class="dropdown dropleft">
-				<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<!-- <img src="./images/logo.jpg"> -->
-					<i class="far fa-user"></i>
-				</div>
+		
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<c:if test="${memberVo.memberId==null}">
 						<div class="userAvatar">
@@ -223,7 +219,36 @@ header {
 						<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
 					</c:if>
 				</div>
+
+		<div class="dropdown dropleft">
+			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<!-- <img src="./images/logo.jpg"> -->
+				<i class="far fa-user"></i>
 			</div>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<c:if test="${memberVo.memberId==null}">
+					<div class="userAvatar">
+						<!-- <img src="./images/logo.jpg"> -->
+						<i class="fas fa-meh" style="font-size: 79px; color: #888;"></i>
+					</div>
+				</c:if>
+				<c:if test="${memberVo.memberId!=null}">
+					<div class="userAvatar">
+						<img src="<%=request.getContextPath()%>/Login?memberpic=picDisplay&memberId=${memberVo.memberId}">
+					</div>
+				</c:if>
+				<div style="color: #2cbcf4">${memberVo.memberName}</div>
+				<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item"
+					href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a>
+				<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
+				<c:if test="${memberVo.memberId==null}">
+					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
+				</c:if>
+				<c:if test="${memberVo.memberId!=null}">
+					<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
+				</c:if>
+			</div>
+		</div>
 	</header>
 
 	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
@@ -262,12 +287,12 @@ header {
 		})
 
 		var MyPoint = "/notification/{${memberVo.memberId}}";
-		console.log(MyPoint);
+		
 		var host = window.location.host;
 		var path = window.location.pathname;
 		var webCtx = path.substring(0, path.indexOf('/', 1));
 		var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
-		
+
 		var webSocket;
 		function connectnoti() {
 			// create a websocket
@@ -284,7 +309,7 @@ header {
 			webSocket.onmessage = function(event) {
 				var jsonObj = JSON.parse(event.data);
 				icRing();
-				noti(jsonObj.title);
+				noti(jsonObj);
 				console.log(jsonObj);
 			}
 		}
@@ -300,15 +325,25 @@ header {
 				$("#ring").text(number + 1);
 			}
 		}
-		function noti(data) {
+		function noti(jsonObj) {
 			var noti = document.getElementById("noti");
 			$("#nomsg").remove();
 			let notifi = document.createElement("a");
+			notifi.setAttribute("href", jsonObj.link);
 			let content = notifi.setAttribute("class", "dropdown-item");
-			notifi.text = data;
-
-			console.log(notifi.text);
-			noti.append(notifi);
+			let icon = document.createElement("i");
+			icon.setAttribute("class", "fas fa-bullhorn");
+			noti.prepend(icon);
+			$(icon).wrap(notifi);
+			$(icon).css("margin-right","19px");
+			let intext = document.createElement("span");
+			icon.after(intext);
+			intext.append(jsonObj.sendTime.substr(5));
+			icon.after(jsonObj.title);
+			$(intext).css("font-size","1px").css("vertical-align","sub");
+			
+			
+			
 		}
 		function isRead() {
 			var jsonObj = {
