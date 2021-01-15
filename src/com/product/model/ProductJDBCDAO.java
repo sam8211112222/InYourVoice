@@ -85,11 +85,11 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 		/**
 		 * added by  鈺涵
 		 */
-		private static final String SELECT_PRODUCT_FOR_LIST_STMT = "SELECT PRODUCT_ID,BAND_ID,PRODUCT_TYPE,PRODUCT_NAME,PRODUCT_INTRO,PRODUCT_PRICE,PRODUCT_STOCK,PRODUCT_CHECK_STATUS,PRODUCT_STATUS,PRODUCT_ON_TIME, " + 
-				"PRODUCT_OFF_TIME,PRODUCT_ADD_TIME,PRODUCT_DISCOUNT,PRODUCT_DISCOUNT_ON_TIME,PRODUCT_DISCOUNT_OFF_TIME,PRODUCT_LAST_EDIT_TIME,PRODUCT_LAST_EDITOR, " + 
-				"AVG(ORDERLIST.REVIEW_SCORE) AS REVIEW_SCORE,COUNT(orderlist.orderlist_id) AS REVIEW_COUNT FROM PRODUCT INNER JOIN ORDERLIST USING(PRODUCT_ID) WHERE orderlist.review_time IS NOT NULL %S GROUP BY " + 
-				"PRODUCT_ID,BAND_ID,PRODUCT_TYPE,PRODUCT_NAME,PRODUCT_INTRO,PRODUCT_PRICE,PRODUCT_STOCK,PRODUCT_CHECK_STATUS,PRODUCT_STATUS,PRODUCT_ON_TIME, " + 
-				"PRODUCT_OFF_TIME,PRODUCT_ADD_TIME,PRODUCT_DISCOUNT,PRODUCT_DISCOUNT_ON_TIME,PRODUCT_DISCOUNT_OFF_TIME,PRODUCT_LAST_EDIT_TIME,PRODUCT_LAST_EDITOR";
+		private static final String SELECT_PRODUCT_FOR_LIST_STMT = "SELECT P.PRODUCT_ID,P.BAND_ID,P.PRODUCT_TYPE,P.PRODUCT_NAME,P.PRODUCT_INTRO,P.PRODUCT_PRICE,P.PRODUCT_STOCK,P.PRODUCT_CHECK_STATUS,P.PRODUCT_STATUS,P.PRODUCT_ON_TIME," + 
+				"P.PRODUCT_OFF_TIME,P.PRODUCT_ADD_TIME,P.PRODUCT_DISCOUNT,P.PRODUCT_DISCOUNT_ON_TIME,P.PRODUCT_DISCOUNT_OFF_TIME,P.PRODUCT_LAST_EDIT_TIME,P.PRODUCT_LAST_EDITOR," + 
+				"AVG(case when o.review_time is not null then o.review_score else null end) AS REVIEW_SCORE,COUNT(case when o.review_time is not null then 1 end) AS REVIEW_COUNT  FROM PRODUCT P left outer JOIN ORDERLIST O ON P.PRODUCT_ID = O.PRODUCT_ID %S GROUP BY " + 
+				"P.PRODUCT_ID,P.BAND_ID,P.PRODUCT_TYPE,P.PRODUCT_NAME,P.PRODUCT_INTRO,P.PRODUCT_PRICE,P.PRODUCT_STOCK,P.PRODUCT_CHECK_STATUS,P.PRODUCT_STATUS,P.PRODUCT_ON_TIME," + 
+				"P.PRODUCT_OFF_TIME,P.PRODUCT_ADD_TIME,P.PRODUCT_DISCOUNT,P.PRODUCT_DISCOUNT_ON_TIME,P.PRODUCT_DISCOUNT_OFF_TIME,P.PRODUCT_LAST_EDIT_TIME,P.PRODUCT_LAST_EDITOR";
 
 	@Override
 	public void insert(ProductVO productVO) {
@@ -1184,10 +1184,18 @@ public class ProductJDBCDAO implements ProductDAO_interface {
 			StringBuilder clause = new StringBuilder();
 			
 			if(productName!=null) {
-				clause.append(" and upper(product_name) LIKE upper(?) ");
+				if(clause.toString().length()==0) {
+					clause.append(" where ");
+				}
+				clause.append(" upper(P.product_name) LIKE upper(?) ");
 			}
 			if(productType!=null) {
-				clause.append(" and product_type = ? ");
+				if(clause.toString().length()==0) {
+					clause.append(" where ");
+				}else {
+					clause.append(" and ");
+				}
+				clause.append(" P.product_type = ? ");
 			}
 			
 			String stmt = String.format(SELECT_PRODUCT_FOR_LIST_STMT, clause.toString());
