@@ -57,9 +57,9 @@ div.lea-img{
 						
 			<c:forEach var="eventVO" items="${eventSvc.getEventByName(name)}"> 
 
-				<div class="song-line" style="cursor:pointer;" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
+				<div class="song-line">
 					<div class="num"></div>
-					<div class="lea-img" >
+					<div class="lea-img" style="cursor:pointer;" onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 						<img src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}" alt="">
 
 						<div class="in-play" style="display: none;">
@@ -69,17 +69,83 @@ div.lea-img{
 					<div class="song-name">
 						${eventVO.event_title}<br> <span>${eventVO.event_detail}</span>
 					</div>
-					<div class="add">
-						<i class="fas fa-plus"></i>
+						<div class="add">
+							<i class="fas fa-plus"></i>
+							<input type="hidden" class="favId" value="${eventVO.event_id}">
+						</div>
+						<div class="delete">
+							<i class="fas fa-minus"></i>
+							<input type="hidden" class="favId" value="${eventVO.event_id}">
+						</div>
 					</div>
-				</div>
 				<hr class="songlist-hr">
 			</c:forEach>
 		</div>
 	</div>
-	
-	
+		
 	<%@include file="/front-end/header_footer/footer.jsp" %>
-
+	
+	
+	<script>
+		let data = {
+		    action:"getAllMeberfav",
+		    memberid :"${memberVo.memberId}",
+	  	};
+		$.ajax({
+	        type: "POST",
+	        url: "<%=request.getContextPath()%>/FavoritesServlet",
+	        data:data,
+	        success: function (data) {
+	           	console.log(data);
+	        },
+			error : function(err) { 
+				console.log(err);
+			}
+		});
+	
+		$(".add").click(function(){
+		  let eventid = $(this).find("input.favId")[0].value;
+		  let memberid = "${memberVo.memberId}";
+		  
+		  let data = {
+				  action:"addfav",
+				  favid : eventid,
+				  memberid : memberid,
+				  type : "0",
+		  };
+		  $.ajax({
+              type: "POST",
+              url: "<%=request.getContextPath()%>/FavoritesServlet",
+              data:data,
+              success: function (data) {
+                 	alert("新增成功");
+              },
+				error : function(err) {
+					alert("請登入");
+				}
+			});
+		})
+		$(".delete").click(function(){
+		  let eventid = $(this).find("input.favId")[0].value;
+		  let memberid = "${memberVo.memberId}";
+		  
+		  let data = {
+				  action:"deletefav17",
+				  favid : eventid,
+				  memberid : memberid,
+		  };
+		  $.ajax({
+              type: "POST",
+              url: "<%=request.getContextPath()%>/FavoritesServlet",
+              data:data,
+              success: function (data) {
+                 	alert("移除成功");
+              },
+				error : function(err) {
+					alert("請登入");
+				}
+			});
+		})
+	</script>	
 </body>
 </html>

@@ -55,9 +55,9 @@
 						
 			<c:forEach var="bandVO" items="${bandSvc.getBandByName(name)}">
 
-				<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${bandVO.band_id}';">
+				<div class="song-line">
 					<div class="num"></div>
-					<div class="lea-img">
+					<div class="lea-img" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${bandVO.band_id}';">
 						<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=${bandVO.band_id}" alt="">
 
 						<div class="in-play" style="display: none;">

@@ -56,10 +56,9 @@
 						
 			<c:forEach var="albumVO" items="${albumSvc.getAlbumByName(name)}"> 
 
-				<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${albumVO.band_id}';">
+				<div class="song-line">
 					<div class="num"></div>
-					<div class="lea-img">
-						<!-- 					<img src="./images/排行榜歌圖1.png" alt=""> -->
+					<div class="lea-img" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${albumVO.band_id}';">
 						<img src="<%=request.getContextPath()%>/album/album.do?action=getAlbumPhoto&album_id=${albumVO.album_id}" alt="">
 
 						<div class="in-play" style="display: none;">

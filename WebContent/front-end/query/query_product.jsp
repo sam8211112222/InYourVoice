@@ -54,9 +54,9 @@
 						
 			<c:forEach var="productVO" items="${productSvc.getProductByName(name)}"> 
 																							
-				<div class="song-line" onclick="location.href='<%= request.getContextPath() %>/product/YUproductServlet?action=show_me_one&id=${productVO.product_id}';">
+				<div class="song-line">
 					<div class="num"></div>
-					<div class="lea-img">
+					<div class="lea-img" onclick="location.href='<%= request.getContextPath() %>/product/YUproductServlet?action=show_me_one&id=${productVO.product_id}';">
 						<img src="<%= request.getContextPath() %>/productphoto/YUproductPhotoServlet?id=${productVO.product_id}" alt="">
 						<div class="in-play" style="display: none;">
 							<i class="far fa-play-circle img-play"></i>

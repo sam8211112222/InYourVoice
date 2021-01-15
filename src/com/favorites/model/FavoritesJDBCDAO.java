@@ -39,6 +39,14 @@ public class FavoritesJDBCDAO implements FavoritesDAO_interface {
 	private static final String GET_ONE_BY_MEMBERID_AND_PRODUCTID_STMT = 
 			"SELECT * FROM favorites where member_id = ? and favorite_id=? and favorite_type=2";
 	
+	//移除收藏
+	private static final String DELETE_FAV = "DELETE FROM FAVORITES WHERE MEMBER_ID = ? AND FAVORITE_ID=?";
+	
+	//查使用者的全部收藏
+	private static final String GET_MEMBER_FAV = "SELECT * FROM FAVORITES WHERE MEMBER_ID = ?"; 
+	
+	
+	
 	@Override
 	public void insert(FavoritesVO favoritesVO) {
 		
@@ -432,6 +440,118 @@ public class FavoritesJDBCDAO implements FavoritesDAO_interface {
 		}
 		return favoritesVO;
 	}
+	
+	//移除收藏
+	@Override
+	public void delete_fav17(String memberId , String favoriteId) {
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		
+
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(DELETE_FAV);
+
+			pstmt.setString(1, memberId);
+			pstmt.setString(2, favoriteId);
+
+			pstmt.executeUpdate();
+			
+
+
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+		} finally {
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+
+	}
+	
+	@Override
+	public List<FavoritesVO> getAllMeberfav(String memberId ) {
+		List<FavoritesVO> list = new ArrayList<FavoritesVO>();
+		FavoritesVO favoritesVO = null;
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+
+			Class.forName(driver);
+			con = DriverManager.getConnection(url, userid, passwd);
+			pstmt = con.prepareStatement(GET_MEMBER_FAV);
+			
+			pstmt.setString(1, memberId);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				
+				favoritesVO = new FavoritesVO();
+				favoritesVO.setUniqueid(rs.getString("uniqueid"));
+				favoritesVO.setMember_id(rs.getString("member_id"));
+				favoritesVO.setFavorite_type(rs.getInt("favorite_type"));
+				favoritesVO.setFavorite_id(rs.getString("favorite_id"));
+				favoritesVO.setFavorite_add_time(rs.getTimestamp("favorite_add_time"));
+				list.add(favoritesVO); 
+			}
+			
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException("Couldn't load database driver. "
+					+ e.getMessage());
+			// Handle any SQL errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. "
+					+ se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return list;
+	}
+	
+	
 //	public static void main(String[] args) {
 //
 //		FavoritesJDBCDAO dao = new FavoritesJDBCDAO();
