@@ -393,6 +393,7 @@ td {
 		<div id="container">
 			<div>
 				<table>
+				<c:if test="${cartList!=null}">
 					<tr style="text-align: center;">
 						<td style="margin:0px 0px 0px 50px">商品照片</td>
 						<td>商品名稱</td>
@@ -431,7 +432,10 @@ td {
 						<td class="totalpricesubtotal"></td>
 						<td></td>
 					</tr>
-
+</c:if >
+<c:if test="${cartList==null}">
+<h3>目前尚無商品</h3>
+</c:if>
 				</table>
 			</div>
 		</div>

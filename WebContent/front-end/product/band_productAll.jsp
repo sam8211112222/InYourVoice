@@ -32,6 +32,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/product/band_productAll.css">
 <style>
+body{
+background-color:rgb(199 188 147 / 38%) !improtant;
+}
 div.pagination{
     margin: auto 600px;
     width: 100%;
