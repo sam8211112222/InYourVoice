@@ -44,7 +44,7 @@
 	</ul>
 </c:if>
 
-<div>
+<div align="center">
 <table width=75%>
 	<tr>
 		<th>·Ó¤ù½s¸¹</th>
