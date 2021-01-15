@@ -1,0 +1,486 @@
+/* 購物車css樣式 */
+
+
+/* 打開參考線 */
+
+
+/* div {
+  outline: 1px solid turquoise;
+} */
+
+
+/* 購物進度列 */
+
+.progressbar {
+    width: 100%;
+    height: 140px;
+    counter-reset: step;
+    margin-top: 2rem;
+    padding-left: 4rem;
+}
+
+.progressbar li {
+    list-style-type: none;
+    float: left;
+    width: 30.33%;
+    position: relative;
+    text-align: center;
+}
+
+.progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #e6e6e6;
+    display: block;
+    border-radius: 50%;
+    text-align: center;
+    margin: 0 auto 0 auto;
+}
+
+.progressbar li .active {
+    color: #000;
+}
+
+.progressbar li.active::before {
+    border-color: #000;
+}
+
+li.cart {
+    color: #ccc;
+}
+
+li.check {
+    color: #ccc;
+}
+
+
+/* 訂單確認 */
+
+.top-title h5 {
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 2.5rem;
+}
+
+.product-detail {
+    width: 60%;
+    margin: 0 20% 0 25%;
+}
+
+.detail-line {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.det-1 {
+    border-right: 1px solid #e6e6e6;
+}
+
+.detail-line p {
+    transform: translateX(-50%);
+}
+
+.top-title h5 {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+/* 查看訂單記錄 */
+
+.btn-buy {
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    width: 450px;
+    height: 50px;
+    font-size: .6rem;
+    margin-top: 1rem;
+}
+
+
+/* 回首頁按鈕 */
+
+.btn-back {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+    width: 450px;
+    height: 50px;
+    font-size: .6rem;
+    margin-top: 1rem;
+}
+
+.btn-all {
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6rem;
+}
+
+.btn-all .btn-buy,
+.btn-back {
+    margin: 0 auto;
+    margin-top: 1rem;
+}
+
+
+/* RWD部分 */
+
+@media (max-width: 767px) {
+    /* 進度列 */
+    .progressbar {
+        width: 100%;
+        height: 100px;
+        padding-left: 1rem;
+    }
+    ul.progressbar {
+        margin-top: 7rem;
+    }
+    .span.cart {
+        color: #ccc;
+    }
+    .span.check {
+        color: #ccc;
+    }
+    .product-detail {
+        width: 100%;
+        margin: auto;
+    }
+    ul.detail-line {
+        padding: 0 1rem 0 1rem;
+    }
+    .detail-line {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+    }
+    ul.detail-line li {
+        width: 100%;
+        padding: 10px 0;
+    }
+    .detail-line p {
+        transform: translateX(0%);
+        display: flex;
+        margin: 0;
+    }
+    .det-1 {
+        width: 80%;
+        border-right: none;
+        border-bottom: 1px solid #e6e6e6;
+        margin-bottom: .5rem;
+    }
+    .top-title h5 {
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    .btn-all {
+        width: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 3rem;
+    }
+    /* 查看訂單記錄 */
+    .btn-buy {
+        width: 250px;
+        height: 45px;
+    }
+    /* 回首頁按鈕 */
+    .btn-back {
+        width: 250px;
+        height: 45px;
+    }
+}
+
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+html {
+    display: grid;
+    min-height: 100%;
+}
+
+body {
+    display: grid;
+    overflow: hidden;
+    font-family: "Lato", sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#container {
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+    width: 100%;
+    height: 250px;
+}
+
+h1 {
+    font-size: 0.9em;
+    font-weight: 100;
+    letter-spacing: 3px;
+    padding-top: 5px;
+    color: #FCFCFC;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.green {
+    color: #4ec07d;
+}
+
+.red {
+    color: #e96075;
+}
+
+.alert {
+    font-weight: 700;
+    letter-spacing: 5px;
+}
+
+p {
+    margin-top: -5px;
+    font-size: 0.5em;
+    font-weight: 100;
+    color: #5e5e5e;
+    letter-spacing: 1px;
+}
+
+button,
+.dot {
+    cursor: pointer;
+}
+
+#success-box {
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    left: calc(50%);
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom right, #B0DB7D 40%, #99DBB4 100%);
+    border-radius: 20px;
+    box-shadow: 5px 5px 20px rgba(203, 205, 211, 0.1);
+    perspective: 40px;
+}
+
+#error-box {
+    position: absolute;
+    width: 70%;
+    height: 100%;
+    left: calc(50%);
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom left, #EF8D9C 40%, #FFC39E 100%);
+    border-radius: 20px;
+    box-shadow: 5px 5px 20px rgba(203, 205, 211, 0.1);
+    perspective: 40px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: #FCFCFC;
+    border-radius: 50%;
+    position: absolute;
+    top: 4%;
+    right: 6%;
+}
+
+.dot:hover {
+    background: #c9c9c9;
+}
+
+.two {
+    right: 12%;
+    opacity: 0.5;
+}
+
+.face {
+    position: absolute;
+    width: 22%;
+    height: 22%;
+    background: #FCFCFC;
+    border-radius: 50%;
+    border: 1px solid #777777;
+    top: 21%;
+    left: 37.5%;
+    z-index: 2;
+    animation: bounce 1s ease-in infinite;
+}
+
+.face2 {
+    position: absolute;
+    width: 22%;
+    height: 22%;
+    background: #FCFCFC;
+    border-radius: 50%;
+    border: 1px solid #777777;
+    top: 21%;
+    left: 37.5%;
+    z-index: 2;
+    animation: roll 3s ease-in-out infinite;
+}
+
+.eye {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: #777777;
+    border-radius: 50%;
+    top: 40%;
+    left: 20%;
+}
+
+.right {
+    left: 68%;
+}
+
+.mouth {
+    position: absolute;
+    top: 43%;
+    left: 41%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+
+.happy {
+    border: 2px solid;
+    border-color: transparent #777777 #777777 transparent;
+    transform: rotate(45deg);
+}
+
+.sad {
+    top: 49%;
+    border: 2px solid;
+    border-color: #777777 transparent transparent #777777;
+    transform: rotate(45deg);
+}
+
+.shadow {
+    position: absolute;
+    width: 21%;
+    height: 3%;
+    opacity: 0.5;
+    background: #777777;
+    left: 40%;
+    top: 43%;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.scale {
+    animation: scale 1s ease-in infinite;
+}
+
+.move {
+    animation: move 3s ease-in-out infinite;
+}
+
+.message {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    height: 40%;
+    top: 47%;
+}
+
+.button-box {
+    position: absolute;
+    background: #FCFCFC;
+    width: 50%;
+    height: 15%;
+    border-radius: 20px;
+    top: 73%;
+    left: 25%;
+    outline: 0;
+    border: none;
+    box-shadow: 2px 2px 10px rgba(119, 119, 119, 0.5);
+    transition: all 0.5s ease-in-out;
+}
+
+.button-box:hover {
+    background: #efefef;
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+}
+
+@keyframes bounce {
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes scale {
+    50% {
+        transform: scale(0.9);
+    }
+}
+
+@keyframes roll {
+    0% {
+        transform: rotate(0deg);
+        left: 25%;
+    }
+    50% {
+        left: 60%;
+        transform: rotate(168deg);
+    }
+    100% {
+        transform: rotate(0deg);
+        left: 25%;
+    }
+}
+
+@keyframes move {
+    0% {
+        left: 25%;
+    }
+    50% {
+        left: 60%;
+    }
+    100% {
+        left: 25%;
+    }
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    font-size: 1em;
+    text-transform: uppercase;
+    padding: 10px;
+    font-family: "Lato", sans-serif;
+}
+
+footer p {
+    color: #EF8D9C;
+    letter-spacing: 2px;
+}
+
+footer a {
+    color: #B0DB7D;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #FFC39E;
+}
+
+@media (min-width: 767px) {
+    #success-box,
+    #error-box {
+        width: 20%;
+    }
+}

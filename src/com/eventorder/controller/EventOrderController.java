@@ -67,11 +67,6 @@ public class EventOrderController extends HttpServlet {
 				}
 
 				context.setAttribute("ticketRestAmount", ticketRestAmount);
-				System.out.println("總票數更新");
-				Set<String> set = ticketRestAmount.keySet();
-				for(String key :set) {
-					System.out.println(key+" "+ticketRestAmount.get(key));
-				}
 
 			}
 		};
