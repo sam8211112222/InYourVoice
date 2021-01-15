@@ -726,17 +726,17 @@ img.td{
 
 
 		//判斷名字
-		function checkUserEntryName() {
+// 		function checkUserEntryName() {
 
-			let userEntry = $("#order-customer-name").val();
-			let errMsg = $("#order-customer-name-span");
-			if (userEntry.length === 0) {
-				errMsg.text('*名字請勿空白');
-			}
-		}
-		$("#order-customer-name").on("blur", function() {
-			checkUserEntryName();
-		});
+// 			let userEntry = $("#order-customer-name").val();
+// 			let errMsg = $("#order-customer-name-span");
+// 			if (userEntry.length === 0) {
+// 				errMsg.text('*名字請勿空白');
+// 			}
+// 		}
+// 		$("#order-customer-name").on("blur", function() {
+// 			checkUserEntryName();
+// 		});
 	</script>
 	<script>
 		var MyPoint = "/TimeOut/<%=memberVo.getMemberId()%>";

@@ -8,8 +8,8 @@ public class EventOrderListService {
 	EventOrderListDAO dao = null;
 	
 	public EventOrderListService() {
-//		dao = new EventOrderListJNDIDAO();
-		dao = new EventOrderListJDBCDAO();
+		dao = new EventOrderListJNDIDAO();
+//		dao = new EventOrderListJDBCDAO();
 	}
 	
 	public List<EventOrderListVO> getAll(){

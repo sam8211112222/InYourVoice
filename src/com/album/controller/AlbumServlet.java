@@ -27,7 +27,9 @@ import javax.websocket.Session;
 
 import com.album.model.AlbumService;
 import com.album.model.AlbumVO;
+import com.emp.model.EmpVO;
 import com.google.gson.Gson;
+import com.member.model.MemberVo;
 import com.pieces.model.PiecesService;
 import com.pieces.model.PiecesVO;
 
@@ -331,12 +333,27 @@ public class AlbumServlet extends HttpServlet {
 			
 			res.setCharacterEncoding("UTF-8");
 			
+			HttpSession session = req.getSession();
+			MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
+			System.out.println(memberVo);
+			
 			String action_type = req.getParameter("action_type");
 			
 			String album_id = req.getParameter("album_id");
 			String band_id = req.getParameter("band_id");
+			
 			String member_id = req.getParameter("member_id");
-			System.out.println(member_id);
+			System.out.println("member_id = " + member_id);
+			
+			String emp_id = "";
+			EmpVO empVO = (EmpVO) req.getSession().getAttribute("empVO");
+			if(empVO!=null) {
+				emp_id = empVO.getEmp_id();
+			}
+			System.out.println("emp_id = " + emp_id);
+			
+			String lastEditor = !"".equals(member_id) ? member_id : !"".equals(emp_id) ? emp_id : "NoMemberIDorNoEmpId";
+
 			String album_name = req.getParameter("album_name");
 			String album_intro = req.getParameter("album_intro");
 			int shelf_status = Integer.parseInt(req.getParameter("shelf_status"));
@@ -398,7 +415,7 @@ public class AlbumServlet extends HttpServlet {
 				}else {
 					albumVO.setAlbum_photo(albumSvc.getOneAlbum(album_id).getAlbum_photo());							
 				}	
-				albumVO.setAlbum_last_editor(member_id);
+				albumVO.setAlbum_last_editor(lastEditor);
 				albumVO.setAlbum_last_edit_time(new Timestamp(System.currentTimeMillis()));
 				
 //				 寫入資料庫
@@ -431,7 +448,7 @@ public class AlbumServlet extends HttpServlet {
 				}else {
 					albumVO.setAlbum_photo(albumSvc.getOneAlbum(album_id).getAlbum_photo());					
 				}
-				albumVO.setAlbum_last_editor(member_id);
+				albumVO.setAlbum_last_editor(lastEditor);
 				albumVO.setAlbum_last_edit_time(new Timestamp(System.currentTimeMillis()));
 				
 				// 寫入資料庫

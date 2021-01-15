@@ -350,7 +350,7 @@ function updateFavorite(action){
 								</div>
 							</div>
 							<div class="intro">
-								<p>${productVO.product_intro}</p>
+								<p>${productVO.product_detail}</p>
 							</div>
 
 
@@ -403,7 +403,7 @@ function updateFavorite(action){
 					<li class="nav-item"><a class="nav-link" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review" aria-selected="false">評價</a></li>
 				</ul>
 				<div class="tab-content" id="myTabContent">
-					<div class="tab-pane fade active show" id="description" role="tabpanel" aria-labelledby="description-tab">${productVO.product_intro}</div>
+					<div class="tab-pane fade active show" id="description" role="tabpanel" aria-labelledby="description-tab">${productVO.product_detail}</div>
 					<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
 						<div class="review-heading">REVIEWS</div>
 				<div class="comment-list">

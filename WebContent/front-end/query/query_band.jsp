@@ -58,7 +58,7 @@
 				<div class="song-line" style="cursor: pointer;" onclick="location.href='<%= request.getContextPath() %>/band/band.do?action=getBandMain&band_id=${bandVO.band_id}';">
 					<div class="num"></div>
 					<div class="lea-img">
-						<img src="<%=request.getContextPath()%>/band/band.do?action=getPhoto&band_id=${bandVO.band_id}" alt="">
+						<img src="<%=request.getContextPath()%>/band/band.do?action=getBandPhoto&band_id=${bandVO.band_id}" alt="">
 
 						<div class="in-play" style="display: none;">
 							<i class="far fa-play-circle img-play"></i>

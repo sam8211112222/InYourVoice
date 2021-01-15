@@ -395,6 +395,8 @@ td {
 
 			<div>
 				<table>
+				
+					
 					<tr style="text-align: center;">
 						<td>商品照片</td>
 						<td>商品名稱</td>
@@ -403,8 +405,7 @@ td {
 						<td>小計</td>
 						<td></td>
 					</tr>
-
-
+					
 					<c:forEach items="${cartList}" var="order">
 
 						<tr class="p">

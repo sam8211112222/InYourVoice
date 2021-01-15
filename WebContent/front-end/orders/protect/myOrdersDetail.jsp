@@ -1,7 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="java.util.* , com.cart.model.CartVO,com.orders.model.OrdersVO"%>
 <%@ page import="static com.cart.controller.CartServlet.SESSION_CART_KEY"%>
@@ -47,7 +47,7 @@ a.btn-custom {
 
 a.btn-color-primary:focus {
 	border-width: 1px;
-	border-style: solid color: white !important;
+	border-style: solid white !important;
 	border-color: #f9595f;
 }
 
@@ -253,13 +253,19 @@ function addToCart(){
 									value="${orderListVO.price*orderListVO.orderlist_goods_amount}"
 									pattern="$#,###" /></td>
 							<td class="form2" align="center" valign="center">
+<%-- 							<c:if test="${orderListVO.order_status==0}"> --%>
+<%--       						</c:if> --%>
 							<c:if test="${orderListVO.review_time==null}">
 									<a class="btn btn-custom btn-color-primary"
 										onclick="showReviewDialog('${orderListVO.orderlist_id}');">評價商品</a>
-								</c:if> <c:if test="${orderListVO.review_time!=null}">
+								</c:if> 
+								<c:if test="${orderListVO.review_time!=null}">
 									<a class="btn btn-custom btn-color-primary"
 										onclick="showReviewDialog('${orderListVO.orderlist_id}','${orderListVO.review_msg}','${orderListVO.review_score}');">修改評價</a>
-								</c:if></td>
+								</c:if>
+								
+								</td>
+						
 						</tr>
 
 					</c:forEach>

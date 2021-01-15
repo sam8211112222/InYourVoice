@@ -14,7 +14,7 @@ public class OrdersJDBCDAO implements OrdersDAO_interface {
 	String userid = "TEA102G6";
 	String password = "123456";
 
-	private static final String INSERT_STMT = "INSERT INTO orders (order_id,member_id,order_status,order_place_time,order_name,order_mail,order_phone,order_delivery_time,order_received_time)VALUES('ORDERS'||LPAD(ORDERS_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?,?,?,?) order by order_place_time DESC";
+	private static final String INSERT_STMT = "INSERT INTO orders (order_id,member_id,order_status,order_place_time,order_name,order_mail,order_phone,order_delivery_time,order_received_time)VALUES('ORDERS'||LPAD(ORDERS_SEQ.NEXTVAL, 5, '0'),?,?,?,?,?,?,?,?)";
 
 	private static final String GET_ALL_STMT = "SELECT * FROM  orders order by order_place_time DESC";
 

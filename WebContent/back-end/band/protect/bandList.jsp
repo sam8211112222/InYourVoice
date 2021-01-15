@@ -129,15 +129,37 @@
 
 	<!-- End of Main Content -->
 	<%@ include file="/back-end/sb/page2.file"%>
-	<script src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+ <!-- Bootstrap core JavaScript-->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
+ <script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+ <!-- Core plugin JavaScript-->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+ <!-- Custom scripts for all pages-->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/sb-admin-2.min.js"></script>
+
+ <!-- Page level plugins -->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/jquery.dataTables.min.js"></script>
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+ <!-- Page level custom scripts -->
+ <script
+  src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/demo/datatables-demo.js"></script>
 	<script>
-	
-		$(".updatebtn").click(function(e) {
+		$(".updatebtn")
+				.click(function(e) {
 						var that = $(this);
 						let status = that.closest("tr").find("select.update")[0].value;
+							console.log(status);
 							if (status != "") {
 								that.closest("tr").find("select.update").toggleClass("-none");
 								that.closest("tr").find("p.para").toggleClass("-none");
@@ -160,7 +182,8 @@
 										bandLastEditor : bandLastEditor,
 										bandStatus : bandStatus,
 									}
-									$.ajax({
+									$
+											.ajax({
 												type : "POST",
 												url : "/TEA102G6/band/band.do",
 												dataType : "JSON",

@@ -18,12 +18,12 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 	String userid = "TEA102G6";
 	String passwd = "123456";
 
-	private static final String INSERT_STMT = "INSERT INTO eventorderlist (orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks) VALUES ('EVENTORDERLIST'||LPAD(EVENTORDERLIST_SEQ.NEXTVAL, 5, '0'), ?, ?, ?, ?)";
-	private static final String GET_ALL_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks FROM eventorderlist order by orderlist_id ";
-	private static final String GET_ONE_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks FROM  eventorderlist WHERE orderlist_id = ?";
+	private static final String INSERT_STMT = "INSERT INTO eventorderlist (orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks,ORDERLIST_STATUS) VALUES ('EVENTORDERLIST'||LPAD(EVENTORDERLIST_SEQ.NEXTVAL, 5, '0'), ?, ?, ?, ?,?)";
+	private static final String GET_ALL_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks,ORDERLIST_STATUS FROM eventorderlist order by orderlist_id ";
+	private static final String GET_ONE_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks,ORDERLIST_STATUS FROM  eventorderlist WHERE orderlist_id = ?";
 	private static final String DELETE = "DELETE FROM eventorderlist where orderlist_id = ?";
-	private static final String UPDATE = "UPDATE eventorderlist set ticket_id = ?,event_order_id = ?,orderlist_goods_amount = ?,orderlist_remarks = ? where orderlist_id=? ";
-	private static final String GET_LIST_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks FROM  eventorderlist WHERE event_order_id = ?";
+	private static final String UPDATE = "UPDATE eventorderlist set ticket_id = ?,event_order_id = ?,orderlist_goods_amount = ?,orderlist_remarks = ? ,ORDERLIST_STATUS=? where orderlist_id=? ";
+	private static final String GET_LIST_STMT = "SELECT orderlist_id,ticket_id,event_order_id,orderlist_goods_amount,orderlist_remarks,ORDERLIST_STATUS FROM  eventorderlist WHERE event_order_id = ?";
 	
 	@Override
 	public String insert(Connection con, EventOrderListVO eventOrderListVO) {
@@ -40,6 +40,7 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 			pstmt.setInt(3, eventOrderListVO.getOrderlist_goods_amount());
 			pstmt.setString(4, eventOrderListVO.getOrderlist_remarks());
 			pstmt.setInt(5, eventOrderListVO.getOrderlist_status());
+			pstmt.setInt(6, eventOrderListVO.getOrderlist_status());
 
 			pstmt.executeUpdate();
 
@@ -87,7 +88,9 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 			pstmt.setString(2, eventOrderListVO.getEvent_order_id());
 			pstmt.setInt(3, eventOrderListVO.getOrderlist_goods_amount());
 			pstmt.setString(4, eventOrderListVO.getOrderlist_remarks());
-			pstmt.setString(5, eventOrderListVO.getOrderlist_id());
+			pstmt.setInt(5, eventOrderListVO.getOrderlist_status());
+			pstmt.setString(6, eventOrderListVO.getOrderlist_id());
+			
 
 			pstmt.executeUpdate();
 
@@ -182,6 +185,7 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 				eventOrderListVO.setEvent_order_id(rs.getString("event_order_id"));
 				eventOrderListVO.setOrderlist_goods_amount(rs.getInt("orderlist_goods_amount"));
 				eventOrderListVO.setOrderlist_remarks(rs.getString("orderlist_remarks"));
+				eventOrderListVO.setOrderlist_status(rs.getInt("ORDERLIST_STATUS"));
 
 			}
 
@@ -241,6 +245,7 @@ public class EventOrderListJDBCDAO implements EventOrderListDAO {
 				eventOrderListVO.setEvent_order_id(rs.getString("event_order_id"));
 				eventOrderListVO.setOrderlist_goods_amount(rs.getInt("orderlist_goods_amount"));
 				eventOrderListVO.setOrderlist_remarks(rs.getString("orderlist_remarks"));
+				eventOrderListVO.setOrderlist_status(rs.getInt("orderlist_status"));
 				list.add(eventOrderListVO); // Store the row in the list
 			}
 
