@@ -28,6 +28,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.member.model.MemberService;
+import com.member.model.MemberVo;
 
 @ServerEndpoint("/notification/{memberId}")
 public class NotificationWebsocket {
@@ -57,31 +59,54 @@ public class NotificationWebsocket {
 		java.util.Date sendTime = mnt.getSendTime();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String formatTime = sdf.format(sendTime);
-		
-		if("audit".equals(mnt.getType())) {
+
+		if ("audit".equals(mnt.getType())) {
 			String receiver = mnt.getReceiver();
 			String link = mnt.getLink();
-			
-				Session receiverSession = sessionsMap.get(receiver);
+
+			Session receiverSession = sessionsMap.get(receiver);
+			if (receiverSession != null && receiverSession.isOpen()) {
+				Gson gson = new Gson();
+				Map<String, String> msg = new HashMap<String, String>();
+				msg.put("title", title);
+				msg.put("content", content);
+				msg.put("receiver", receiver);
+				msg.put("sendTime", formatTime);
+				msg.put("link", link);
+				JedisMessage.isRead(receiver);
+				receiverSession.getAsyncRemote().sendText(gson.toJson(msg));
+			}
+			JedisMessage.saveMessage(receiver, title, content, formatTime, link);
+			return;
+		}
+		if ("isRead".equals(mnt.getType())) {
+			JedisMessage.read(senderId);
+
+			return;
+		}
+		if ("newband".equals(mnt.getType())) {
+			String link = mnt.getLink();
+			MemberService memberSvc = new MemberService();
+			List<MemberVo> memberVo = memberSvc.getAll();
+			for (MemberVo Vo : memberVo) {
+				System.out.println(Vo.getMemberId());
+				Session receiverSession = sessionsMap.get(Vo.getMemberId());
 				if (receiverSession != null && receiverSession.isOpen()) {
 					Gson gson = new Gson();
 					Map<String, String> msg = new HashMap<String, String>();
 					msg.put("title", title);
 					msg.put("content", content);
-					msg.put("receiver", receiver);
-					msg.put("sendTime",formatTime);
-					msg.put("link",link);
-					JedisMessage.isRead(receiver);
+					msg.put("receiver", Vo.getMemberId());
+					msg.put("sendTime", formatTime);
+					msg.put("link", link);
+					JedisMessage.isRead(Vo.getMemberId());
 					receiverSession.getAsyncRemote().sendText(gson.toJson(msg));
 				}
-				JedisMessage.saveMessage(receiver, title, content, formatTime, link);
-				return;
+				JedisMessage.saveMessage(Vo.getMemberId(), title, content, formatTime, link);
+			}
+			return;
 		}
-		if("isRead".equals(mnt.getType())) {
-			JedisMessage.read(senderId);
 
-			return;		
-		}
 //		List<String> receiver = new ArrayList<String>();
 //
 //		FavoritesService favoSvc = new FavoritesService();
