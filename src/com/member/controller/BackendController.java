@@ -256,6 +256,7 @@ public class BackendController extends HttpServlet {
 		}
 		if ("update".equals(str)) {
 			String memberId = (String) request.getParameter("memberId");
+			System.out.println(memberId);
 			String memberName = (String) request.getParameter("memberName");
 			String memberGender = (String) request.getParameter("memberGender");
 			String memberPhone = (String) request.getParameter("memberPhone");

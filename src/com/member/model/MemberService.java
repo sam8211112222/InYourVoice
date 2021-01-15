@@ -10,7 +10,7 @@ public class MemberService {
 	private MemberDao_interface memberDao;
 	
 	public MemberService() {
-		memberDao = new MemberDaoJDBC();
+		memberDao = new MemberDao();
 	}
 	public List<MemberVo> getAll(){
 		return memberDao.getAll();

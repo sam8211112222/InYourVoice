@@ -88,9 +88,6 @@
 									<c:if test="${bandVO.band_status==2}">
 									<p class="para">樂團下架</p>
 									</c:if>
-									<c:if test="${bandVO.band_status==3}">
-									<p class="para">已退回申請</p>
-									</c:if>
 									
 									<select class="update -none">	
 											<option ${bandVO.band_status == 0 ? "selected":""} value="0">審核未通過</option>
@@ -105,15 +102,10 @@
 
 									<c:choose>
 										<c:when test="${bandVO.band_status==0}">
-											<td class="status"><a href="<%=request.getContextPath()%>/band/band.do?action=getAuditPage&bandId=${bandVO.band_id}"><input type="button" class="auditbtn" value="審核"></a></td>
+											<td><a href="<%=request.getContextPath()%>/band/band.do?action=getAuditPage&bandId=${bandVO.band_id}"><input type="button" class="auditbtn" value="審核"></a></td>
 										</c:when>
-										<c:when test="${bandVO.band_status==1}">
-											<td class="status">通過審核</td>
-										</c:when>
-										<c:when test="${bandVO.band_status==2}">
-											<td class="status">樂團下架</td>
-										</c:when><c:when test="${bandVO.band_status==3}">
-											<td class="status">申請已退回</td>
+										<c:when test="${bandVO.band_status!=0}">
+											<td>通過審核</td>
 										</c:when>
 									</c:choose>
 								</tr>
@@ -134,10 +126,11 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script>
-	
-		$(".updatebtn").click(function(e) {
+		$(".updatebtn")
+				.click(function(e) {
 						var that = $(this);
 						let status = that.closest("tr").find("select.update")[0].value;
+							console.log(status);
 							if (status != "") {
 								that.closest("tr").find("select.update").toggleClass("-none");
 								that.closest("tr").find("p.para").toggleClass("-none");
@@ -160,14 +153,18 @@
 										bandLastEditor : bandLastEditor,
 										bandStatus : bandStatus,
 									}
-									$.ajax({
+									$
+											.ajax({
 												type : "POST",
 												url : "/TEA102G6/band/band.do",
 												dataType : "JSON",
 												data : obj,
 												success : function(result) {
-													that.closest("td").closest("tr")[0].children[5].innerText = result.bandLastEditor;
-													that.closest("td").closest("tr")[0].children[4].innerText = result.bandLastEditTime;												
+
+													that.closest("td").closest(
+															"tr")[0].children[5].innerText = result.bandLastEditor;
+													that.closest("td").closest(
+															"tr")[0].children[4].innerText = result.bandLastEditTime;
 												},
 												error : function(err) {
 													alert("系統錯誤");

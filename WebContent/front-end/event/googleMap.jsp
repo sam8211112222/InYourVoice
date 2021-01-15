@@ -80,10 +80,12 @@
   var geocoder = new google.maps.Geocoder();
   var info_config = [
 	<c:forEach var="eventVO" items="${list}">
+	<c:if test{eventVO.event_status==1}>
     `<h2>`+"${eventVO.event_place}"+'</h2>'+
     '<span>'+"${eventVO.event_title}"+'</span><br/>'+
     '<a href="<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${eventVO.event_id}"><img class="infoImg" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></a><br/>'
     ,
+    </c:if>
     </c:forEach>
     ];
 
@@ -91,10 +93,12 @@
   //建立地圖 marker 的集合
   var marker_config = [
 	<c:forEach var="eventVO" items="${list}">
+	<c:if test{eventVO.event_status==1}>
 	{
     address: "${eventVO.event_city}${eventVO.event_cityarea}${eventVO.event_address}",
     title: "${eventVO.event_place}"
     },
+    </c:if>
   </c:forEach>];  
 
   //geocoder主程式

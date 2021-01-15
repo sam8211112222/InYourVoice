@@ -154,7 +154,8 @@ audio {
     		let obj={
     				action : "updateStatus",
     				bandId : "${bandVO.band_id}",
-    				bandLastEditor : "${empVO.emp_id}"
+    				bandLastEditor : "${empVO.emp_id}",
+    				bandStatus : "1",
     		}
     		$.ajax({
 				type : "POST",
@@ -176,7 +177,23 @@ audio {
     returnBtn.addEventListener("click",function(){
     	var yes = confirm('確定退回審核嗎？');
     	if (yes) {
-    		sendMessage2();
+    		let obj={
+    				action : "updateStatus",
+    				bandId : "${bandVO.band_id}",
+    				bandLastEditor : "${empVO.emp_id}",
+    				bandStatus : "3",
+    		}
+    		$.ajax({
+				type : "POST",
+				url : "/TEA102G6/band/band.do",
+				data : obj,
+				success : function(result) {
+					sendMessage2();
+				},
+				error : function(err) {
+					alert("系統錯誤");
+				}
+			});
     	} else {
     	    alert('你按了取消按鈕');
     	}        

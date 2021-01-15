@@ -23,11 +23,9 @@
 <title>SB Admin 2 - Tables</title>
 
 <!-- Custom fonts for this template -->
-<link
-	href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/fontawesome-free/css/all.min.css"
+<link href="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/fontawesome-free/css/all.min.css"
 	rel="stylesheet" type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
 	rel="stylesheet">
 
 <!-- Custom styles for this template -->
@@ -56,12 +54,7 @@ float:right;
 
 
 	<%@ include file="/back-end/sb/page1.file"%>
-	<!-- Begin Page Content -->
-	<div class="container-fluid">
-
-		<!-- Page Heading -->
-		<h1 class="h3 mb-2 text-gray-800">會員資料</h1>
-		<!-- DataTales Example -->
+	
 		<div class="card shadow mb-4">
 			<div class="card-header py-3">
 				<h6 class="m-0 font-weight-bold text-primary">會員資料表</h6>
@@ -69,8 +62,7 @@ float:right;
 			</div>
 			<div class="card-body">
 				<div class="table-responsive">
-					<table class="table table-bordered" id="dataTable" width="100%"
-						cellspacing="0">
+					<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 						<thead>
 							<tr>
 								<th>會員ID</th>
@@ -115,54 +107,61 @@ float:right;
 	</div>
 	<!-- End of Main Content -->
 
+	<%@ include file="/back-end/sb/page2.file"%>
+	<!-- Bootstrap core JavaScript-->
 	<script
 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery/jquery.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 	<script
 		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<%@ include file="/back-end/sb/page2.file"%>
-	<script src="<%=request.getContextPath()%>/vendors/jquery/jquery-3.5.1.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/popper/popper.min.js"></script>
-	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/sb-admin-2.min.js"></script>
+
+	<!-- Page level plugins -->
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/jquery.dataTables.min.js"></script>
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+	<!-- Page level custom scripts -->
+	<script
+		src="<%=request.getContextPath()%>/vendors/sb-admin-2/js/demo/datatables-demo.js"></script>
+
 	
 	<script>
-		$(".updatebtn")
-				.click(
-						function(e) {
+		$(".updatebtn").click(function(e) {
 							var that = $(this);
-							var length = $(this).closest("tr").find(
-									"input.update").length;
+							var length = $(this).closest("tr").find("input.update").length;
 							var list = [];
 							for (var i = 0; i < length; i++) {
-								let info = (that.closest("tr").find(
-										"input.update")[i].value.trim());
+								let info = (that.closest("tr").find("input.update")[i].value.trim());
 								if (info != "") {
 									list.push(info);
 								}
 							}
 							console.log(list);
 							if (list.length == 3) {
-								console.log("list.length == 3")
+								
 								const phoneReg = new RegExp("^0(9)[0-9]{8}$");
 								if (list[2].match(phoneReg)) {
+									console.log("123");
 									let memberPhone = list[2];
-									let memberId = that.closest("td").closest(
-											"tr")[0].children[0].innerText;
+									let memberId = that.closest("td").closest("tr")[0].children[0].innerText;
 									let memberName = list[0];
 									let memberGender = list[1];
-									that.closest("td").closest("tr").find(
-											"input.update")
-											.toggleClass("-none");
-									that.closest("td").closest("tr").find(
-											"p.para").toggleClass("-none");
-									let l = e.target.closest("td")
-											.closest("tr");
+									that.closest("td").closest("tr").find("input.update").toggleClass("-none");
+									that.closest("td").closest("tr").find("p.para").toggleClass("-none");
+									let l = e.target.closest("td").closest("tr");
 									for (var i = 0; i < list.length; i++) {
-										let v = that.closest("tr").find(
-												"p.para")[i];
-										let newV = that.closest("tr").find(
-												"input.update")[i];
+										let v = that.closest("tr").find("p.para")[i];
+										let newV = that.closest("tr").find("input.update")[i];
 										v.innerText = newV.value;
 									}
 									//ajax請求開始修改
