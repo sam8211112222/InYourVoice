@@ -74,10 +74,14 @@ public class CheckTicketController extends HttpServlet {
 			} else {
 
 				dt = gson.fromJson(jedis.get(orderlist_id), LocalDateTime.class);
-				
+
+				jedis.close();
+
 				req.setAttribute("time", dt);
 				req.setAttribute("ticketOwner", ticketOwner);
 				req.setAttribute("ticketVO", ticketVO);
+				
+				
 
 				String url = "/front-end/eventorder/alreadyCheck.jsp";
 				RequestDispatcher alreadyCheck = req.getRequestDispatcher(url);
