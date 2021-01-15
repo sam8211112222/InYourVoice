@@ -5,19 +5,7 @@
 <%@ page import="com.orderlist.model.ReviewVO"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.product.enums.ProductType"%>
-<%
-	List<ReviewVO> reviewList = (List<ReviewVO>)request.getAttribute("reviewList");
-	int review_score = 0;
-	int total = 0;
-	if(reviewList!=null){
-		for(ReviewVO tmp:reviewList){
-			total+=tmp.getReview_score();
-		}
-		review_score = total/reviewList.size();
-	}
 
-	pageContext.setAttribute("review_score", review_score);
-%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -339,7 +327,7 @@ function updateFavorite(action){
 											stars</span> <input type="hidden" id="star4" name="rate" value="4" /> <span class="<c:if test='${review_score>3}'>shine</c:if>">4 stars</span> <input type="hidden" id="star5" name="rate"
 											value="5" /> <span class="<c:if test='${review_score>4}'>shine</c:if>">5 stars</span>
 									</div>
-									<span style="font-size: 12px;">${fn:length(reviewList)} Review<c:if test="${fn:length(reviewList)>1}">s</c:if></span>
+									<span style="font-size: 18px;">${fn:length(reviewList)} Review<c:if test="${fn:length(reviewList)>1}">s</c:if></span>
 								</div>
 								<div class="product-price-discount">
 									<span class="product-price-discount"><span style="color: #444">NT</span>
@@ -350,7 +338,7 @@ function updateFavorite(action){
 								</div>
 							</div>
 							<div class="intro">
-								<p>${productVO.product_detail}</p>
+								<p>${productVO.product_intro}</p>
 							</div>
 
 
@@ -370,7 +358,7 @@ function updateFavorite(action){
 								<input type="hidden" name="productId" value="${productVO.product_id}" /> <input type="hidden" name="productName" value="${productVO.product_name}" /> <input type="hidden" name="productPrice"
 									value="${productVO.product_price}" /> <input type="hidden" name="productPhotoId" value="" /> <input type="submit" value="立即購買" class="round-black-btn-now" /> <input type="hidden"
 									name="action" value="goToCart" />
-								<button class="round-black-btn-add" onclick="addToCart();">
+								<button class="round-black-btn-add" onclick="addToCart();return false;">
 									<i class="fas fa-cart-plus"></i>&nbsp 加入購物車
 								</button>
 								</c:if>
@@ -405,7 +393,7 @@ function updateFavorite(action){
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade active show" id="description" role="tabpanel" aria-labelledby="description-tab">${productVO.product_detail}</div>
 					<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
-						<div class="review-heading">REVIEWS</div>
+						
 				<div class="comment-list">
 							<ul class="comments">
 								<c:if test="${not empty reviewList}">

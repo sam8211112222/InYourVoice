@@ -118,13 +118,12 @@ hr.new3 {
 	border: 1px solid #f9595f;
 }
 td.detailimg{
-    text-align: center; /** 设置水平方向居中 */
+    text-align: center ; /** 设置水平方向居中 */
 	vertical-align: middle;
 }
-img{
-width: 80px;
+img.pimg {
+    width: 80px;
     height: 80px;
-}
 </style>
 
 </head>
@@ -244,7 +243,7 @@ function addToCart(){
 					<c:forEach items="${list}" var="orderListVO">
 						<tr>
 
-							<td class="dsetailimg"><img src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${orderListVO.product_id}" /></td>
+							<td class="dsetailimg"><img class="pimg" src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${orderListVO.product_id}" /></td>
 							<td class="form2">${productSvc.getOneProduct(orderListVO.product_id).product_name}</td>
 							<td class="form2">NT<fmt:formatNumber value="${orderListVO.price}"
 									pattern="$#,###" /></td>
@@ -253,15 +252,18 @@ function addToCart(){
 									value="${orderListVO.price*orderListVO.orderlist_goods_amount}"
 									pattern="$#,###" /></td>
 							<td class="form2" align="center" valign="center">
-<%-- 							<c:if test="${orderListVO.order_status==0}"> --%>
-<%--       						</c:if> --%>
-							<c:if test="${orderListVO.review_time==null}">
-									<a class="btn btn-custom btn-color-primary"
-										onclick="showReviewDialog('${orderListVO.orderlist_id}');">評價商品</a>
-								</c:if> 
-								<c:if test="${orderListVO.review_time!=null}">
-									<a class="btn btn-custom btn-color-primary"
-										onclick="showReviewDialog('${orderListVO.orderlist_id}','${orderListVO.review_msg}','${orderListVO.review_score}');">修改評價</a>
+<%--  							<c:if test="${orderListVO.order_status==0}"> --%>
+<!--  							<h3>尚未可以評價</h3>						  -->
+<%--      						</c:if>  --%>
+								<c:if test="${order.order_status==1}">
+									<c:if test="${orderListVO.review_time==null}">
+										<a class="btn btn-custom btn-color-primary"
+											onclick="showReviewDialog('${orderListVO.orderlist_id}');">評價商品</a>
+									</c:if> 
+									<c:if test="${orderListVO.review_time!=null}">
+										<a class="btn btn-custom btn-color-primary"
+											onclick="showReviewDialog('${orderListVO.orderlist_id}','${orderListVO.review_msg}','${orderListVO.review_score}');">修改評價</a>
+									</c:if>
 								</c:if>
 								
 								</td>

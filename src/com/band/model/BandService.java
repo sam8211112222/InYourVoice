@@ -123,12 +123,13 @@ public class BandService {
 		dao.update(bandVO);
 		return bandVO;		
 	}
-	public BandVO updateSignup(String bandId, String band_name, String band_intro, byte[] band_banner, byte[] band_piece_check) {
+	public BandVO updateSignup(String bandId, String band_name, String band_intro, byte[] band_banner, byte[] band_piece_check,Integer band_status) {
 		BandVO bandVo = dao.findByPrimaryKey(bandId);
 		bandVo.setBand_banner(band_banner);
 		bandVo.setBand_intro(band_intro);
 		bandVo.setBand_piece_check(band_piece_check);
 		bandVo.setBand_name(band_name);
+		bandVo.setBand_status(band_status);
 		dao.update(bandVo);
 		return bandVo;
 		

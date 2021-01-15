@@ -83,7 +83,7 @@ form label {
 				class="form-control" name="memberBirth" type="text" /> <label
 				for="memberPhone">手機</label> <input id="memberPhone"
 				class="form-control" name="memberPhone" type="text"
-				placeholder="0912345678" value=""/> <span id="errorPhone"></span> <br>
+				placeholder="請輸入手機號碼" value=""/> <span id="errorPhone"></span> <br>
 			<div class="form-check form-check-inline">
 				<input class="form-check-input" type="radio" name="memberGender"
 					id="memberGender" value="M"
