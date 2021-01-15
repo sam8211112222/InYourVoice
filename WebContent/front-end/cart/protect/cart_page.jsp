@@ -11,7 +11,7 @@
 <title>購物車清單</title>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
 	crossorigin="anonymous">
-<%-- <link rel="stylesheet" href="<%=request.getContextPath()%>/css/cart/cart_page.css" /> --%>
+<%--  <link rel="stylesheet" href="<%=request.getContextPath()%>/css/cart/cart_page.css" />  --%>
 
 <style type="text/css">
 body {
@@ -234,17 +234,16 @@ td {
 }
 
 .image {
-	width: 150px;
-	height:150px;
+	width: 100px;
+	height:100px;
 }
 
 .image>img {
-	width: 100%;
-	height:120px;
+	width: 100px;
+    height: 80px;
 	background: white;
-	border-radius: 2px;
-/* 	box-shadow: 0 2px 7px rgba(0, 0, 0, 0.4); */
-	a-border: 1px solid black;
+
+	
 }
 
 .amount {
@@ -392,13 +391,11 @@ td {
 		</div>
 		<hr class="new3" size="12px" align="center" width="100%" color="#f9595f">
 		<div id="container">
-
 			<div>
 				<table>
-				
-					
+				<c:if test="${cartList!=null}">
 					<tr style="text-align: center;">
-						<td>商品照片</td>
+						<td style="margin:0px 0px 0px 50px">商品照片</td>
 						<td>商品名稱</td>
 						<td>商品單價</td>
 						<td>數量</td>
@@ -412,13 +409,13 @@ td {
 
 							<td class="image"><img src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${order.product_id}" /></td>
 							<td class="name">${order.product_name}</td>
-							<td class="price"><fmt:formatNumber value="${order.product_price}" pattern="#,###" /></td>
+							<td class="price"><fmt:formatNumber value="${order.product_price}" pattern="NT$#,###"/></td>
 							<td class="amount">${order.product_quantity}<input type="hidden" value="${order.product_quantity}" /> <%-- 							<input type="number"
 								name="quantity" value="${order.product_quantity}" min="0"
 								class="qty" /> --%>
 							</td>
 
-							<td class="pricesubtotal"><fmt:formatNumber value="${order.product_price*order.product_quantity}" pattern="$#,###" /></td>
+							<td class="pricesubtotal">${order.product_price*order.product_quantity}</td>
 							<td class="remove">
 								<form action="<%=request.getContextPath()%>/cart/cartServlet" method="post">
 									<input type=hidden name="action" value="delete"> <input type=hidden name="del" value="${order.product_id}"> <input type=submit value="&times">
@@ -435,7 +432,10 @@ td {
 						<td class="totalpricesubtotal"></td>
 						<td></td>
 					</tr>
-
+</c:if >
+<c:if test="${cartList==null}">
+<h3>目前尚無商品</h3>
+</c:if>
 				</table>
 			</div>
 		</div>
@@ -519,9 +519,9 @@ td {
 				</div>
 				<div class="section-body">
 					<span class="pull-left">小計:</span>
-					<span class="totalpricesubtotal" id="pull-right">NT:</span><br><br>
+					<span class="totalpricesubtotal" id="pull-right"></span><br><br>
 					<span class="pull-left">運費:</span>
-					<span class="pull-right">NT:0</span><br><br>
+					<span class="pull-right">NT$0</span><br><br>
 					<hr class="new2" size="12px" align="center" width="100%" color="#f3f3f3">
 					<span class="pull-left">合計:</span>
 					<span class="totalpricesubtotal" id="pull-right"></span><br>
@@ -557,7 +557,7 @@ td {
 
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-	<script src="<%=request.getContextPath()%>/js/cart/cart_page.js"></script>
+ 	<script src="<%=request.getContextPath()%>/js/cart/cart_page.js"></script> 
 	<%@ include file="/css/member/member_center_bottom.file"%> 
 	<jsp:include page="/front-end/header_footer/footer.jsp" flush="true" />
 

@@ -76,8 +76,9 @@ h1 {
 	display: block;
 	color: white;
 	width: inherit;
-	background-size: cover !important;
-	background-position: center !important;
+/* 	background-size: cover !important; */
+/* 	background-position: center !important; */
+	background-size: 100% 100% !important;
 	height: 200px;
 	padding: 1em 2em;
 	background: #313131;
@@ -133,7 +134,7 @@ div#productType {
 	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .1);
 	position: fixed;
 	left: 50px;
-	top: 20%;
+	top: 23%;
 	margin-top: -2.5em;
 }
 

@@ -1,5 +1,6 @@
 package com.favorites.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -99,6 +100,23 @@ public class FavoritesService {
 		List<FavoritesVO> favList = favsvc.getAll();
 		Optional<FavoritesVO> fav = favList.stream().filter(f -> f.getFavorite_id().equals(favId)).findFirst();
 		dao.delete(fav.get().getUniqueid());
+	}
+	
+	
+	//新增收藏的方法
+	public void addfav(String memberId,String favId , Integer type) {
+		Timestamp ts = new Timestamp(System.currentTimeMillis());
+		addFavorites(memberId, type, favId, ts);
+	}
+	//移除收藏的方法
+	public void deletefav17(String memberId,String favId) {
+		dao.delete_fav17(memberId, favId);
+	}
+	//查使用者的全部收藏
+	public List<FavoritesVO> getAllMeberfav(String memberId) {
+		List<FavoritesVO> listMeberId  = dao.getAllMeberfav(memberId);
+		
+		return listMeberId;
 	}
 	
 // Test=======================================================================================================	

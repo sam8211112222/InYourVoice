@@ -129,20 +129,6 @@ header {
 	background: red;
 }
 
-.user {
-	width: 80px;
-	height: 80px;
-	border: 1px solid #000;
-	margin-left: 40px;
-	border-radius: 50%;
-	overflow: hidden;
-	position: relative;
-	cursor: pointer;
-}
-
-.user img {
-	width: 100%;
-}
 </style>
 
 </head>
@@ -170,66 +156,69 @@ header {
                         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                     </li> -->
 					<form action="<%=request.getContextPath()%>/album/album.do" method="get" class="form-inline my-2 my-lg-0">
+						<select class="custom-select" id="inputGroupSelect01" name="select">
+						    <option value="query_album">歌曲</option>
+						    <option value="query_product">商品</option>
+						    <option value="query_event">活動</option>
+						    <option value="query_band">樂團</option>
+					    </select>
 						<input class="form-control mr-sm-2" type="search" placeholder="搜尋" aria-label="Search" name="search" id="search" value="${name}"> <input type="hidden" name="action" value="searchName">
 						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜尋</button>
 					</form>
 				</ul>
 			</div>
-		</nav>
-		<c:if test="${memberVo.memberId!=null}">
-			<!-- 小鈴鐺   -->
-			<div class="dropdown dropleft">
+			</nav>
+			<div style="color: #3F51B5; font-size: 22px;word-break: keep-all; margin: auto; margin-right: 16px">${memberVo.memberName}</div>
+			<c:if test="${memberVo.memberId!=null}">
+				<!-- 小鈴鐺   -->
+				<div class="dropdown dropleft">
 
-				<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<div class="notice">
-						<span class="" id="ring"></span> <i class="fas fa-bell" style="color: dimgrey;" id="ringring"></i>
+					<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<div class="notice">
+							<span class="" id="ring"></span> <i class="fas fa-bell" style="color: dimgrey;" id="ringring"></i>
+						</div>
+					</div>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="noti">
+						<c:choose>
+							<c:when test="${new5.size()==0}">
+								<a href="#" class="dropdown-item" id="nomsg">沒有任何通知</a>
+							</c:when>
+
+							<c:when test="${new5.size()!=0}">
+								<c:forEach var="noti" items="${new5}">
+									<a href="${noti.link}" class="dropdown-item"><i class="fas fa-bullhorn" style="margin-right: 19px;"></i>${noti.title} 
+										<span style="font-size:1px;vertical-align: sub;"><fmt:formatDate value="${noti.sendTime}" pattern="MM-dd mm:ss"/></span>
+										</a>
+
+								</c:forEach>
+							</c:when>
+						</c:choose>
+
 					</div>
 				</div>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="noti">
-					<c:choose>
-						<c:when test="${new5.size()==0}">
-							<a href="#" class="dropdown-item" id="nomsg">沒有任何通知</a>
-						</c:when>
+			</c:if>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<c:if test="${memberVo.memberId==null}">
+						<div class="userAvatar">
+							<!-- <img src="./images/logo.jpg"> -->
+							<i class="fas fa-meh" style="font-size: 79px; color: #888;"></i>
+						</div>
+					</c:if>
+					<c:if test="${memberVo.memberId!=null}">
+						<div class="userAvatar">
+							<img src="<%=request.getContextPath()%>/Login?memberpic=picDisplay&memberId=${memberVo.memberId}">
+						</div>
+					</c:if>
 
-						<c:when test="${new5.size()!=0}">
-							<c:forEach var="noti" items="${new5}">
-								<a href="${noti.link}" class="dropdown-item"><i class="fas fa-bullhorn" style="margin-right: 19px;"></i>${noti.title} 
-								<span style="font-size:1px;vertical-align: sub;"><fmt:formatDate value="${noti.sendTime}" pattern="MM-dd mm:ss"/></span>
-							    </a>
-							</c:forEach>
-						</c:when>
-					</c:choose>
+					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
 
-				</div>
-			</div>
-		</c:if>
-		<div class="dropdown dropleft">
-			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<!-- <img src="./images/logo.jpg"> -->
-				<i class="far fa-user"></i>
-			</div>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<c:if test="${memberVo.memberId==null}">
-					<div class="userAvatar">
-						<!-- <img src="./images/logo.jpg"> -->
-						<i class="fas fa-meh" style="font-size: 79px; color: #888;"></i>
-					</div>
-				</c:if>
-				<c:if test="${memberVo.memberId!=null}">
-					<div class="userAvatar">
-						<img src="<%=request.getContextPath()%>/Login?memberpic=picDisplay&memberId=${memberVo.memberId}">
-					</div>
-				</c:if>
-				<div style="color: #2cbcf4">${memberVo.memberName}</div>
-				<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item"
-					href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a>
-				<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
-				<c:if test="${memberVo.memberId==null}">
-					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
-				</c:if>
-				<c:if test="${memberVo.memberId!=null}">
-					<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
-				</c:if>
+					<c:if test="${memberVo.memberId==null}">
+						<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
+					</c:if>
+					<c:if test="${memberVo.memberId!=null}">
+						<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
+					</c:if>
+
 			</div>
 		</div>
 	</header>
@@ -239,6 +228,15 @@ header {
 	<script src="<%=request.getContextPath()%>/vendors/bootstrap/js/bootstrap.min.js"></script>
 
 	<script>
+	//選擇搜尋類別
+	var tempPage = "<%=session.getAttribute("page17")%>";
+	var optionArray = $("#inputGroupSelect01 option");
+	for (let i = 0;i < optionArray.length;i++) {
+		if (optionArray[i].value === tempPage) {
+			optionArray[i].selected="selected";
+		}
+	} 
+	
 	//登出
 	$("#logoutBtn").click(function() {
 		let obj = new FormData();

@@ -514,13 +514,15 @@ public class AlbumServlet extends HttpServlet {
 		}
 			
 		//冠華的方法==================		
-				if("searchName".equals(action)) {
-					
-					String name = req.getParameter("search");
-					
-					req.getSession().setAttribute("name", name);
-					res.sendRedirect(req.getContextPath() + "/front-end/query/query_album.jsp");
-				}
+		if("searchName".equals(action)) {
+			
+			String name = req.getParameter("search");
+			String page = req.getParameter("select");
+			
+			req.getSession().setAttribute("name", name);
+			req.getSession().setAttribute("page17", page);
+			res.sendRedirect(req.getContextPath() + "/front-end/query/" + page + ".jsp");
+		}
 
 		
 
