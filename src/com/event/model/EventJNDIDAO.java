@@ -438,6 +438,11 @@ public class EventJNDIDAO implements EventDAO {
 				eventVO.setEvent_cityarea(rs.getString("event_cityarea"));
 				eventVO.setEvent_address(rs.getString("event_address"));
 				eventVO.setEvent_start_time(rs.getTimestamp("event_start_time"));
+				eventVO.setEvent_on_time(rs.getTimestamp("event_on_time"));
+				eventVO.setEvent_last_edit_time(rs.getTimestamp("event_last_edit_time"));
+				eventVO.setEvent_last_editor(rs.getString("event_last_editor"));
+				eventVO.setEvent_status(rs.getInt("event_status"));
+				eventVO.setEvent_seat(rs.getBytes("event_seat"));
 			
 
 				list.add(eventVO); // Store the row in the list

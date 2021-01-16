@@ -327,7 +327,7 @@ public class ProductPhotoServlet extends HttpServlet {
 				e.printStackTrace();
 				errorMsgs.add("修改資料失敗:"+e.getMessage());
 				RequestDispatcher failureView = req
-						.getRequestDispatcher("/front-end/productphoto/protect/addProductPhoto.jsp");
+						.getRequestDispatcher("/front-end/productphoto/protect/addProductPhoto_input.jsp");
 				failureView.forward(req, res);
 			}
 			System.out.println("insert測試成功");
