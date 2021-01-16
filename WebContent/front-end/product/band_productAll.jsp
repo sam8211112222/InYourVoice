@@ -32,6 +32,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/product/band_productAll.css">
 <style>
+body{
+background-color:rgb(199 188 147 / 38%) !improtant;
+}
 div.pagination{
     margin: auto 600px;
     width: 100%;
@@ -109,7 +112,9 @@ a.btn-color-primary-search {
 	background-color: #f9595f;
 	
 }
-
+h4.productName{
+font-size:15px;
+}
 </style>
 </head>
 
@@ -171,7 +176,7 @@ a.btn-color-primary-search {
 									<span style="font-size: 14px;">${vo.review_count} Review<c:if test="${vo.review_count>1}">s</c:if></span>
 								</div>
 									<div class="info" style="margin:10px;">
-									<h4  style="text-align: left !important;color:#444;">${vo.product_name}</h4>
+									<h4 class="productName" style="text-align: left !important;color:#444;">${vo.product_name}</h4>
 									<h6 style="text-align: left !important;color:#888;">NT$<fmt:formatNumber value="${vo.product_price}" pattern="#,###" />
 										</h6>
 									</div>

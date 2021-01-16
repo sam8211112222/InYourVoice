@@ -352,7 +352,7 @@ div.song-name{
     margin-right: 10px;
     flex-grow:1;
 }
-div.add{
+div.add, div.delete{
     color: rgb(80, 67, 196);
     text-align: center;
     padding-top: 1px;

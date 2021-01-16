@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 
 import com.favorites.model.FavoritesService;
 import com.favorites.model.FavoritesVO;
+import com.google.gson.Gson;
 
 
 
@@ -285,6 +286,33 @@ public class FavoritesServlet extends HttpServlet {
 				FavoritesService favSvc = new FavoritesService();
 				favSvc.deleteFav(favId);
 				
+		}
+		
+		//新增收藏
+		if("addfav".equals(action)) {
+			String memberid = req.getParameter("memberid");
+			String favid = req.getParameter("favid");
+			Integer type = Integer.valueOf(req.getParameter("type"));
+			FavoritesService favSvc = new FavoritesService();
+			favSvc.addfav(memberid, favid, type);
+		}
+		//移除收藏
+		if("deletefav17".equals(action)) {
+			String memberid = req.getParameter("memberid");
+			String favid = req.getParameter("favid");
+			FavoritesService favSvc = new FavoritesService();
+			favSvc.deletefav17(memberid, favid);
+		}
+		//查詢使用者全部收藏
+		if("getAllMeberfav".equals(action)) {
+			String memberid = req.getParameter("memberid");
+			FavoritesService favSvc = new FavoritesService();
+			
+			String jsonObjectString = new Gson().toJson(favSvc.getAllMeberfav(memberid));
+			
+			PrintWriter out = res.getWriter();
+			out.print(jsonObjectString);
+			out.flush();
 		}
 	}
   

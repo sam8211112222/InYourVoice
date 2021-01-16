@@ -19,6 +19,10 @@ public interface FavoritesDAO_interface {
 	 * added by 鈺涵
 	 */
 	FavoritesVO findByMemberIdAndProductId(String memberId, String productId);
-//    �U�νƦX�d��(�ǤJ�Ѽƫ��AMap)(�^�� List)
-//    public List<FavoritesVO> getAll(Map<String, String[]> map); 
+
+	//移除收藏
+	public void delete_fav17(String memberId , String favoriteId);
+	//查使用者的全部收藏
+	public List<FavoritesVO> getAllMeberfav(String memberId);
+	
 }

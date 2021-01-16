@@ -172,6 +172,8 @@
 			let memberCardNumber = $("#memberCardNumber").val()
 			let memberCardExpyear = $("#memberCardExpyear").val()
 			let memberCardExpmonth = $("#memberCardExpmonth").val()
+			const phoneReg = new RegExp("^0(9)[0-9]{8}$");
+			if(memberPhone.match(phoneReg)){
 			let obj = {
 				action : "updateac",
 				memberName : memberName,
@@ -195,7 +197,9 @@
 					alert("系統錯誤");
 				}
 			});
-
+			}else{
+				alert("手機格式錯誤");
+			}
 		});
 	</script>
 </body>

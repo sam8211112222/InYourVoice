@@ -107,7 +107,7 @@ margin:20px auto;
 					<table class="table table-hover">
 						<thead>
 						<tr><div class="pagination">
-	<%@ include file="/front-end/orders/myOrders_page1.file"%>
+
 	</div></tr>
 							<tr>
 								<th scope="col" class="font">訂單編號</th>
@@ -145,7 +145,7 @@ margin:20px auto;
 						</tbody>
 					</table>
 						<div class="pagination2">
-	<%@ include file="/front-end/orders/myOrders_page2.file"%>
+	
 </div>
 				</div>
 				<div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">

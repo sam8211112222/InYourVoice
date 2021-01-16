@@ -154,7 +154,8 @@ audio {
     		let obj={
     				action : "updateStatus",
     				bandId : "${bandVO.band_id}",
-    				bandLastEditor : "${empVO.emp_id}"
+    				bandLastEditor : "${empVO.emp_id}",
+    				bandStatus : "1",
     		}
     		$.ajax({
 				type : "POST",
@@ -162,6 +163,7 @@ audio {
 				data : obj,
 				success : function(result) {
 					sendMessage();
+					sendMessageNoti();
 				},
 				error : function(err) {
 					alert("系統錯誤");
@@ -176,7 +178,23 @@ audio {
     returnBtn.addEventListener("click",function(){
     	var yes = confirm('確定退回審核嗎？');
     	if (yes) {
-    		sendMessage2();
+    		let obj={
+    				action : "updateStatus",
+    				bandId : "${bandVO.band_id}",
+    				bandLastEditor : "${empVO.emp_id}",
+    				bandStatus : "3",
+    		}
+    		$.ajax({
+				type : "POST",
+				url : "/TEA102G6/band/band.do",
+				data : obj,
+				success : function(result) {
+					sendMessage2();
+				},
+				error : function(err) {
+					alert("系統錯誤");
+				}
+			});
     	} else {
     	    alert('你按了取消按鈕');
     	}        
@@ -222,7 +240,7 @@ audio {
 			var jsonObj = {
 				title : "審核退回",
 				content : $("#replyArea").val(),
-				sender : "${memberVo.memberId}",
+				sender : "${empVO.emp_id}",
 				isRead : false,
 				sendTime : new Date().getTime(),
 				receiver : "${memberVo.memberId}",
@@ -231,6 +249,19 @@ audio {
 			};
 			webSocket.send(JSON.stringify(jsonObj));
 			window.location.replace("<%=request.getContextPath()%>/back-end/band/protect/bandList.jsp");
+		}
+			function sendMessageNoti() {
+			
+			var jsonObj = {
+				title : "${bandVO.band_name} 已經成立囉 趕快來去追蹤!!",
+				content :"${bandVO.band_name}已經上線囉 !!",
+				sender : "${empVO.emp_id}",
+				isRead : false,
+				sendTime : new Date().getTime(),
+				link:"<%=request.getContextPath()%>/band/band.do?action=getBandMain&band_id=${bandVO.band_id}",
+				type : "newband",
+			};
+			webSocket.send(JSON.stringify(jsonObj));
 		}
 	</script>
 </body>
