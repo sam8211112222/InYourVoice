@@ -77,9 +77,7 @@ input.ticket_endsale_time {
 }
 </style>
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.css" />
-<script
-	src="<%=request.getContextPath()%>/back-end/events/ckeditor/ckeditor.js"></script>
+	href="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.css" />
 </head>
 <body>
 <jsp:include page="/front-end/header_footer/header.jsp" flush="true" />
@@ -245,9 +243,9 @@ input.ticket_endsale_time {
 	<script
 		src="<%=request.getContextPath()%>/js/jquery/jquery-3.5.1.min.js"></script>
 	<script
-		src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.js"></script>
+		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.js"></script>
 	<script
-		src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.full.js"></script>
+		src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
 
 	<%@ include file="/css/member/member_center_bottom.file"%>
 	<%@ include file="/front-end/header_footer/footer.jsp"%>
@@ -268,13 +266,13 @@ input.ticket_endsale_time {
 	}
 %>
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.css" />
+	href="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.css" />
 <script
-	src="<%=request.getContextPath()%>/back-end/events/js/jquery-3.5.1.min.js"></script>
+	src="<%=request.getContextPath()%>/plugins/js/jquery-3.5.1.min.js"></script>
 <script
-	src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.js"></script>
+	src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.js"></script>
 <script
-	src="<%=request.getContextPath()%>/back-end/events/datetimepicker/jquery.datetimepicker.full.js"></script>
+	src="<%=request.getContextPath()%>/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/jquery-twzipcode@1.7.14/jquery.twzipcode.min.js"></script>
 
@@ -287,7 +285,8 @@ input.ticket_endsale_time {
 	height: 151px; /* height:  151px; */
 }
 </style>
-
+<script
+	src="<%=request.getContextPath()%>/plugins/ckeditor/ckeditor.js"></script>
 <script>
         $.datetimepicker.setLocale('zh');
         $('#f_date1').datetimepicker({
