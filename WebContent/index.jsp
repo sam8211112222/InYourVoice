@@ -116,7 +116,6 @@
 <!-- 			<div class="playall"> -->
 <!-- 				<i class="fas fa-play"></i> 全部播放 -->
 <!-- 			</div> -->
-			<div class="lea-time">2020 / xx / xx ~ 2020 / xx / xx</div>
 		</div>		
 			<% int i = 1; %>
 			<c:forEach var="albumVO" items="${albumVOList}" begin="1" end="10">
