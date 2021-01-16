@@ -675,15 +675,6 @@
                                     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
                                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
                                     <script>
-                                        $(function() {
-                                            alert(
-                                                '您所選擇的訂單票券將為您保留10分鐘,請您在時限內完成結帳手續。如欲重新選擇票券,請點擊下方的取消按鈕!'
-                                          )
-                                        });
-
-                                        $(window).load(function() {});
-
-
                                         function checkOut() {
                                             document.getElementById("customerForm").submit();
                                         }
@@ -721,23 +712,23 @@
                                         // 		});
                                     </script>
                                     <script>
-                                        var MyPoint = "/TimeOut/<%=memberVo.getMemberId()%>";
-                                        var host = window.location.host;
-                                        var path = window.location.pathname;
-                                        var webCtx = path.substring(0, path.indexOf('/', 1));
-                                        var endPointURL = "ws://" + window.location.host + webCtx + MyPoint;
+                                        var MyPointLeo = "/TimeOut/<%=memberVo.getMemberId()%>";
+                                        var hostLeo = window.location.host;
+                                        var pathLeo = window.location.pathname;
+                                        var webCtxLeo = pathLeo.substring(0, pathLeo.indexOf('/', 1));
+                                        var endPointURLLeo = "ws://" + window.location.host + webCtxLeo + MyPointLeo;
 
-                                        var webSocket;
+                                        var webSocketLeo;
 
 
-                                        function connect() {
+                                        function connectLeo() {
                                             // create a websocket
-                                            console.log(endPointURL)
-                                            webSocket = new WebSocket(endPointURL);
+                                            console.log(endPointURLLeo)
+                                            webSocketLeo = new WebSocket(endPointURLLeo);
 
-                                            webSocket.onopen = function(event) {}
+                                            webSocketLeo.onopen = function(event) {}
 
-                                            webSocket.onmessage = function(event) {
+                                            webSocketLeo.onmessage = function(event) {
                                                 var message = event.data;
                                                 if (message == "go-out") {
                                                     alert("已超過購票時間,請返回前頁重新選擇");
@@ -745,7 +736,7 @@
                                                 }
                                             }
 
-                                            webSocket.onclose = function(event) {}
+                                            webSocketLeo.onclose = function(event) {}
                                         }
 
                                         function defaultMemberData() {
@@ -757,7 +748,12 @@
                                             }
                                         }
 
-
+                                        $(function() {
+                                            alert(
+                                                '您所選擇的訂單票券將為您保留10分鐘,請您在時限內完成結帳手續。如欲重新選擇票券,請點擊下方的取消按鈕!'
+                                            )
+                                            connectLeo();
+                                        });
 
 
                                         function disconnect() {

@@ -2,6 +2,7 @@ package com.eventorder.controller;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +16,6 @@ import com.eventorder.model.EventOrderVO;
 import com.eventorderlist.model.EventOrderListService;
 import com.eventorderlist.model.EventOrderListVO;
 import com.google.gson.Gson;
-import com.member.model.MemberService;
-import com.member.model.MemberVo;
 import com.ticket.model.TicketService;
 import com.ticket.model.TicketVO;
 
@@ -65,7 +64,7 @@ public class CheckTicketController extends HttpServlet {
 			String ticketOwner = new String(originMail);
 			// 查找完成 準備轉交
 
-			LocalDateTime dt = LocalDateTime.now();
+			Date dt = new Date();
 
 			int originStatus = eventOrderListVO.getOrderlist_status();
 			if (originStatus == 0) {
@@ -73,8 +72,9 @@ public class CheckTicketController extends HttpServlet {
 				eventOrderListSvc.updateOrderStatus(status, eventOrderListVO);
 			} else {
 
-				dt = gson.fromJson(jedis.get(orderlist_id), LocalDateTime.class);
+				dt = gson.fromJson(jedis.get(orderlist_id), java.util.Date.class);
 				
+				jedis.close();
 				req.setAttribute("time", dt);
 				req.setAttribute("ticketOwner", ticketOwner);
 				req.setAttribute("ticketVO", ticketVO);
@@ -82,11 +82,13 @@ public class CheckTicketController extends HttpServlet {
 				String url = "/front-end/eventorder/alreadyCheck.jsp";
 				RequestDispatcher alreadyCheck = req.getRequestDispatcher(url);
 				alreadyCheck.forward(req, res);
+				
+				return;
 			}
 
 			String checkInTime = gson.toJson(dt);
 
-			if (jedis.exists(orderlist_id)) {
+			if (!jedis.exists(orderlist_id)) {
 				jedis.set(orderlist_id, checkInTime);
 			}
 

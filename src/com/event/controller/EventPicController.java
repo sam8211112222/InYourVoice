@@ -69,7 +69,6 @@ public class EventPicController extends HttpServlet {
 			Gson gson = new Gson();
 			
 			String qrCode = jedis.get(orderlist_id);
-			jedis.close();
 			byte[] qrCodeByte = gson.fromJson(qrCode, byte[].class);
 			sos.write(qrCodeByte);
 			sos.close();

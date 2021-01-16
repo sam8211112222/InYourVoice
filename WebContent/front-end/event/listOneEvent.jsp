@@ -254,7 +254,7 @@
                                                             <div class="tickets">
                                                                 <div class="table-wrapper"></div>
                                                             </div>
-                                                            <a href=""><button id="orderSubmit" type="button">返回</button></a>
+                                                            <a href="<%=request.getContextPath() %>/front-end/event/allevent.jsp"><button id="orderSubmit" type="button">返回</button></a>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
