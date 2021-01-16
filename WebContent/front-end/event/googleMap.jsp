@@ -66,6 +66,12 @@
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 		<script>
+		
+		$('img').on("click", function(e){
+			e.preventDefault();
+			location.href("<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${eventVO.event_id}");
+			
+		})
 
         var map;
         function initMap() {
@@ -80,10 +86,10 @@
   var geocoder = new google.maps.Geocoder();
   var info_config = [
 	<c:forEach var="eventVO" items="${list}">
-	<c:if test{eventVO.event_status==1}>
+	<c:if test="${eventVO.event_status==1}">
     `<h2>`+"${eventVO.event_place}"+'</h2>'+
     '<span>'+"${eventVO.event_title}"+'</span><br/>'+
-    '<a href="<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${eventVO.event_id}"><img class="infoImg" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></a><br/>'
+    '<a href="<%=request.getContextPath()%>/EventPicController?action=getEventPic&event_id=${eventVO.event_id}"><img class="infoImg" style="max-width:100%;" src="<%=request.getContextPath()%>/EventPicController?action=getEventPoster&event_id=${eventVO.event_id}"></a>'
     ,
     </c:if>
     </c:forEach>
@@ -93,7 +99,7 @@
   //建立地圖 marker 的集合
   var marker_config = [
 	<c:forEach var="eventVO" items="${list}">
-	<c:if test{eventVO.event_status==1}>
+	<c:if test="${eventVO.event_status==1}">
 	{
     address: "${eventVO.event_city}${eventVO.event_cityarea}${eventVO.event_address}",
     title: "${eventVO.event_place}"

@@ -376,7 +376,7 @@
 			$(".chat-box").toggle('scale');
 		})
 
-		var userName = '${memberVo.memberId}';
+		var userName = '${memberVo.memberName}';
 	    var friend = 'EMP00000';
 	    var host = window.location.host;
 	    var path = window.location.pathname;
