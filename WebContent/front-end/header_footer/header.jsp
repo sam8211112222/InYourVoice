@@ -197,28 +197,28 @@ header {
 				</div>
 			</c:if>
 		
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<c:if test="${memberVo.memberId==null}">
-						<div class="userAvatar">
-							<!-- <img src="./images/logo.jpg"> -->
-							<i class="fas fa-meh" style="font-size: 79px; color: #888;"></i>
-						</div>
-					</c:if>
-					<c:if test="${memberVo.memberId!=null}">
-						<div class="userAvatar">
-							<img src="<%=request.getContextPath()%>/Login?memberpic=picDisplay&memberId=${memberVo.memberId}">
-						</div>
-					</c:if>
+<!-- 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
+<%-- 					<c:if test="${memberVo.memberId==null}"> --%>
+<!-- 						<div class="userAvatar"> -->
+<!-- 							<img src="./images/logo.jpg"> -->
+<!-- 							<i class="fas fa-meh" style="font-size: 79px; color: #888;"></i> -->
+<!-- 						</div> -->
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${memberVo.memberId!=null}"> --%>
+<!-- 						<div class="userAvatar"> -->
+<%-- 							<img src="<%=request.getContextPath()%>/Login?memberpic=picDisplay&memberId=${memberVo.memberId}"> --%>
+<!-- 						</div> -->
+<%-- 					</c:if> --%>
 
-					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a>
+<%-- 					<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberCenter2.jsp">會員中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/notificationCenter.jsp">通知中心</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/cart/protect/cart_page.jsp">購物車</a> <a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/protect/memberFavorites.jsp">我的最愛</a> --%>
 
-					<c:if test="${memberVo.memberId==null}">
-						<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a>
-					</c:if>
-					<c:if test="${memberVo.memberId!=null}">
-						<a id="logoutBtn" class="dropdown-item" href="#">登出</a>
-					</c:if>
-				</div>
+<%-- 					<c:if test="${memberVo.memberId==null}"> --%>
+<%-- 						<a class="dropdown-item" href="<%=request.getContextPath()%>/front-end/member/Login.jsp">登入</a> --%>
+<%-- 					</c:if> --%>
+<%-- 					<c:if test="${memberVo.memberId!=null}"> --%>
+<!-- 						<a id="logoutBtn" class="dropdown-item" href="#">登出</a> -->
+<%-- 					</c:if> --%>
+<!-- 				</div> -->
 
 		<div class="dropdown dropleft">
 			<div id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

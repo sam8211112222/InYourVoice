@@ -57,7 +57,7 @@
 
 		<div class="row justify-content-around">
 			<c:forEach var="eventVO" items="${list}">
-<%-- 			<c:if test="${eventVO.event_status==1}"> --%>
+			<c:if test="${eventVO.event_status==1}">
 				<div class="flip" data-event_id="${eventVO.event_id}" style="cursor: pointer;"
 					onclick="location.href='<%= request.getContextPath() %>/event/EventServlet?action=getOne_For_Display&event_id=${eventVO.event_id}';">
 					<div class="front"
@@ -69,7 +69,7 @@
 						<p>${eventVO.event_place}</p>
 					</div>
 				</div>
-<%-- 				</c:if> --%>
+				</c:if>
 			</c:forEach>
 			<c:if test="${list.size()==0}">
 			<h1>查無資料</h1>
