@@ -156,8 +156,8 @@ public class EventOrderController extends HttpServlet {
 						}
 
 					};
-					timer.schedule(task, 30 * 60 * 1000);
-
+					timer.schedule(task,  30 * 1000);
+					
 					System.out.println(session.getAttribute("timer"));
 					req.setAttribute("event_id", req.getParameter("event_id"));
 					String url = "/front-end/eventorder/protect/checkOutPage.jsp";
