@@ -380,7 +380,7 @@ $(function(){
     function addAlbumHTML(){
         $(".album_area").prepend(`
             <!-- for each album -->
-            <div class="row col-12 my_album_card justify-content-center" data-album_id="new_album_${i}" data-band_id="BAND00650">
+            <div class="row col-12 my_album_card justify-content-center" data-album_id="new_album_${i}" data-band_id="">
                 <div class="row col-12 album_header justify-content-end">
                     <div class="arrow col-1">
                         <i class="fa-2x fas fa-caret-right my_folder_arrow hide"></i>
