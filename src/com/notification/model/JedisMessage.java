@@ -32,7 +32,7 @@ public class JedisMessage {
 		Jedis jedis = pool.getResource();
 	
 		jedis.auth("123456");
-		jedis.rpush(receiver+"msg", gson.toJson(msg));
+		jedis.lpush(receiver+"msg", gson.toJson(msg));
 		jedis.close();
 	}
 	public static List<MemberNotification> getMessageNew5(String receiver){

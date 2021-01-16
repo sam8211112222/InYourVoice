@@ -172,7 +172,7 @@ public class OnShelfTimerListener implements ServletContextListener {
 			// Fetch the image and associate to part 
 			
 //			DataSource fds = new FileDataSource(file); 
-			String urlStr = "http://inyourvoice.ga/TEA102G6/album/album.do?action=getAlbumPhoto&album_id=" + album_id;
+			String urlStr = "http://localhost:8081/TEA102G6/album/album.do?action=getAlbumPhoto&album_id=" + album_id;
 			URL url = new URL(urlStr);
 			DataSource fds = new URLDataSource(url);
 			messageBodyPart.setDataHandler(new DataHandler(fds)); 

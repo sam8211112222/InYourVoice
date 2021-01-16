@@ -340,9 +340,11 @@ public class AlbumServlet extends HttpServlet {
 			String action_type = req.getParameter("action_type");
 			
 			String album_id = req.getParameter("album_id");
-			String band_id = req.getParameter("band_id");
+//			String band_id = req.getParameter("band_id");
+			String band_id = memberVo.getBandId();
+			String member_id = memberVo.getMemberId();
 			
-			String member_id = req.getParameter("member_id");
+//			String member_id = req.getParameter("member_id");
 			System.out.println("member_id = " + member_id);
 			
 			String emp_id = "";
@@ -379,7 +381,10 @@ public class AlbumServlet extends HttpServlet {
 //			System.out.println(in.available());
 			int photo_file_length = in.available();
 			String filename = album_photo.getSubmittedFileName();
-			filename = filename.length() == 0 ? null : filename;
+//			filename = filename.length() == 0 ? null : filename;
+			if(filename == null || filename.length() == 0) {
+				filename = null;
+			}
 			byte[] album_photo_byte = new byte[in.available()];
 			
 			in.read(album_photo_byte);

@@ -18,6 +18,7 @@
 	MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
 	System.out.println(memberVo);
     String band_id = memberVo.getBandId();
+    System.out.println(band_id);
     pageContext.setAttribute("band_id", band_id);
 // 	String band_id = "BAND00000";
 	List <AlbumVO> albumVOList = albumSvc.getBandAlbums(band_id);
@@ -105,7 +106,7 @@
         <c:forEach var="albumVO" items="${albumVOList}">
 
             <!-- for each album -->
-            <div class="row col-12 my_album_card justify-content-center" data-album_id="${albumVO.album_id}" data-band_id="${band_id}" data-member_id="${memberVo.memberId}">
+            <div class="row col-12 my_album_card justify-content-center" data-album_id="${albumVO.album_id}" data-band_id="${memberVo.bandId}" data-member_id="${memberVo.memberId}">
                 <div class="row col-12 album_header justify-content-end">
                     <div class="arrow col-1">
                         <i class="fa-2x fas fa-caret-right my_folder_arrow"></i>
