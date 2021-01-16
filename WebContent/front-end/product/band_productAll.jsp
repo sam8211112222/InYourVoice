@@ -12,7 +12,7 @@
 	List<ReviewVO> reviewList = (List<ReviewVO>) request.getAttribute("reviewList");
 	int review_score = 0;
 	int total = 0;
-	if (reviewList != null) {
+	if (reviewList != null&&!reviewList.isEmpty()) {
 		for (ReviewVO tmp : reviewList) {
 			total += tmp.getReview_score();
 		}

@@ -5,6 +5,19 @@
 <%@ page import="com.orderlist.model.ReviewVO"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.product.enums.ProductType"%>
+<%
+	List<ReviewVO> reviewList = (List<ReviewVO>) request.getAttribute("reviewList");
+	int review_score = 0;
+	int total = 0;
+	if (reviewList != null&&!reviewList.isEmpty()) {
+		for (ReviewVO tmp : reviewList) {
+			total += tmp.getReview_score();
+		}
+		review_score = total / reviewList.size();
+	}
+
+	pageContext.setAttribute("review_score", review_score);
+%>
 
 <!DOCTYPE html>
 <html lang="en">
