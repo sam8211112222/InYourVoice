@@ -366,7 +366,10 @@ function updateFavorite(action){
 									<c:if test="${productVO.product_stock<=0}">
 									<div class="qtyplus" id="qtyplus" style="pointer-events:none;"><i class="fas fa-ban"></i></div>
 									</c:if>
+									&nbsp&nbsp <p>庫存量:${productVO.product_stock}</p>
 								</div>
+								
+								
 								<c:if test="${productVO.product_stock>0}">
 								<input type="hidden" name="productId" value="${productVO.product_id}" /> <input type="hidden" name="productName" value="${productVO.product_name}" /> <input type="hidden" name="productPrice"
 									value="${productVO.product_price}" /> <input type="hidden" name="productPhotoId" value="" /> <input type="submit" value="立即購買" class="round-black-btn-now" /> <input type="hidden"

@@ -402,7 +402,7 @@ td {
 						<td>小計</td>
 						<td></td>
 					</tr>
-					
+				
 					<c:forEach items="${cartList}" var="order">
 
 						<tr class="p">
@@ -432,6 +432,7 @@ td {
 						<td class="totalpricesubtotal"></td>
 						<td></td>
 					</tr>
+					
 </c:if >
 <c:if test="${cartList==null}">
 <h3>目前尚無商品</h3>
