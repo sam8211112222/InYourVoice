@@ -97,9 +97,9 @@ public class OnShelfTimerListener implements ServletContextListener {
 			}
 		};
 
-//		timer.scheduleAtFixedRate(task, 0, 10 * 60 * 1000);
+		timer.scheduleAtFixedRate(task, 0, 10 * 60 * 1000);
 //		timer.scheduleAtFixedRate(task, 0, 5 *1000);
-		timer.scheduleAtFixedRate(task, 0, 15 *1000);
+//		timer.scheduleAtFixedRate(task, 0, 15 *1000);
 
 	}
 	

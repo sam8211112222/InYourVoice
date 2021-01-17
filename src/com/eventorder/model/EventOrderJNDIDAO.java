@@ -76,10 +76,18 @@ public class EventOrderJNDIDAO implements EventOrderDAO {
 			}
 			
 			for(EventOrderListVO eventOrderListVO:eventOrderList) {
-				eventOrderListVO.setEvent_order_id(pk);
-				String orderlist_id = dao.insert(con, eventOrderListVO);
-				orderListIds.add(orderlist_id);
+				for(int i = 0 ; i<eventOrderListVO.getOrderlist_goods_amount();i++) {
+					EventOrderListVO newVO = new EventOrderListVO();
+					newVO.setOrderlist_goods_amount(1);
+					newVO.setEvent_order_id(pk);
+					newVO.setOrderlist_remarks(eventOrderListVO.getOrderlist_remarks());
+					newVO.setOrderlist_status(eventOrderListVO.getOrderlist_status());
+					newVO.setTicket_id(eventOrderListVO.getTicket_id());
+					String orderlist_id = dao.insert(con, newVO);
+					orderListIds.add(orderlist_id);
+				}
 			}
+			
 			
 			orders.put(pk, orderListIds);
 			

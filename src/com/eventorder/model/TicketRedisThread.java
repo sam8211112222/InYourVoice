@@ -28,8 +28,8 @@ import redis.util.JedisPoolUtil;
 public class TicketRedisThread implements Runnable {
 	private String order_mail;
 	private String event_title;
-	private String ticketCheckInURL = "http://inyourvoice.ga/TEA102G6/CheckTicketController?action=check-in&orderListId=";
-	private String ticketGetQrcodeURL = "http://inyourvoice.ga/TEA102G6/EventPicController?action=send-mail&orderListId=";
+	private String ticketCheckInURL = "http://10.2.0.67:8081/TEA102G6/CheckTicketController?action=check-in&orderListId=";
+	private String ticketGetQrcodeURL = "http://10.2.0.67:8081/TEA102G6/EventPicController?action=send-mail&orderListId=";
 	private Map<String, List<String>> orders;
 
 	public TicketRedisThread(String order_mail, String event_title, Map<String, List<String>> orders) {
