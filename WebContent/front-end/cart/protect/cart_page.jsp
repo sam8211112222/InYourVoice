@@ -402,12 +402,12 @@ td {
 						<td>小計</td>
 						<td></td>
 					</tr>
-					
+				
 					<c:forEach items="${cartList}" var="order">
 
 						<tr class="p">
 
-							<td class="image"><img src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${order.product_id}" /></td>
+							<td class="image"><a href="<%= request.getContextPath() %>/product/YUproductServlet?action=show_me_one&id=${order.product_id}"><img src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${order.product_id}" /></a></td>
 							<td class="name">${order.product_name}</td>
 							<td class="price"><fmt:formatNumber value="${order.product_price}" pattern="NT$#,###"/></td>
 							<td class="amount">${order.product_quantity}<input type="hidden" value="${order.product_quantity}" /> <%-- 							<input type="number"
@@ -432,6 +432,7 @@ td {
 						<td class="totalpricesubtotal"></td>
 						<td></td>
 					</tr>
+					
 </c:if >
 <c:if test="${cartList==null}">
 <h3>目前尚無商品</h3>

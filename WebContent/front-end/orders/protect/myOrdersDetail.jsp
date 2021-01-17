@@ -120,10 +120,12 @@ hr.new3 {
 td.detailimg{
     text-align: center ; /** 设置水平方向居中 */
 	vertical-align: middle;
+	
 }
 img.pimg {
     width: 80px;
     height: 80px;
+    margin:auto ;
 </style>
 
 </head>
@@ -243,7 +245,7 @@ function addToCart(){
 					<c:forEach items="${list}" var="orderListVO">
 						<tr>
 
-							<td class="dsetailimg"><img class="pimg" src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${orderListVO.product_id}" /></td>
+							<td class="dsetailimg"><a href="<%= request.getContextPath() %>/product/YUproductServlet?action=show_me_one&id=${orderListVO.product_id}"><img class="pimg" src="${pageContext.request.contextPath}/productphoto/YUproductPhotoServlet?id=${orderListVO.product_id}" /></a></td>
 							<td class="form2">${productSvc.getOneProduct(orderListVO.product_id).product_name}</td>
 							<td class="form2">NT<fmt:formatNumber value="${orderListVO.price}"
 									pattern="$#,###" /></td>
