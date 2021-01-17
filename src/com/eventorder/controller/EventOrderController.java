@@ -156,19 +156,21 @@ public class EventOrderController extends HttpServlet {
 						}
 
 					};
-					timer.schedule(task,  30 * 1000);
-					
+					timer.schedule(task, 10 * 60 * 1000);
+
 					System.out.println(session.getAttribute("timer"));
 					req.setAttribute("event_id", req.getParameter("event_id"));
 					String url = "/front-end/eventorder/protect/checkOutPage.jsp";
 					RequestDispatcher successView = req.getRequestDispatcher(url);
 					successView.forward(req, res);
 					System.out.println("success");
+					return;
 				} else {
 					System.out.println("沒選東西,重導回前頁");
 					res.sendRedirect(
 							"http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
 									+ req.getParameter("event_id"));
+					return;
 
 				}
 
@@ -177,6 +179,7 @@ public class EventOrderController extends HttpServlet {
 				String url = "/front-end/eventorder/protect/checkOutPage.jsp";
 				RequestDispatcher successView = req.getRequestDispatcher(url);
 				successView.forward(req, res);
+				return;
 			}
 
 		}
@@ -198,7 +201,7 @@ public class EventOrderController extends HttpServlet {
 				String order_mail = req.getParameter("orderMail");
 				String order_phone = req.getParameter("orderPhone");
 				String orderlist_remarks = req.getParameter("remarks");
-				
+
 				EventOrderService eventOrderSvc = new EventOrderService();
 				Map<String, List<String>> orders = eventOrderSvc.addOrder(member_id, event_id, order_place_time,
 						order_name, order_mail, order_phone, orderlist_remarks, cartList);
@@ -297,7 +300,6 @@ public class EventOrderController extends HttpServlet {
 			successView.forward(req, res);
 
 		}
-		
 
 	}
 

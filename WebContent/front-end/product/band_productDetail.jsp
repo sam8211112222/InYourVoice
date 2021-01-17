@@ -379,7 +379,7 @@ function updateFavorite(action){
 								</button>
 								</c:if>
 								<c:if test="${productVO.product_stock<=0}">
-								<button class="round-black-btn-end" disabled="disabled" >售完捕貨中</button>
+								<button class="round-black-btn-end" disabled="disabled" >售完補貨中</button>
 								
 								</c:if>
 								<c:if test="${empty favoritesVO}">

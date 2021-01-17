@@ -140,8 +140,8 @@
                                                 <div class="event-info">
                                                     <ul class="info">
                                                         <li><span class="info-desc"><i
-								class="fas fa-calendar-alt"></i><span class="timezoneSuffix">2021/01/16(周六)
-									19:30(+0800)</span> </span>
+								class="fas fa-calendar-alt"></i><span class="timezoneSuffix"><fmt:formatDate value="${eventVO.event_start_time}"
+								pattern="yyyy/MM/dd HH:mm" /></span> </span>
                                                         </li>
                                                         <li><span class="info-desc"><i
 								class="fas fa-map-marker-alt"></i>${eventVO.event_place} /
