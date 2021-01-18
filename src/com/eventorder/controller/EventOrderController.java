@@ -94,7 +94,9 @@ public class EventOrderController extends HttpServlet {
 			}
 			MemberVo memberVo = (MemberVo) session.getAttribute("memberVo");
 			String member_id = memberVo.getMemberId();
-
+			ServletContext context = getServletContext();
+			ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) context
+					.getAttribute("ticketRestAmount");
 			if (session.getAttribute("ticket" + member_id) == null) {
 
 				System.out.println("購物車是空的");
@@ -107,13 +109,18 @@ public class EventOrderController extends HttpServlet {
 					Integer orderList_goods_amount = null;
 					orderList_goods_amount = new Integer(orderList_goods_amount_list[i]);
 					if (orderList_goods_amount.intValue() != 0 && orderList_goods_amount != null) {
+						if (ticketRestAmount.get(ticket_id_list[i]) < orderList_goods_amount) {
+							res.sendRedirect(
+									"http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
+											+ req.getParameter("event_id"));
+							return;
+						}
 						cartList.put(ticket_id_list[i], orderList_goods_amount);
 					}
 				}
 				if (!cartList.isEmpty()) {
-					ServletContext context = getServletContext();
-					ConcurrentHashMap<String, Integer> ticketRestAmount = (ConcurrentHashMap<String, Integer>) context
-							.getAttribute("ticketRestAmount");
+					
+
 					Set<String> cartListKeys = cartList.keySet();
 					Iterator<String> it = cartListKeys.iterator();
 					while (it.hasNext()) {
@@ -124,7 +131,6 @@ public class EventOrderController extends HttpServlet {
 						}
 					}
 
-					session.setAttribute("timer", timer);
 					session.setAttribute("ticket" + member_id, cartList);
 
 					Timer timer = new Timer();
@@ -157,8 +163,8 @@ public class EventOrderController extends HttpServlet {
 
 					};
 					timer.schedule(task, 10 * 60 * 1000);
+					session.setAttribute("timer", timer);
 
-					System.out.println(session.getAttribute("timer"));
 					req.setAttribute("event_id", req.getParameter("event_id"));
 					String url = "/front-end/eventorder/protect/checkOutPage.jsp";
 					RequestDispatcher successView = req.getRequestDispatcher(url);
@@ -168,7 +174,7 @@ public class EventOrderController extends HttpServlet {
 				} else {
 					System.out.println("沒選東西,重導回前頁");
 					res.sendRedirect(
-							"http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
+							req.getContextPath()+"/event/EventServlet?action=getOne_For_Display&event_id="
 									+ req.getParameter("event_id"));
 					return;
 
