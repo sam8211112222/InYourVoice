@@ -10,7 +10,8 @@ public class OrderListService {
 	private OrderListDAO_interface dao;
 
 	public OrderListService() {
-		dao = new OrderListJDBCDAO();
+//		dao = new OrderListJDBCDAO();
+		dao = new OrderListDAO();
 	}
 
 	public OrderListVO addOrderList(String order_id, String product_id, Integer orderlist_goods_amount,

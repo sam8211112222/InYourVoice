@@ -111,7 +111,7 @@ public class EventOrderController extends HttpServlet {
 					if (orderList_goods_amount.intValue() != 0 && orderList_goods_amount != null) {
 						if (ticketRestAmount.get(ticket_id_list[i]) < orderList_goods_amount) {
 							res.sendRedirect(
-									"http://localhost:8081/TEA102G6/event/EventServlet?action=getOne_For_Display&event_id="
+									req.getContextPath()+"/event/EventServlet?action=getOne_For_Display&event_id="
 											+ req.getParameter("event_id"));
 							return;
 						}
@@ -162,7 +162,7 @@ public class EventOrderController extends HttpServlet {
 						}
 
 					};
-					timer.schedule(task, 10 * 60 * 1000);
+					timer.schedule(task, 1 * 60 * 1000);
 					session.setAttribute("timer", timer);
 
 					req.setAttribute("event_id", req.getParameter("event_id"));

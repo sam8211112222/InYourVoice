@@ -70,12 +70,12 @@ public class bandServlet extends HttpServlet {
 //		System.out.println("Message received: " + message);
 //	}
 
-	public void updateFollowCount(String followCount) {
+	public void updateFollowCount(String json) {
 		for (Session session : connectedSessions) {
 			if (session.isOpen())
-				session.getAsyncRemote().sendText(followCount);
+				session.getAsyncRemote().sendText(json);
 		}
-		System.out.println("Message pushed: follow count is " + followCount);
+		System.out.println("Message pushed: follow count is " + json);
 	}
 
 	@OnClose
@@ -265,11 +265,18 @@ public class bandServlet extends HttpServlet {
 				jsonStr = "added";
 				// 如果是新增追蹤專輯，就push追蹤數
 				if (favorite_type == 1) {
-					String followCount = String.valueOf(
+					int followCount = 
 							favSvc.getAll().stream().filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
-									.collect(Collectors.toList()).size());
-
-					updateFollowCount(followCount);
+									.collect(Collectors.toList()).size();
+					MessageVO msgVO = new MessageVO();
+					msgVO.setFavID(favorite_id);
+					msgVO.setFollowCount(followCount);
+					
+					Gson gsonf = new Gson();
+					String jsonf = gsonf.toJson(msgVO);
+					
+					
+					updateFollowCount(jsonf);
 				}
 			}
 			System.out.println(jsonStr);
@@ -325,11 +332,17 @@ public class bandServlet extends HttpServlet {
 				favSvc.deleteFavorites(favVO.getUniqueid());
 				// 樂團
 				if (favorite_type == 1) {
-					String followCount = String.valueOf(
+					int followCount = 
 							favSvc.getAll().stream().filter(f -> f.getFavorite_id().equals(favorite_id_effective_final))
-									.collect(Collectors.toList()).size());
+									.collect(Collectors.toList()).size();
+					MessageVO msgVO = new MessageVO();
+					msgVO.setFavID(favorite_id);
+					msgVO.setFollowCount(followCount);
+					
+					Gson gsonf = new Gson();
+					String jsonf = gsonf.toJson(msgVO);
 
-					updateFollowCount(followCount);
+					updateFollowCount(jsonf);
 				}
 
 			}
@@ -517,4 +530,23 @@ public class bandServlet extends HttpServlet {
 					res.sendRedirect(req.getContextPath() + "/front-end/query/query_band.jsp");
 				}
 	}
+}
+
+class MessageVO{
+	private String favID;
+	private int followCount;
+	public String getFavID() {
+		return favID;
+	}
+	public void setFavID(String favID) {
+		this.favID = favID;
+	}
+	public int getFollowCount() {
+		return followCount;
+	}
+	public void setFollowCount(int followCount) {
+		this.followCount = followCount;
+	}
+	
+	
 }

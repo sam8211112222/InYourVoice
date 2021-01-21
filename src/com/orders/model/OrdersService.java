@@ -7,7 +7,8 @@ public class OrdersService {
 	private OrdersDAO_interface dao;
 
 	public OrdersService() {
-		dao = new OrdersJDBCDAO();
+//		dao = new OrdersJDBCDAO();
+		dao = new OrdersDAO();
 	}
 	
 	public List<OrdersVO> getAll2() {

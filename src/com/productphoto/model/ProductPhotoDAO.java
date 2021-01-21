@@ -1,6 +1,7 @@
 package com.productphoto.model;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -377,20 +378,144 @@ public class ProductPhotoDAO implements ProductPhotoDAO_interface {
 	// 這是鈺涵的方法
 	@Override
 	public byte[] getFirstImageByProductId(String product_id) {
-		return null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		byte[] result = null;
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(
+					"select productphoto_photo FROM productphoto where product_id = ? and ROWNUM = 1 order by productphoto_sort");
+			pstmt.setString(1, product_id);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				result = rs.getBytes("productphoto_photo");
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return result;
 	}
 
 	// 這是鈺涵的方法
 	@Override
 	public List<String> getIdListByProductId(String productId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<String> result = new ArrayList<String>();
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(
+					"select productphoto_id FROM productphoto where product_id = ? and ROWNUM < 6 order by productphoto_sort");
+			pstmt.setString(1, productId);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				result.add(rs.getString("productphoto_id"));
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return result;
 	}
 
 	// 這是鈺涵的方法
 	@Override
 	public byte[] getImageByPhotoId(String photoId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		byte[] result = null;
+		try {
+
+			con = ds.getConnection();
+			pstmt = con.prepareStatement(
+					"select productphoto_photo FROM productphoto where productphoto_id = ?");
+			pstmt.setString(1, photoId);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				result = rs.getBytes("productphoto_photo");
+			}
+			// Handle any driver errors
+		} catch (SQLException se) {
+			throw new RuntimeException("A database error occured. " + se.getMessage());
+			// Clean up JDBC resources
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException se) {
+					se.printStackTrace(System.err);
+				}
+			}
+			if (con != null) {
+				try {
+					con.close();
+				} catch (Exception e) {
+					e.printStackTrace(System.err);
+				}
+			}
+		}
+		return result;
 	}
 }

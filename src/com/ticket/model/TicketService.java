@@ -7,7 +7,8 @@ public class TicketService {
 	private TicketDAO dao;
 
 	public TicketService() {
-		dao = new TicketJDBCDAO();
+//		dao = new TicketJDBCDAO();
+		dao = new TicketJNDIDAO();
 	}
 
 	public TicketVO addTicket(String event_id, Integer ticket_sort, String ticket_name, Integer ticket_amount,
