@@ -358,7 +358,7 @@
 			        el: $('.odometer')[0], 
 			        value: 0, 
 			        theme: 'minimal',
-			        duration: 3000
+			        duration: 100
 			      });
 			      odometer.render();
 			      
@@ -399,8 +399,12 @@
 
 							// 更新追蹤數
 // 							alert("onmessage!");
-// 							alert(event.data);
-							$('.odometer').text(event.data);
+// 							console.log(event.data);
+							let obj = JSON.parse(event.data);
+// 							console.log(obj.favID);
+							if(obj.favID == "${bandVO.band_id}"){
+								$('.odometer').text(obj.followCount);
+							}
 						};
 				
 						webSocket.onclose = function(event) {

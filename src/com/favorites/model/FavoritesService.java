@@ -11,7 +11,8 @@ public class FavoritesService {
 	private FavoritesDAO_interface dao;
 
 	public FavoritesService() {
-		dao = new FavoritesJDBCDAO();
+//		dao = new FavoritesJDBCDAO();
+		dao = new FavoritesDAO();
 	}
 	public FavoritesVO addFavorites( String member_id, int favorite_type,String favorite_id,	
 			java.sql.Timestamp favorite_add_time) {
