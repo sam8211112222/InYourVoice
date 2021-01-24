@@ -20,7 +20,7 @@ public class ProductPhotoDAO implements ProductPhotoDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestDB");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TEA102G6");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

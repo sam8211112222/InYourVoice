@@ -11,8 +11,8 @@ public class ProductPhotoService {
 	private ProductPhotoDAO_interface dao;
 	
 	public ProductPhotoService() {
-//		dao = new ProductPhotoJDBCDAO();
-		dao = new ProductPhotoDAO();
+		dao = new ProductPhotoJDBCDAO();
+//		dao = new ProductPhotoDAO();
 	}
 	
 	public ProductPhotoVO addProductPhoto(String product_id,byte[] productphoto_photo, Integer productphoto_sort,Timestamp productphoto_add_time) {
