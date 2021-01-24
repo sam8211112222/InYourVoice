@@ -17,8 +17,8 @@ public class ProductService {
 	private ProductDAO_interface dao;
 
 	public ProductService() {
-		dao = new ProductJDBCDAO();
-//		dao = new ProductDAO();
+//		dao = new ProductJDBCDAO();
+		dao = new ProductDAO();
 	}
 
 	public ProductVO addProduct(String band_id, Integer product_type, String product_name, String product_intro,

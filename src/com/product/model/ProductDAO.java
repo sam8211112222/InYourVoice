@@ -24,7 +24,7 @@ public class ProductDAO implements ProductDAO_interface {
 	static {
 		try {
 			Context ctx = new InitialContext();
-			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TestTEA102G6");
+			ds = (DataSource) ctx.lookup("java:comp/env/jdbc/TEA102G6");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
